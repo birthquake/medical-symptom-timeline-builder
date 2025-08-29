@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import SymptomTracker from './components/SymptomTracker';
 import MedicationTracker from './components/MedicationTracker';
 import Timeline from './components/Timeline';
+import Reports from './components/Reports';
 
 function App() {
   const [currentView, setCurrentView] = useState('home');
@@ -14,6 +15,8 @@ function App() {
         return <MedicationTracker />;
       case 'timeline':
         return <Timeline />;
+      case 'reports':
+        return <Reports />;
       case 'home':
       default:
         return <HomePage setCurrentView={setCurrentView} />;
@@ -126,18 +129,18 @@ function App() {
             📈 Timeline
           </button>
           <button
+            onClick={() => setCurrentView('reports')}
             style={{
               padding: '0.5rem 1rem',
-              backgroundColor: 'white',
-              color: '#94a3b8',
+              backgroundColor: currentView === 'reports' ? '#2563eb' : 'white',
+              color: currentView === 'reports' ? 'white' : '#64748b',
               border: '1px solid #e2e8f0',
               borderRadius: '6px',
-              cursor: 'not-allowed',
+              cursor: 'pointer',
               fontSize: '0.9rem'
             }}
-            disabled
           >
-            📄 Reports (Soon)
+            📄 Reports
           </button>
         </div>
       </nav>
@@ -161,7 +164,7 @@ function App() {
         borderTop: '1px solid #e2e8f0',
         backgroundColor: 'white'
       }}>
-        © 2025 Medical Symptom Timeline Builder - Your data stays private
+        © 2025 Medical Symptom Timeline Builder - Your data stays private and secure
       </footer>
     </div>
   );
@@ -176,23 +179,24 @@ const HomePage = ({ setCurrentView }) => {
         padding: '2rem',
         borderRadius: '12px',
         marginBottom: '2rem',
-        border: '1px solid #e2e8f0'
+        border: '1px solid #e2e8f0',
+        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
       }}>
-        <h2 style={{ color: '#16a34a', marginBottom: '1rem' }}>
-          🎉 All Core Features Complete!
+        <h2 style={{ color: '#16a34a', marginBottom: '1rem', fontSize: '1.8rem' }}>
+          🎉 Your Complete Medical Tracking App is Ready!
         </h2>
-        <p style={{ marginBottom: '1.5rem', color: '#64748b' }}>
-          Your medical tracking app now has symptoms, medications, and timeline views.
+        <p style={{ marginBottom: '1.5rem', color: '#64748b', fontSize: '1.1rem' }}>
+          All core features are now live. Track symptoms, manage medications, view timelines, and generate professional reports.
         </p>
         
-        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
           <button
             onClick={() => setCurrentView('symptoms')}
             style={{
               backgroundColor: '#2563eb',
               color: 'white',
               border: 'none',
-              padding: '0.75rem 1.5rem',
+              padding: '0.75rem 1rem',
               borderRadius: '8px',
               cursor: 'pointer',
               fontWeight: '600'
@@ -206,7 +210,7 @@ const HomePage = ({ setCurrentView }) => {
               backgroundColor: '#16a34a',
               color: 'white',
               border: 'none',
-              padding: '0.75rem 1.5rem',
+              padding: '0.75rem 1rem',
               borderRadius: '8px',
               cursor: 'pointer',
               fontWeight: '600'
@@ -220,7 +224,7 @@ const HomePage = ({ setCurrentView }) => {
               backgroundColor: '#d97706',
               color: 'white',
               border: 'none',
-              padding: '0.75rem 1.5rem',
+              padding: '0.75rem 1rem',
               borderRadius: '8px',
               cursor: 'pointer',
               fontWeight: '600'
@@ -228,20 +232,36 @@ const HomePage = ({ setCurrentView }) => {
           >
             📈 View Timeline
           </button>
+          <button
+            onClick={() => setCurrentView('reports')}
+            style={{
+              backgroundColor: '#7c3aed',
+              color: 'white',
+              border: 'none',
+              padding: '0.75rem 1rem',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontWeight: '600'
+            }}
+          >
+            📄 Generate Reports
+          </button>
         </div>
       </div>
 
-      {/* Status Grid */}
+      {/* Feature Status Grid */}
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-        gap: '1rem'
+        gap: '1rem',
+        marginBottom: '2rem'
       }}>
         <div style={{
           backgroundColor: 'white',
           padding: '1rem',
           borderRadius: '8px',
-          border: '1px solid #e2e8f0'
+          border: '1px solid #e2e8f0',
+          textAlign: 'center'
         }}>
           <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>📊</div>
           <h3 style={{ fontSize: '1rem', margin: '0 0 0.5rem 0' }}>Symptom Tracking</h3>
@@ -261,7 +281,8 @@ const HomePage = ({ setCurrentView }) => {
           backgroundColor: 'white',
           padding: '1rem',
           borderRadius: '8px',
-          border: '1px solid #e2e8f0'
+          border: '1px solid #e2e8f0',
+          textAlign: 'center'
         }}>
           <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>💊</div>
           <h3 style={{ fontSize: '1rem', margin: '0 0 0.5rem 0' }}>Medication Tracking</h3>
@@ -281,7 +302,8 @@ const HomePage = ({ setCurrentView }) => {
           backgroundColor: 'white',
           padding: '1rem',
           borderRadius: '8px',
-          border: '1px solid #e2e8f0'
+          border: '1px solid #e2e8f0',
+          textAlign: 'center'
         }}>
           <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>📈</div>
           <h3 style={{ fontSize: '1rem', margin: '0 0 0.5rem 0' }}>Timeline View</h3>
@@ -301,45 +323,64 @@ const HomePage = ({ setCurrentView }) => {
           backgroundColor: 'white',
           padding: '1rem',
           borderRadius: '8px',
-          border: '1px solid #e2e8f0'
+          border: '1px solid #e2e8f0',
+          textAlign: 'center'
         }}>
           <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>📄</div>
           <h3 style={{ fontSize: '1rem', margin: '0 0 0.5rem 0' }}>Export Reports</h3>
           <span style={{
-            backgroundColor: '#d97706',
+            backgroundColor: '#16a34a',
             color: 'white',
             padding: '0.25rem 0.5rem',
             borderRadius: '12px',
             fontSize: '0.75rem',
             fontWeight: '600'
           }}>
-            🚧 NEXT
+            ✅ COMPLETE
           </span>
         </div>
       </div>
 
-      {/* Usage Tips */}
+      {/* Usage Guide */}
       <div style={{
         backgroundColor: '#f0f9ff',
         border: '1px solid #bae6fd',
-        padding: '1.5rem',
-        borderRadius: '8px',
-        marginTop: '2rem'
+        padding: '2rem',
+        borderRadius: '12px'
       }}>
-        <h3 style={{ color: '#0369a1', marginBottom: '1rem' }}>🎯 How to Use Your Timeline</h3>
-        <div style={{ textAlign: 'left', color: '#0c4a6e' }}>
-          <p style={{ margin: '0 0 0.5rem 0' }}>
-            ✅ Add some symptoms and medications to see your timeline populate
-          </p>
-          <p style={{ margin: '0 0 0.5rem 0' }}>
-            ✅ Use filters to focus on specific timeframes or event types
-          </p>
-          <p style={{ margin: '0 0 0.5rem 0' }}>
-            ✅ Look for patterns - do symptoms occur after certain activities?
-          </p>
-          <p style={{ margin: '0' }}>
-            ✅ Share your timeline view with healthcare providers
-          </p>
+        <h3 style={{ color: '#0369a1', marginBottom: '1.5rem', textAlign: 'center' }}>
+          🎯 Your Complete Medical Tracking System
+        </h3>
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
+          gap: '1.5rem',
+          textAlign: 'left' 
+        }}>
+          <div>
+            <h4 style={{ color: '#0c4a6e', margin: '0 0 0.5rem 0' }}>📊 Track Daily Health</h4>
+            <p style={{ color: '#0c4a6e', fontSize: '0.9rem', margin: 0 }}>
+              Log symptoms with severity levels, notes, and timestamps. Quick-select common symptoms for faster entry.
+            </p>
+          </div>
+          <div>
+            <h4 style={{ color: '#0c4a6e', margin: '0 0 0.5rem 0' }}>💊 Medication Management</h4>
+            <p style={{ color: '#0c4a6e', fontSize: '0.9rem', margin: 0 }}>
+              Track medications and dosages. Log when you take them to monitor compliance and effectiveness.
+            </p>
+          </div>
+          <div>
+            <h4 style={{ color: '#0c4a6e', margin: '0 0 0.5rem 0' }}>📈 Visual Timeline</h4>
+            <p style={{ color: '#0c4a6e', fontSize: '0.9rem', margin: 0 }}>
+              See all your health data in chronological order. Filter by date ranges and event types to spot patterns.
+            </p>
+          </div>
+          <div>
+            <h4 style={{ color: '#0c4a6e', margin: '0 0 0.5rem 0' }}>📄 Professional Reports</h4>
+            <p style={{ color: '#0c4a6e', fontSize: '0.9rem', margin: 0 }}>
+              Generate comprehensive reports with statistics and summaries. Print or save as PDF for doctor visits.
+            </p>
+          </div>
         </div>
       </div>
     </div>
