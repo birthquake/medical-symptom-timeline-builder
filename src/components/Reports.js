@@ -1,5 +1,37 @@
 import React, { useState, useEffect } from 'react';
 
+// SVG Icons
+const DownloadIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+    <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 19.5304 3 19V15" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <polyline points="7,10 12,15 17,10" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <line x1="12" y1="15" x2="12" y2="3" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const PrintIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+    <polyline points="6,9 6,2 18,2 18,9" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M6 18H4C3.46957 18 2.96086 17.7893 2.58579 17.4142C2.21071 17.0391 2 16.5304 2 16V11C2 10.4696 2.21071 9.96086 2.58579 9.58579C2.96086 9.21071 3.46957 9 4 9H20C20.5304 9 21.0391 9.21071 21.4142 9.58579C21.7893 9.96086 22 10.4696 22 11V16C22 16.5304 21.7893 17.0391 21.4142 17.4142C21.0391 17.7893 20.5304 18 20 18H18" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <rect x="6" y="14" width="12" height="8" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const CalendarIcon = ({ size = 16 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke="#64748B" strokeWidth="2"/>
+    <line x1="16" y1="2" x2="16" y2="6" stroke="#64748B" strokeWidth="2" strokeLinecap="round"/>
+    <line x1="8" y1="2" x2="8" y2="6" stroke="#64748B" strokeWidth="2" strokeLinecap="round"/>
+    <line x1="3" y1="10" x2="21" y2="10" stroke="#64748B" strokeWidth="2" strokeLinecap="round"/>
+  </svg>
+);
+
+const ChartIcon = ({ size = 16 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <polyline points="22,12 18,12 15,21 9,3 6,12 2,12" stroke="#3B82F6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
 const Reports = () => {
   const [reportData, setReportData] = useState({
     symptoms: [],
@@ -11,8 +43,7 @@ const Reports = () => {
     endDate: '',
     includeSymptoms: true,
     includeMedications: true,
-    includeStatistics: true,
-    includeTimeline: true
+    includeStatistics: true
   });
   const [isGenerating, setIsGenerating] = useState(false);
 
@@ -130,357 +161,458 @@ const Reports = () => {
     const url = URL.createObjectURL(dataBlob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `health-report-${reportSettings.startDate}-to-${reportSettings.endDate}.json`;
+    link.download = `trackrx-report-${reportSettings.startDate}-to-${reportSettings.endDate}.json`;
     link.click();
     URL.revokeObjectURL(url);
+  };
+
+  const getSeverityColor = (severity) => {
+    if (severity <= 3) return '#10B981';
+    if (severity <= 6) return '#F59E0B'; 
+    return '#EF4444';
+  };
+
+  const getSeverityLabel = (severity) => {
+    if (severity <= 3) return 'Mild';
+    if (severity <= 6) return 'Moderate';
+    return 'Severe';
   };
 
   const filtered = getFilteredData();
   const statistics = generateStatistics(filtered.symptoms, filtered.medicationLogs);
 
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '1rem' }}>
-      {/* Header */}
-      <div style={{ 
-        textAlign: 'center', 
-        marginBottom: '2rem',
-        padding: '1.5rem',
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      {/* Header Card */}
+      <div style={{
         backgroundColor: 'white',
-        borderRadius: '12px',
-        border: '1px solid #e2e8f0'
+        borderRadius: '16px',
+        padding: '1.5rem',
+        border: '1px solid #E2E8F0',
+        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)'
       }}>
         <h2 style={{ 
-          color: '#1e293b', 
-          marginBottom: '0.5rem',
-          fontSize: '1.8rem'
+          fontSize: '1.5rem',
+          fontWeight: '700',
+          color: '#1E293B',
+          margin: '0 0 0.5rem 0'
         }}>
-          📄 Health Reports
+          Health Reports
         </h2>
-        <p style={{ color: '#64748b', margin: 0 }}>
-          Generate professional reports for healthcare providers
+        <p style={{ 
+          color: '#64748B', 
+          margin: 0,
+          fontSize: '1rem',
+          lineHeight: '1.5'
+        }}>
+          Generate professional reports to share with your healthcare provider.
         </p>
       </div>
 
       {/* Report Settings */}
       <div style={{
         backgroundColor: 'white',
+        borderRadius: '16px',
         padding: '1.5rem',
-        borderRadius: '12px',
-        border: '1px solid #e2e8f0',
-        marginBottom: '2rem'
+        border: '1px solid #E2E8F0',
+        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)'
       }}>
-        <h3 style={{ marginBottom: '1rem', color: '#1e293b' }}>Report Settings</h3>
+        <h3 style={{ 
+          fontSize: '1.25rem',
+          fontWeight: '600',
+          color: '#1E293B',
+          margin: '0 0 1rem 0'
+        }}>
+          Report Settings
+        </h3>
         
+        {/* Date Range */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          gridTemplateColumns: '1fr 1fr',
           gap: '1rem',
-          marginBottom: '1rem'
+          marginBottom: '1.5rem'
         }}>
           <div>
-            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>
+            <label style={{ 
+              display: 'block', 
+              marginBottom: '0.5rem', 
+              fontWeight: '600',
+              color: '#374151',
+              fontSize: '0.875rem'
+            }}>
               Start Date:
             </label>
-            <input
-              type="date"
-              value={reportSettings.startDate}
-              onChange={(e) => setReportSettings(prev => ({ ...prev, startDate: e.target.value }))}
-              style={{
-                width: '100%',
-                padding: '0.5rem',
-                border: '1px solid #d1d5db',
-                borderRadius: '6px'
-              }}
-            />
+            <div style={{ position: 'relative' }}>
+              <input
+                type="date"
+                value={reportSettings.startDate}
+                onChange={(e) => setReportSettings(prev => ({ ...prev, startDate: e.target.value }))}
+                style={{
+                  width: '100%',
+                  padding: '0.75rem 0.75rem 0.75rem 2.5rem',
+                  border: '1px solid #D1D5DB',
+                  borderRadius: '8px',
+                  fontSize: '0.875rem',
+                  backgroundColor: '#FAFAFA'
+                }}
+              />
+              <CalendarIcon />
+              <div style={{
+                position: 'absolute',
+                left: '0.75rem',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                pointerEvents: 'none'
+              }}>
+                <CalendarIcon />
+              </div>
+            </div>
           </div>
           <div>
-            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>
+            <label style={{ 
+              display: 'block', 
+              marginBottom: '0.5rem', 
+              fontWeight: '600',
+              color: '#374151',
+              fontSize: '0.875rem'
+            }}>
               End Date:
             </label>
-            <input
-              type="date"
-              value={reportSettings.endDate}
-              onChange={(e) => setReportSettings(prev => ({ ...prev, endDate: e.target.value }))}
-              style={{
-                width: '100%',
-                padding: '0.5rem',
-                border: '1px solid #d1d5db',
-                borderRadius: '6px'
-              }}
-            />
+            <div style={{ position: 'relative' }}>
+              <input
+                type="date"
+                value={reportSettings.endDate}
+                onChange={(e) => setReportSettings(prev => ({ ...prev, endDate: e.target.value }))}
+                style={{
+                  width: '100%',
+                  padding: '0.75rem 0.75rem 0.75rem 2.5rem',
+                  border: '1px solid #D1D5DB',
+                  borderRadius: '8px',
+                  fontSize: '0.875rem',
+                  backgroundColor: '#FAFAFA'
+                }}
+              />
+              <div style={{
+                position: 'absolute',
+                left: '0.75rem',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                pointerEvents: 'none'
+              }}>
+                <CalendarIcon />
+              </div>
+            </div>
           </div>
         </div>
 
-        <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', marginBottom: '1.5rem' }}>
-          <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <input
-              type="checkbox"
-              checked={reportSettings.includeSymptoms}
-              onChange={(e) => setReportSettings(prev => ({ ...prev, includeSymptoms: e.target.checked }))}
-            />
-            Include Symptoms
+        {/* Include Options */}
+        <div style={{ marginBottom: '1.5rem' }}>
+          <label style={{ 
+            display: 'block', 
+            marginBottom: '0.75rem', 
+            fontWeight: '600',
+            color: '#374151',
+            fontSize: '0.875rem'
+          }}>
+            Include in Report:
           </label>
-          <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <input
-              type="checkbox"
-              checked={reportSettings.includeMedications}
-              onChange={(e) => setReportSettings(prev => ({ ...prev, includeMedications: e.target.checked }))}
-            />
-            Include Medications
-          </label>
-          <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <input
-              type="checkbox"
-              checked={reportSettings.includeStatistics}
-              onChange={(e) => setReportSettings(prev => ({ ...prev, includeStatistics: e.target.checked }))}
-            />
-            Include Statistics
-          </label>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            {[
+              { key: 'includeSymptoms', label: 'Symptoms & Severity Levels' },
+              { key: 'includeMedications', label: 'Current Medications' },
+              { key: 'includeStatistics', label: 'Summary Statistics' }
+            ].map(option => (
+              <label key={option.key} style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '0.75rem',
+                padding: '0.5rem',
+                backgroundColor: '#F8FAFC',
+                borderRadius: '8px',
+                border: '1px solid #E2E8F0',
+                cursor: 'pointer'
+              }}>
+                <input
+                  type="checkbox"
+                  checked={reportSettings[option.key]}
+                  onChange={(e) => setReportSettings(prev => ({ ...prev, [option.key]: e.target.checked }))}
+                  style={{ transform: 'scale(1.2)' }}
+                />
+                <span style={{ fontSize: '0.875rem', fontWeight: '500', color: '#374151' }}>
+                  {option.label}
+                </span>
+              </label>
+            ))}
+          </div>
         </div>
 
-        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+        {/* Action Buttons */}
+        <div style={{ display: 'flex', gap: '0.75rem' }}>
           <button
             onClick={handlePrint}
             disabled={isGenerating}
             style={{
-              backgroundColor: '#2563eb',
+              flex: 1,
+              backgroundColor: '#3B82F6',
               color: 'white',
               border: 'none',
-              padding: '0.75rem 1.5rem',
+              padding: '0.75rem 1rem',
               borderRadius: '8px',
-              fontSize: '1rem',
-              cursor: isGenerating ? 'not-allowed' : 'pointer',
+              fontSize: '0.875rem',
               fontWeight: '600',
-              opacity: isGenerating ? 0.6 : 1
+              cursor: isGenerating ? 'not-allowed' : 'pointer',
+              opacity: isGenerating ? 0.6 : 1,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.5rem',
+              transition: 'all 0.2s'
             }}
+            onMouseEnter={(e) => !isGenerating && (e.target.style.backgroundColor = '#2563EB')}
+            onMouseLeave={(e) => !isGenerating && (e.target.style.backgroundColor = '#3B82F6')}
           >
-            {isGenerating ? 'Generating...' : '🖨️ Print/Save as PDF'}
+            <PrintIcon />
+            {isGenerating ? 'Generating...' : 'Print Report'}
           </button>
           <button
             onClick={handleExportData}
             style={{
-              backgroundColor: '#16a34a',
+              flex: 1,
+              backgroundColor: '#10B981',
               color: 'white',
               border: 'none',
-              padding: '0.75rem 1.5rem',
+              padding: '0.75rem 1rem',
               borderRadius: '8px',
-              fontSize: '1rem',
+              fontSize: '0.875rem',
+              fontWeight: '600',
               cursor: 'pointer',
-              fontWeight: '600'
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.5rem',
+              transition: 'all 0.2s'
             }}
+            onMouseEnter={(e) => e.target.style.backgroundColor = '#059669'}
+            onMouseLeave={(e) => e.target.style.backgroundColor = '#10B981'}
           >
-            💾 Export Data
+            <DownloadIcon />
+            Export Data
           </button>
         </div>
       </div>
 
-      {/* Report Preview */}
-      <div 
-        id="report-content"
-        style={{
+      {/* Preview Statistics */}
+      {reportSettings.includeStatistics && (filtered.symptoms.length > 0 || filtered.medicationLogs.length > 0) && (
+        <div style={{
           backgroundColor: 'white',
-          padding: '2rem',
-          borderRadius: '12px',
-          border: '1px solid #e2e8f0',
-          fontFamily: 'Arial, sans-serif'
-        }}
-      >
-        {/* Report Header */}
-        <div style={{ textAlign: 'center', marginBottom: '2rem', borderBottom: '2px solid #2563eb', paddingBottom: '1rem' }}>
-          <h1 style={{ color: '#2563eb', marginBottom: '0.5rem', fontSize: '1.8rem' }}>
-            Medical Symptom & Medication Report
-          </h1>
-          <p style={{ color: '#64748b', margin: 0, fontSize: '1rem' }}>
-            {new Date(reportSettings.startDate).toLocaleDateString()} - {new Date(reportSettings.endDate).toLocaleDateString()}
-          </p>
-          <p style={{ color: '#64748b', margin: '0.25rem 0 0 0', fontSize: '0.9rem' }}>
-            Generated: {new Date().toLocaleDateString()} at {new Date().toLocaleTimeString()}
-          </p>
-        </div>
-
-        {/* Statistics Section */}
-        {reportSettings.includeStatistics && (
-          <div style={{ marginBottom: '2rem' }}>
-            <h2 style={{ color: '#1e293b', marginBottom: '1rem', fontSize: '1.3rem', borderBottom: '1px solid #e2e8f0', paddingBottom: '0.5rem' }}>
-              📊 Summary Statistics
-            </h2>
-            
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
-              gap: '1rem',
-              marginBottom: '1rem'
-            }}>
-              <div style={{ textAlign: 'center', padding: '1rem', backgroundColor: '#f8fafc', borderRadius: '8px' }}>
-                <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#2563eb' }}>
-                  {statistics.totalSymptoms}
-                </div>
-                <div style={{ fontSize: '0.9rem', color: '#64748b' }}>Total Symptoms</div>
-              </div>
-              <div style={{ textAlign: 'center', padding: '1rem', backgroundColor: '#f8fafc', borderRadius: '8px' }}>
-                <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#16a34a' }}>
-                  {statistics.totalMedicationDoses}
-                </div>
-                <div style={{ fontSize: '0.9rem', color: '#64748b' }}>Medication Doses</div>
-              </div>
-              <div style={{ textAlign: 'center', padding: '1rem', backgroundColor: '#f8fafc', borderRadius: '8px' }}>
-                <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#d97706' }}>
-                  {statistics.avgSeverity}
-                </div>
-                <div style={{ fontSize: '0.9rem', color: '#64748b' }}>Avg Severity</div>
-              </div>
-              <div style={{ textAlign: 'center', padding: '1rem', backgroundColor: '#f8fafc', borderRadius: '8px' }}>
-                <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#7c3aed' }}>
-                  {statistics.dailyAverages.symptomsPerDay}
-                </div>
-                <div style={{ fontSize: '0.9rem', color: '#64748b' }}>Symptoms/Day</div>
-              </div>
-            </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
-              <div>
-                <h4 style={{ margin: '0 0 0.5rem 0', color: '#374151' }}>Severity Breakdown:</h4>
-                <div style={{ fontSize: '0.9rem' }}>
-                  <div>• Mild (1-3): <strong>{statistics.severityBreakdown.mild}</strong></div>
-                  <div>• Moderate (4-6): <strong>{statistics.severityBreakdown.moderate}</strong></div>
-                  <div>• Severe (7-10): <strong>{statistics.severityBreakdown.severe}</strong></div>
-                </div>
-              </div>
-              <div>
-                <h4 style={{ margin: '0 0 0.5rem 0', color: '#374151' }}>Most Frequent:</h4>
-                <div style={{ fontSize: '0.9rem' }}>
-                  <div>• Symptom: <strong>{statistics.mostCommonSymptom}</strong></div>
-                  <div>• Medication: <strong>{statistics.mostTakenMedication}</strong></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Current Medications */}
-        {reportSettings.includeMedications && reportData.medications.length > 0 && (
-          <div style={{ marginBottom: '2rem' }}>
-            <h2 style={{ color: '#1e293b', marginBottom: '1rem', fontSize: '1.3rem', borderBottom: '1px solid #e2e8f0', paddingBottom: '0.5rem' }}>
-              💊 Current Medications
-            </h2>
-            <div style={{ display: 'grid', gap: '0.5rem' }}>
-              {reportData.medications.map(med => (
-                <div key={med.id} style={{ padding: '0.75rem', backgroundColor: '#f9fafb', borderRadius: '6px', border: '1px solid #e5e7eb' }}>
-                  <strong>{med.name}</strong> - {med.dosage}
-                  <span style={{ color: '#64748b', marginLeft: '1rem' }}>({med.frequency.replace('-', ' ')})</span>
-                  {med.notes && <div style={{ fontSize: '0.85rem', color: '#4b5563', marginTop: '0.25rem' }}>Notes: {med.notes}</div>}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Symptoms Timeline */}
-        {reportSettings.includeSymptoms && filtered.symptoms.length > 0 && (
-          <div style={{ marginBottom: '2rem' }}>
-            <h2 style={{ color: '#1e293b', marginBottom: '1rem', fontSize: '1.3rem', borderBottom: '1px solid #e2e8f0', paddingBottom: '0.5rem' }}>
-              📊 Symptom History
-            </h2>
-            <div style={{ display: 'grid', gap: '0.5rem' }}>
-              {filtered.symptoms.slice(0, 20).map(symptom => (
-                <div key={symptom.id} style={{ 
-                  padding: '0.75rem', 
-                  backgroundColor: '#f9fafb', 
-                  borderRadius: '6px', 
-                  border: '1px solid #e5e7eb',
-                  borderLeft: `4px solid ${symptom.severity <= 3 ? '#16a34a' : symptom.severity <= 6 ? '#d97706' : '#dc2626'}`
-                }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <strong>{symptom.name}</strong>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                      <span style={{ 
-                        backgroundColor: symptom.severity <= 3 ? '#16a34a' : symptom.severity <= 6 ? '#d97706' : '#dc2626',
-                        color: 'white',
-                        padding: '0.25rem 0.5rem',
-                        borderRadius: '12px',
-                        fontSize: '0.75rem'
-                      }}>
-                        {symptom.severity}/10
-                      </span>
-                      <span style={{ fontSize: '0.85rem', color: '#64748b' }}>
-                        {symptom.date} {symptom.time}
-                      </span>
-                    </div>
-                  </div>
-                  {symptom.notes && <div style={{ fontSize: '0.85rem', color: '#4b5563', marginTop: '0.5rem' }}>"{symptom.notes}"</div>}
-                </div>
-              ))}
-              {filtered.symptoms.length > 20 && (
-                <div style={{ textAlign: 'center', color: '#64748b', fontStyle: 'italic', padding: '1rem' }}>
-                  ... and {filtered.symptoms.length - 20} more symptoms (showing latest 20)
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* Medication Log */}
-        {reportSettings.includeMedications && filtered.medicationLogs.length > 0 && (
-          <div style={{ marginBottom: '2rem' }}>
-            <h2 style={{ color: '#1e293b', marginBottom: '1rem', fontSize: '1.3rem', borderBottom: '1px solid #e2e8f0', paddingBottom: '0.5rem' }}>
-              💊 Medication Log
-            </h2>
-            <div style={{ display: 'grid', gap: '0.5rem' }}>
-              {filtered.medicationLogs.slice(0, 30).map(log => (
-                <div key={log.id} style={{ 
-                  padding: '0.5rem 0.75rem', 
-                  backgroundColor: '#f0fdf4', 
-                  borderRadius: '6px', 
-                  border: '1px solid #bbf7d0',
-                  borderLeft: '4px solid #16a34a'
-                }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div>
-                      <strong>{log.medicationName}</strong>
-                      <span style={{ color: '#15803d', marginLeft: '0.5rem' }}>({log.dosage})</span>
-                    </div>
-                    <span style={{ fontSize: '0.85rem', color: '#166534' }}>
-                      {log.date} {log.time}
-                    </span>
-                  </div>
-                </div>
-              ))}
-              {filtered.medicationLogs.length > 30 && (
-                <div style={{ textAlign: 'center', color: '#64748b', fontStyle: 'italic', padding: '1rem' }}>
-                  ... and {filtered.medicationLogs.length - 30} more medication logs (showing latest 30)
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* Footer */}
-        <div style={{ 
-          marginTop: '3rem', 
-          paddingTop: '1rem', 
-          borderTop: '1px solid #e2e8f0', 
-          fontSize: '0.8rem', 
-          color: '#64748b',
-          textAlign: 'center'
+          borderRadius: '16px',
+          padding: '1.5rem',
+          border: '1px solid #E2E8F0',
+          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)'
         }}>
-          <p>This report was generated by Medical Symptom Timeline Builder</p>
-          <p>For questions about this report, please consult with your healthcare provider</p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
+            <ChartIcon />
+            <h3 style={{ 
+              fontSize: '1.25rem',
+              fontWeight: '600',
+              color: '#1E293B',
+              margin: 0
+            }}>
+              Report Preview
+            </h3>
+          </div>
+
+          {/* Stats Grid */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
+            gap: '1rem',
+            marginBottom: '1.5rem'
+          }}>
+            <div style={{
+              textAlign: 'center',
+              padding: '1rem',
+              backgroundColor: '#FEF2F2',
+              borderRadius: '8px',
+              border: '1px solid #FECACA'
+            }}>
+              <div style={{
+                fontSize: '1.75rem',
+                fontWeight: '700',
+                color: '#EF4444',
+                margin: '0 0 0.25rem 0'
+              }}>
+                {statistics.totalSymptoms}
+              </div>
+              <div style={{
+                fontSize: '0.75rem',
+                color: '#991B1B',
+                fontWeight: '500'
+              }}>
+                Symptoms
+              </div>
+            </div>
+
+            <div style={{
+              textAlign: 'center',
+              padding: '1rem',
+              backgroundColor: '#ECFDF5',
+              borderRadius: '8px',
+              border: '1px solid #BBF7D0'
+            }}>
+              <div style={{
+                fontSize: '1.75rem',
+                fontWeight: '700',
+                color: '#10B981',
+                margin: '0 0 0.25rem 0'
+              }}>
+                {statistics.totalMedicationDoses}
+              </div>
+              <div style={{
+                fontSize: '0.75rem',
+                color: '#059669',
+                fontWeight: '500'
+              }}>
+                Med Doses
+              </div>
+            </div>
+
+            <div style={{
+              textAlign: 'center',
+              padding: '1rem',
+              backgroundColor: '#FFFBEB',
+              borderRadius: '8px',
+              border: '1px solid #FED7AA'
+            }}>
+              <div style={{
+                fontSize: '1.75rem',
+                fontWeight: '700',
+                color: '#F59E0B',
+                margin: '0 0 0.25rem 0'
+              }}>
+                {statistics.avgSeverity}
+              </div>
+              <div style={{
+                fontSize: '0.75rem',
+                color: '#92400E',
+                fontWeight: '500'
+              }}>
+                Avg Severity
+              </div>
+            </div>
+
+            <div style={{
+              textAlign: 'center',
+              padding: '1rem',
+              backgroundColor: '#EFF6FF',
+              borderRadius: '8px',
+              border: '1px solid #BFDBFE'
+            }}>
+              <div style={{
+                fontSize: '1.75rem',
+                fontWeight: '700',
+                color: '#3B82F6',
+                margin: '0 0 0.25rem 0'
+              }}>
+                {Math.ceil((new Date(reportSettings.endDate) - new Date(reportSettings.startDate)) / (1000 * 60 * 60 * 24)) + 1}
+              </div>
+              <div style={{
+                fontSize: '0.75rem',
+                color: '#1E40AF',
+                fontWeight: '500'
+              }}>
+                Days
+              </div>
+            </div>
+          </div>
+
+          {/* Key Insights */}
+          <div style={{
+            backgroundColor: '#F8FAFC',
+            borderRadius: '8px',
+            padding: '1rem',
+            border: '1px solid #E2E8F0'
+          }}>
+            <h4 style={{
+              fontSize: '0.875rem',
+              fontWeight: '600',
+              color: '#374151',
+              margin: '0 0 0.5rem 0'
+            }}>
+              Key Insights:
+            </h4>
+            <div style={{ fontSize: '0.75rem', color: '#64748B', lineHeight: '1.5' }}>
+              <div>• Most common symptom: <strong>{statistics.mostCommonSymptom}</strong></div>
+              <div>• Most taken medication: <strong>{statistics.mostTakenMedication}</strong></div>
+              <div>• Daily averages: {statistics.dailyAverages.symptomsPerDay} symptoms, {statistics.dailyAverages.medicationsPerDay} medications</div>
+            </div>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Empty State */}
       {filtered.symptoms.length === 0 && filtered.medicationLogs.length === 0 && (
         <div style={{
           backgroundColor: 'white',
-          padding: '3rem',
-          borderRadius: '12px',
-          border: '1px solid #e2e8f0',
+          borderRadius: '16px',
+          padding: '3rem 1rem',
+          border: '1px solid #E2E8F0',
+          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
           textAlign: 'center',
-          color: '#64748b'
+          color: '#64748B'
         }}>
-          <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📄</div>
-          <h3 style={{ marginBottom: '1rem', color: '#1e293b' }}>No Data for Selected Period</h3>
-          <p>Try selecting a different date range or add some symptoms and medications first.</p>
+          <div style={{
+            width: '64px',
+            height: '64px',
+            backgroundColor: '#F1F5F9',
+            borderRadius: '32px',
+            margin: '0 auto 1rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+            📊
+          </div>
+          <h3 style={{ 
+            fontSize: '1.125rem',
+            fontWeight: '600',
+            color: '#374151',
+            margin: '0 0 0.5rem 0'
+          }}>
+            No data for selected period
+          </h3>
+          <p style={{ margin: 0, fontSize: '0.875rem' }}>
+            Try selecting a different date range or add some symptoms and medications first.
+          </p>
+        </div>
+      )}
+
+      {/* Usage Tips */}
+      {(filtered.symptoms.length > 0 || filtered.medicationLogs.length > 0) && (
+        <div style={{
+          backgroundColor: '#EFF6FF',
+          borderRadius: '16px',
+          padding: '1.5rem',
+          border: '1px solid #BFDBFE'
+        }}>
+          <h4 style={{
+            color: '#1E40AF',
+            fontSize: '1rem',
+            fontWeight: '600',
+            margin: '0 0 0.5rem 0'
+          }}>
+            💡 Sharing with Healthcare Providers
+          </h4>
+          <p style={{
+            color: '#1E40AF',
+            margin: 0,
+            fontSize: '0.875rem',
+            lineHeight: '1.5'
+          }}>
+            Print your report or save the data file to share with your doctor. 
+            These insights can help your healthcare provider understand your health patterns and make more informed decisions about your care.
+          </p>
         </div>
       )}
     </div>
