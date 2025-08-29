@@ -1,28 +1,12 @@
 import React, { useState, useEffect } from 'react';
-
-// SVG Icons
-const PrintIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-    <polyline points="6,9 6,2 18,2 18,9" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M6 18H4C3.46957 18 2.96086 17.7893 2.58579 17.4142C2.21071 17.0391 2 16.5304 2 16V11C2 10.4696 2.21071 9.96086 2.58579 9.58579C2.96086 9.21071 3.46957 9 4 9H20C20.5304 9 21.0391 9.21071 21.4142 9.58579C21.7893 9.96086 22 10.4696 22 11V16C22 16.5304 21.7893 17.0391 21.4142 17.4142C21.0391 17.7893 20.5304 18 20 18H18" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-    <rect x="6" y="14" width="12" height="8" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-);
-
-const CalendarIcon = ({ size = 16 }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke="#64748B" strokeWidth="2"/>
-    <line x1="16" y1="2" x2="16" y2="6" stroke="#64748B" strokeWidth="2" strokeLinecap="round"/>
-    <line x1="8" y1="2" x2="8" y2="6" stroke="#64748B" strokeWidth="2" strokeLinecap="round"/>
-    <line x1="3" y1="10" x2="21" y2="10" stroke="#64748B" strokeWidth="2" strokeLinecap="round"/>
-  </svg>
-);
-
-const ChartIcon = ({ size = 16 }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-    <polyline points="22,12 18,12 15,21 9,3 6,12 2,12" stroke="#3B82F6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-);
+import { 
+  ReportsIcon,
+  PrintIcon, 
+  CalendarIcon, 
+  ChartIcon,
+  getSeverityColor,
+  getSeverityLabel
+} from './Icons';
 
 const Reports = () => {
   const [reportData, setReportData] = useState({
@@ -134,47 +118,49 @@ const Reports = () => {
     }, 500);
   };
 
-  const getSeverityColor = (severity) => {
-    if (severity <= 3) return '#10B981';
-    if (severity <= 6) return '#F59E0B'; 
-    return '#EF4444';
-  };
-
-  const getSeverityLabel = (severity) => {
-    if (severity <= 3) return 'Mild';
-    if (severity <= 6) return 'Moderate';
-    return 'Severe';
-  };
-
   const filtered = getFilteredData();
   const statistics = generateStatistics(filtered.symptoms, filtered.medicationLogs);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      {/* Header Card */}
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+      {/* Header */}
       <div style={{
         backgroundColor: 'white',
         borderRadius: '16px',
         padding: '1.5rem',
         border: '1px solid #E2E8F0',
-        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)'
+        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
       }}>
-        <h2 style={{ 
-          fontSize: '1.5rem',
-          fontWeight: '700',
-          color: '#1E293B',
-          margin: '0 0 0.5rem 0'
-        }}>
-          Health Reports
-        </h2>
-        <p style={{ 
-          color: '#64748B', 
-          margin: 0,
-          fontSize: '1rem',
-          lineHeight: '1.5'
-        }}>
-          Generate professional reports to share with your healthcare provider.
-        </p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
+          <div style={{
+            width: '48px',
+            height: '48px',
+            backgroundColor: '#8B5CF6',
+            borderRadius: '12px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+            <ReportsIcon color="#FFFFFF" size={24} />
+          </div>
+          <div>
+            <h2 style={{ 
+              fontSize: '1.5rem',
+              fontWeight: '700',
+              color: '#1E293B',
+              margin: '0'
+            }}>
+              Health Reports
+            </h2>
+            <p style={{ 
+              color: '#64748B', 
+              margin: '0.25rem 0 0 0',
+              fontSize: '0.875rem'
+            }}>
+              Generate professional reports to share with your healthcare provider
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* Report Settings */}
@@ -183,10 +169,10 @@ const Reports = () => {
         borderRadius: '16px',
         padding: '1.5rem',
         border: '1px solid #E2E8F0',
-        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)'
+        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
       }}>
         <h3 style={{ 
-          fontSize: '1.25rem',
+          fontSize: '1.125rem',
           fontWeight: '600',
           color: '#1E293B',
           margin: '0 0 1rem 0'
@@ -225,7 +211,6 @@ const Reports = () => {
                   backgroundColor: '#FAFAFA'
                 }}
               />
-              <CalendarIcon />
               <div style={{
                 position: 'absolute',
                 left: '0.75rem',
@@ -295,19 +280,31 @@ const Reports = () => {
                 display: 'flex', 
                 alignItems: 'center', 
                 gap: '0.75rem',
-                padding: '0.5rem',
+                padding: '0.75rem',
                 backgroundColor: '#F8FAFC',
                 borderRadius: '8px',
                 border: '1px solid #E2E8F0',
-                cursor: 'pointer'
-              }}>
+                cursor: 'pointer',
+                transition: 'background-color 0.15s ease'
+              }}
+              onMouseEnter={(e) => e.target.style.backgroundColor = '#F1F5F9'}
+              onMouseLeave={(e) => e.target.style.backgroundColor = '#F8FAFC'}
+              >
                 <input
                   type="checkbox"
                   checked={reportSettings[option.key]}
                   onChange={(e) => setReportSettings(prev => ({ ...prev, [option.key]: e.target.checked }))}
-                  style={{ transform: 'scale(1.2)' }}
+                  style={{ 
+                    transform: 'scale(1.2)',
+                    accentColor: '#3B82F6'
+                  }}
                 />
-                <span style={{ fontSize: '0.875rem', fontWeight: '500', color: '#374151' }}>
+                <span style={{ 
+                  fontSize: '0.875rem', 
+                  fontWeight: '500', 
+                  color: '#374151',
+                  flex: 1
+                }}>
                   {option.label}
                 </span>
               </label>
@@ -315,13 +312,13 @@ const Reports = () => {
           </div>
         </div>
 
-        {/* Action Button */}
+        {/* Print Button */}
         <button
           onClick={handlePrint}
           disabled={isGenerating}
           style={{
             width: '100%',
-            backgroundColor: '#3B82F6',
+            backgroundColor: isGenerating ? '#9CA3AF' : '#3B82F6',
             color: 'white',
             border: 'none',
             padding: '1rem',
@@ -337,8 +334,20 @@ const Reports = () => {
             transition: 'all 0.2s',
             boxShadow: '0 4px 12px rgba(59, 130, 246, 0.25)'
           }}
-          onMouseEnter={(e) => !isGenerating && (e.target.style.backgroundColor = '#2563EB')}
-          onMouseLeave={(e) => !isGenerating && (e.target.style.backgroundColor = '#3B82F6')}
+          onMouseEnter={(e) => {
+            if (!isGenerating) {
+              e.target.style.backgroundColor = '#2563EB';
+              e.target.style.transform = 'translateY(-1px)';
+              e.target.style.boxShadow = '0 6px 16px rgba(59, 130, 246, 0.35)';
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (!isGenerating) {
+              e.target.style.backgroundColor = '#3B82F6';
+              e.target.style.transform = 'translateY(0)';
+              e.target.style.boxShadow = '0 4px 12px rgba(59, 130, 246, 0.25)';
+            }
+          }}
         >
           <PrintIcon />
           {isGenerating ? 'Generating Report...' : 'Print Report for Doctor'}
@@ -352,12 +361,12 @@ const Reports = () => {
           borderRadius: '16px',
           padding: '1.5rem',
           border: '1px solid #E2E8F0',
-          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)'
+          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
             <ChartIcon />
             <h3 style={{ 
-              fontSize: '1.25rem',
+              fontSize: '1.125rem',
               fontWeight: '600',
               color: '#1E293B',
               margin: 0
@@ -375,15 +384,19 @@ const Reports = () => {
           }}>
             <div style={{
               textAlign: 'center',
-              padding: '1rem',
-              backgroundColor: '#FEF2F2',
-              borderRadius: '8px',
-              border: '1px solid #FECACA'
-            }}>
+              padding: '1.25rem 1rem',
+              background: 'linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%)',
+              borderRadius: '12px',
+              border: '1px solid #FECACA',
+              transition: 'transform 0.2s ease'
+            }}
+            onMouseEnter={(e) => e.target.style.transform = 'translateY(-2px)'}
+            onMouseLeave={(e) => e.target.style.transform = 'translateY(0)'}
+            >
               <div style={{
-                fontSize: '1.75rem',
-                fontWeight: '700',
-                color: '#EF4444',
+                fontSize: '2rem',
+                fontWeight: '800',
+                color: '#DC2626',
                 margin: '0 0 0.25rem 0'
               }}>
                 {statistics.totalSymptoms}
@@ -391,47 +404,55 @@ const Reports = () => {
               <div style={{
                 fontSize: '0.75rem',
                 color: '#991B1B',
-                fontWeight: '500'
+                fontWeight: '600'
               }}>
-                Symptoms
+                Total Symptoms
               </div>
             </div>
 
             <div style={{
               textAlign: 'center',
-              padding: '1rem',
-              backgroundColor: '#ECFDF5',
-              borderRadius: '8px',
-              border: '1px solid #BBF7D0'
-            }}>
+              padding: '1.25rem 1rem',
+              background: 'linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%)',
+              borderRadius: '12px',
+              border: '1px solid #BBF7D0',
+              transition: 'transform 0.2s ease'
+            }}
+            onMouseEnter={(e) => e.target.style.transform = 'translateY(-2px)'}
+            onMouseLeave={(e) => e.target.style.transform = 'translateY(0)'}
+            >
               <div style={{
-                fontSize: '1.75rem',
-                fontWeight: '700',
-                color: '#10B981',
+                fontSize: '2rem',
+                fontWeight: '800',
+                color: '#059669',
                 margin: '0 0 0.25rem 0'
               }}>
                 {statistics.totalMedicationDoses}
               </div>
               <div style={{
                 fontSize: '0.75rem',
-                color: '#059669',
-                fontWeight: '500'
+                color: '#047857',
+                fontWeight: '600'
               }}>
-                Med Doses
+                Med Doses Taken
               </div>
             </div>
 
             <div style={{
               textAlign: 'center',
-              padding: '1rem',
-              backgroundColor: '#FFFBEB',
-              borderRadius: '8px',
-              border: '1px solid #FED7AA'
-            }}>
+              padding: '1.25rem 1rem',
+              background: 'linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%)',
+              borderRadius: '12px',
+              border: '1px solid #FDE68A',
+              transition: 'transform 0.2s ease'
+            }}
+            onMouseEnter={(e) => e.target.style.transform = 'translateY(-2px)'}
+            onMouseLeave={(e) => e.target.style.transform = 'translateY(0)'}
+            >
               <div style={{
-                fontSize: '1.75rem',
-                fontWeight: '700',
-                color: '#F59E0B',
+                fontSize: '2rem',
+                fontWeight: '800',
+                color: getSeverityColor(parseFloat(statistics.avgSeverity)),
                 margin: '0 0 0.25rem 0'
               }}>
                 {statistics.avgSeverity}
@@ -439,7 +460,7 @@ const Reports = () => {
               <div style={{
                 fontSize: '0.75rem',
                 color: '#92400E',
-                fontWeight: '500'
+                fontWeight: '600'
               }}>
                 Avg Severity
               </div>
@@ -447,15 +468,19 @@ const Reports = () => {
 
             <div style={{
               textAlign: 'center',
-              padding: '1rem',
-              backgroundColor: '#EFF6FF',
-              borderRadius: '8px',
-              border: '1px solid #BFDBFE'
-            }}>
+              padding: '1.25rem 1rem',
+              background: 'linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%)',
+              borderRadius: '12px',
+              border: '1px solid #BFDBFE',
+              transition: 'transform 0.2s ease'
+            }}
+            onMouseEnter={(e) => e.target.style.transform = 'translateY(-2px)'}
+            onMouseLeave={(e) => e.target.style.transform = 'translateY(0)'}
+            >
               <div style={{
-                fontSize: '1.75rem',
-                fontWeight: '700',
-                color: '#3B82F6',
+                fontSize: '2rem',
+                fontWeight: '800',
+                color: '#1E40AF',
                 margin: '0 0 0.25rem 0'
               }}>
                 {Math.ceil((new Date(reportSettings.endDate) - new Date(reportSettings.startDate)) / (1000 * 60 * 60 * 24)) + 1}
@@ -463,32 +488,74 @@ const Reports = () => {
               <div style={{
                 fontSize: '0.75rem',
                 color: '#1E40AF',
-                fontWeight: '500'
+                fontWeight: '600'
               }}>
-                Days
+                Days Tracked
               </div>
             </div>
           </div>
 
           {/* Key Insights */}
           <div style={{
-            backgroundColor: '#F8FAFC',
-            borderRadius: '8px',
-            padding: '1rem',
+            background: 'linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%)',
+            borderRadius: '12px',
+            padding: '1.25rem',
             border: '1px solid #E2E8F0'
           }}>
             <h4 style={{
-              fontSize: '0.875rem',
+              fontSize: '1rem',
               fontWeight: '600',
               color: '#374151',
-              margin: '0 0 0.5rem 0'
+              margin: '0 0 0.75rem 0'
             }}>
-              Key Insights:
+              Key Insights for Your Doctor:
             </h4>
-            <div style={{ fontSize: '0.75rem', color: '#64748B', lineHeight: '1.5' }}>
-              <div>• Most common symptom: <strong>{statistics.mostCommonSymptom}</strong></div>
-              <div>• Most taken medication: <strong>{statistics.mostTakenMedication}</strong></div>
-              <div>• Daily averages: {statistics.dailyAverages.symptomsPerDay} symptoms, {statistics.dailyAverages.medicationsPerDay} medications</div>
+            <div style={{ 
+              fontSize: '0.875rem', 
+              color: '#4B5563', 
+              lineHeight: '1.6',
+              display: 'grid',
+              gap: '0.5rem'
+            }}>
+              <div style={{ 
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem'
+              }}>
+                <div style={{
+                  width: '6px',
+                  height: '6px',
+                  backgroundColor: '#DC2626',
+                  borderRadius: '50%'
+                }} />
+                Most common symptom: <strong style={{ color: '#DC2626' }}>{statistics.mostCommonSymptom}</strong>
+              </div>
+              <div style={{ 
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem'
+              }}>
+                <div style={{
+                  width: '6px',
+                  height: '6px',
+                  backgroundColor: '#059669',
+                  borderRadius: '50%'
+                }} />
+                Most taken medication: <strong style={{ color: '#059669' }}>{statistics.mostTakenMedication}</strong>
+              </div>
+              <div style={{ 
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem'
+              }}>
+                <div style={{
+                  width: '6px',
+                  height: '6px',
+                  backgroundColor: '#3B82F6',
+                  borderRadius: '50%'
+                }} />
+                Daily averages: <strong>{statistics.dailyAverages.symptomsPerDay}</strong> symptoms, <strong>{statistics.dailyAverages.medicationsPerDay}</strong> medications per day
+              </div>
             </div>
           </div>
         </div>
@@ -501,21 +568,20 @@ const Reports = () => {
           borderRadius: '16px',
           padding: '3rem 1rem',
           border: '1px solid #E2E8F0',
-          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
-          textAlign: 'center',
-          color: '#64748B'
+          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+          textAlign: 'center'
         }}>
           <div style={{
             width: '64px',
             height: '64px',
-            backgroundColor: '#F1F5F9',
+            backgroundColor: '#F3F4F6',
             borderRadius: '32px',
             margin: '0 auto 1rem',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
           }}>
-            📊
+            <ChartIcon size={32} color="#9CA3AF" />
           </div>
           <h3 style={{ 
             fontSize: '1.125rem',
@@ -525,7 +591,12 @@ const Reports = () => {
           }}>
             No data for selected period
           </h3>
-          <p style={{ margin: 0, fontSize: '0.875rem' }}>
+          <p style={{ 
+            margin: 0, 
+            fontSize: '0.875rem',
+            color: '#64748B',
+            lineHeight: '1.5'
+          }}>
             Try selecting a different date range or add some symptoms and medications first.
           </p>
         </div>
@@ -534,7 +605,7 @@ const Reports = () => {
       {/* Usage Tips */}
       {(filtered.symptoms.length > 0 || filtered.medicationLogs.length > 0) && (
         <div style={{
-          backgroundColor: '#EFF6FF',
+          background: 'linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%)',
           borderRadius: '16px',
           padding: '1.5rem',
           border: '1px solid #BFDBFE'
@@ -543,18 +614,33 @@ const Reports = () => {
             color: '#1E40AF',
             fontSize: '1rem',
             fontWeight: '600',
-            margin: '0 0 0.5rem 0'
+            margin: '0 0 0.75rem 0',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem'
           }}>
-            💡 Sharing with Healthcare Providers
+            <div style={{
+              width: '24px',
+              height: '24px',
+              backgroundColor: '#3B82F6',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '0.875rem'
+            }}>
+              💡
+            </div>
+            Sharing with Healthcare Providers
           </h4>
           <p style={{
             color: '#1E40AF',
             margin: 0,
             fontSize: '0.875rem',
-            lineHeight: '1.5'
+            lineHeight: '1.6'
           }}>
-            Print your report to share with your doctor. These insights can help your healthcare provider 
-            understand your health patterns and make more informed decisions about your care.
+            Print your report to share with your doctor during appointments. These insights can help your healthcare provider 
+            understand your health patterns and make more informed decisions about your treatment plan.
           </p>
         </div>
       )}
