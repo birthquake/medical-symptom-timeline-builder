@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import SymptomTracker from './components/SymptomTracker';
 import MedicationTracker from './components/MedicationTracker';
+import Timeline from './components/Timeline';
 
 function App() {
   const [currentView, setCurrentView] = useState('home');
@@ -11,6 +12,8 @@ function App() {
         return <SymptomTracker />;
       case 'medications':
         return <MedicationTracker />;
+      case 'timeline':
+        return <Timeline />;
       case 'home':
       default:
         return <HomePage setCurrentView={setCurrentView} />;
@@ -109,18 +112,18 @@ function App() {
             💊 Medications
           </button>
           <button
+            onClick={() => setCurrentView('timeline')}
             style={{
               padding: '0.5rem 1rem',
-              backgroundColor: 'white',
-              color: '#94a3b8',
+              backgroundColor: currentView === 'timeline' ? '#2563eb' : 'white',
+              color: currentView === 'timeline' ? 'white' : '#64748b',
               border: '1px solid #e2e8f0',
               borderRadius: '6px',
-              cursor: 'not-allowed',
+              cursor: 'pointer',
               fontSize: '0.9rem'
             }}
-            disabled
           >
-            📈 Timeline (Soon)
+            📈 Timeline
           </button>
           <button
             style={{
@@ -176,10 +179,10 @@ const HomePage = ({ setCurrentView }) => {
         border: '1px solid #e2e8f0'
       }}>
         <h2 style={{ color: '#16a34a', marginBottom: '1rem' }}>
-          ✅ Core Features Ready!
+          🎉 All Core Features Complete!
         </h2>
         <p style={{ marginBottom: '1.5rem', color: '#64748b' }}>
-          Your medical tracking app now has symptom and medication tracking.
+          Your medical tracking app now has symptoms, medications, and timeline views.
         </p>
         
         <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -211,6 +214,20 @@ const HomePage = ({ setCurrentView }) => {
           >
             💊 Manage Medications
           </button>
+          <button
+            onClick={() => setCurrentView('timeline')}
+            style={{
+              backgroundColor: '#d97706',
+              color: 'white',
+              border: 'none',
+              padding: '0.75rem 1.5rem',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontWeight: '600'
+            }}
+          >
+            📈 View Timeline
+          </button>
         </div>
       </div>
 
@@ -236,7 +253,7 @@ const HomePage = ({ setCurrentView }) => {
             fontSize: '0.75rem',
             fontWeight: '600'
           }}>
-            ✅ LIVE
+            ✅ COMPLETE
           </span>
         </div>
 
@@ -256,7 +273,7 @@ const HomePage = ({ setCurrentView }) => {
             fontSize: '0.75rem',
             fontWeight: '600'
           }}>
-            ✅ LIVE
+            ✅ COMPLETE
           </span>
         </div>
 
@@ -269,14 +286,14 @@ const HomePage = ({ setCurrentView }) => {
           <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>📈</div>
           <h3 style={{ fontSize: '1rem', margin: '0 0 0.5rem 0' }}>Timeline View</h3>
           <span style={{
-            backgroundColor: '#d97706',
+            backgroundColor: '#16a34a',
             color: 'white',
             padding: '0.25rem 0.5rem',
             borderRadius: '12px',
             fontSize: '0.75rem',
             fontWeight: '600'
           }}>
-            🚧 NEXT
+            ✅ COMPLETE
           </span>
         </div>
 
@@ -289,15 +306,40 @@ const HomePage = ({ setCurrentView }) => {
           <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>📄</div>
           <h3 style={{ fontSize: '1rem', margin: '0 0 0.5rem 0' }}>Export Reports</h3>
           <span style={{
-            backgroundColor: '#64748b',
+            backgroundColor: '#d97706',
             color: 'white',
             padding: '0.25rem 0.5rem',
             borderRadius: '12px',
             fontSize: '0.75rem',
             fontWeight: '600'
           }}>
-            📋 PLANNED
+            🚧 NEXT
           </span>
+        </div>
+      </div>
+
+      {/* Usage Tips */}
+      <div style={{
+        backgroundColor: '#f0f9ff',
+        border: '1px solid #bae6fd',
+        padding: '1.5rem',
+        borderRadius: '8px',
+        marginTop: '2rem'
+      }}>
+        <h3 style={{ color: '#0369a1', marginBottom: '1rem' }}>🎯 How to Use Your Timeline</h3>
+        <div style={{ textAlign: 'left', color: '#0c4a6e' }}>
+          <p style={{ margin: '0 0 0.5rem 0' }}>
+            ✅ Add some symptoms and medications to see your timeline populate
+          </p>
+          <p style={{ margin: '0 0 0.5rem 0' }}>
+            ✅ Use filters to focus on specific timeframes or event types
+          </p>
+          <p style={{ margin: '0 0 0.5rem 0' }}>
+            ✅ Look for patterns - do symptoms occur after certain activities?
+          </p>
+          <p style={{ margin: '0' }}>
+            ✅ Share your timeline view with healthcare providers
+          </p>
         </div>
       </div>
     </div>
