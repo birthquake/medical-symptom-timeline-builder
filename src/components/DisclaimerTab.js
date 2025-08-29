@@ -476,7 +476,7 @@ const DisclaimerTab = () => {
               padding: '0.75rem 1rem',
               border: 'none',
               backgroundColor: currentSection === section ? '#3B82F6' : '#F8FAFC',
-              color: currentView === section ? 'white' : '#64748B',
+              color: currentSection === section ? 'white' : '#64748B',
               borderRadius: '8px',
               cursor: 'pointer',
               fontSize: '0.875rem',
