@@ -3,4 +3,4 @@ export { default as SymptomTracker } from './SymptomTracker';
 export { default as MedicationTracker } from './MedicationTracker';
 export { default as Timeline } from './Timeline';
 export { default as Reports } from './Reports';
-export { default as MedicalDisclaimer } from './MedicalDisclaimer';
+export { default as DisclaimerTab } from './DisclaimerTab';
