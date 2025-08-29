@@ -1,11 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SymptomTracker from './components/SymptomTracker';
 import MedicationTracker from './components/MedicationTracker';
 import Timeline from './components/Timeline';
 import Reports from './components/Reports';
+import MedicalDisclaimer from './components/MedicalDisclaimer';
 
 function App() {
   const [currentView, setCurrentView] = useState('home');
+  const [showDisclaimer, setShowDisclaimer] = useState(false);
+  const [disclaimerAccepted, setDisclaimerAccepted] = useState(false);
+
+  // Check if user has accepted disclaimer on app load
+  useEffect(() => {
+    const accepted = localStorage.getItem('medicalDisclaimerAccepted');
+    if (accepted === 'true') {
+      setDisclaimerAccepted(true);
+    } else {
+      setShowDisclaimer(true);
+    }
+  }, []);
+
+  const handleDisclaimerAccept = () => {
+    setDisclaimerAccepted(true);
+    setShowDisclaimer(false);
+    localStorage.setItem('medicalDisclaimerAccepted', 'true');
+  };
+
+  const handleViewDisclaimer = () => {
+    setShowDisclaimer(true);
+  };
 
   const renderCurrentView = () => {
     switch(currentView) {
@@ -19,9 +42,14 @@ function App() {
         return <Reports />;
       case 'home':
       default:
-        return <HomePage setCurrentView={setCurrentView} />;
+        return <HomePage setCurrentView={setCurrentView} onViewDisclaimer={handleViewDisclaimer} />;
     }
   };
+
+  // Show disclaimer modal if not accepted
+  if (showDisclaimer && !disclaimerAccepted) {
+    return <MedicalDisclaimer onAccept={handleDisclaimerAccept} />;
+  }
 
   return (
     <div style={{ 
@@ -29,6 +57,34 @@ function App() {
       minHeight: '100vh',
       fontFamily: 'Arial, sans-serif'
     }}>
+      {/* Medical Disclaimer Banner */}
+      <div style={{
+        backgroundColor: '#fef2f2',
+        borderBottom: '1px solid #fecaca',
+        padding: '0.5rem 0',
+        textAlign: 'center'
+      }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 1rem' }}>
+          <span style={{ color: '#991b1b', fontSize: '0.9rem' }}>
+            ⚕️ This app is for tracking purposes only and does not provide medical advice. 
+          </span>
+          <button
+            onClick={handleViewDisclaimer}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: '#dc2626',
+              textDecoration: 'underline',
+              cursor: 'pointer',
+              marginLeft: '0.5rem',
+              fontSize: '0.9rem'
+            }}
+          >
+            View full disclaimer
+          </button>
+        </div>
+      </div>
+
       {/* Header */}
       <header style={{
         background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
@@ -55,7 +111,7 @@ function App() {
             opacity: 0.9,
             margin: 0
           }}>
-            Track your symptoms and medications with visual timelines
+            Track your symptoms and medications • Share with healthcare providers
           </p>
         </div>
       </header>
@@ -154,7 +210,7 @@ function App() {
         {renderCurrentView()}
       </main>
 
-      {/* Footer */}
+      {/* Footer with Medical Notice */}
       <footer style={{
         marginTop: '3rem',
         padding: '2rem 1rem',
@@ -164,16 +220,94 @@ function App() {
         borderTop: '1px solid #e2e8f0',
         backgroundColor: 'white'
       }}>
-        © 2025 Medical Symptom Timeline Builder - Your data stays private and secure
+        <div style={{ marginBottom: '1rem' }}>
+          <p style={{ margin: '0 0 0.5rem 0' }}>
+            © 2025 Medical Symptom Timeline Builder - Your data stays private and secure
+          </p>
+          <p style={{ margin: 0, fontSize: '0.8rem', color: '#94a3b8' }}>
+            ⚕️ Not intended for medical diagnosis or treatment • Always consult healthcare professionals • 
+            <button
+              onClick={handleViewDisclaimer}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: '#94a3b8',
+                textDecoration: 'underline',
+                cursor: 'pointer',
+                marginLeft: '0.25rem',
+                fontSize: '0.8rem'
+              }}
+            >
+              Medical Disclaimer
+            </button>
+          </p>
+        </div>
       </footer>
+
+      {/* Show disclaimer modal if requested */}
+      {showDisclaimer && disclaimerAccepted && (
+        <MedicalDisclaimer onAccept={() => setShowDisclaimer(false)} />
+      )}
     </div>
   );
 }
 
-// Home Page Component
-const HomePage = ({ setCurrentView }) => {
+// Enhanced Home Page Component with Medical Best Practices
+const HomePage = ({ setCurrentView, onViewDisclaimer }) => {
   return (
     <div style={{ textAlign: 'center' }}>
+      {/* Medical Safety Notice */}
+      <div style={{
+        backgroundColor: '#fef2f2',
+        border: '1px solid #fecaca',
+        padding: '1.5rem',
+        borderRadius: '12px',
+        marginBottom: '2rem',
+        textAlign: 'left'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
+          <span style={{ fontSize: '1.5rem', marginRight: '0.75rem' }}>🚨</span>
+          <h3 style={{ margin: 0, color: '#dc2626', fontSize: '1.2rem' }}>
+            Important Medical Safety Information
+          </h3>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
+          <div>
+            <h4 style={{ color: '#991b1b', margin: '0 0 0.5rem 0', fontSize: '1rem' }}>
+              🚑 Medical Emergencies
+            </h4>
+            <p style={{ color: '#991b1b', margin: 0, fontSize: '0.9rem' }}>
+              Call 911 immediately for emergencies. Do not use this app during medical emergencies.
+            </p>
+          </div>
+          <div>
+            <h4 style={{ color: '#991b1b', margin: '0 0 0.5rem 0', fontSize: '1rem' }}>
+              ⚕️ Healthcare Decisions
+            </h4>
+            <p style={{ color: '#991b1b', margin: 0, fontSize: '0.9rem' }}>
+              Always consult healthcare professionals. This app tracks data but cannot diagnose or treat.
+            </p>
+          </div>
+        </div>
+        <div style={{ textAlign: 'center', marginTop: '1rem' }}>
+          <button
+            onClick={onViewDisclaimer}
+            style={{
+              backgroundColor: '#dc2626',
+              color: 'white',
+              border: 'none',
+              padding: '0.5rem 1rem',
+              borderRadius: '6px',
+              fontSize: '0.9rem',
+              cursor: 'pointer'
+            }}
+          >
+            Read Full Medical Disclaimer
+          </button>
+        </div>
+      </div>
+
+      {/* Main Welcome Section */}
       <div style={{
         backgroundColor: 'white',
         padding: '2rem',
@@ -183,10 +317,10 @@ const HomePage = ({ setCurrentView }) => {
         boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
       }}>
         <h2 style={{ color: '#16a34a', marginBottom: '1rem', fontSize: '1.8rem' }}>
-          🎉 Your Complete Medical Tracking App is Ready!
+          📊 Your Personal Health Tracking Assistant
         </h2>
         <p style={{ marginBottom: '1.5rem', color: '#64748b', fontSize: '1.1rem' }}>
-          All core features are now live. Track symptoms, manage medications, view timelines, and generate professional reports.
+          Organize your health information to share with healthcare providers and track patterns over time.
         </p>
         
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
@@ -216,7 +350,7 @@ const HomePage = ({ setCurrentView }) => {
               fontWeight: '600'
             }}
           >
-            💊 Manage Medications
+            💊 Log Medications
           </button>
           <button
             onClick={() => setCurrentView('timeline')}
@@ -265,6 +399,9 @@ const HomePage = ({ setCurrentView }) => {
         }}>
           <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>📊</div>
           <h3 style={{ fontSize: '1rem', margin: '0 0 0.5rem 0' }}>Symptom Tracking</h3>
+          <p style={{ fontSize: '0.8rem', color: '#64748b', margin: '0 0 0.5rem 0' }}>
+            Log symptoms with severity and notes
+          </p>
           <span style={{
             backgroundColor: '#16a34a',
             color: 'white',
@@ -273,7 +410,7 @@ const HomePage = ({ setCurrentView }) => {
             fontSize: '0.75rem',
             fontWeight: '600'
           }}>
-            ✅ COMPLETE
+            ✅ READY
           </span>
         </div>
 
@@ -286,6 +423,9 @@ const HomePage = ({ setCurrentView }) => {
         }}>
           <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>💊</div>
           <h3 style={{ fontSize: '1rem', margin: '0 0 0.5rem 0' }}>Medication Tracking</h3>
+          <p style={{ fontSize: '0.8rem', color: '#64748b', margin: '0 0 0.5rem 0' }}>
+            Log prescribed medications and doses
+          </p>
           <span style={{
             backgroundColor: '#16a34a',
             color: 'white',
@@ -294,7 +434,7 @@ const HomePage = ({ setCurrentView }) => {
             fontSize: '0.75rem',
             fontWeight: '600'
           }}>
-            ✅ COMPLETE
+            ✅ READY
           </span>
         </div>
 
@@ -307,6 +447,9 @@ const HomePage = ({ setCurrentView }) => {
         }}>
           <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>📈</div>
           <h3 style={{ fontSize: '1rem', margin: '0 0 0.5rem 0' }}>Timeline View</h3>
+          <p style={{ fontSize: '0.8rem', color: '#64748b', margin: '0 0 0.5rem 0' }}>
+            Chronological view of health events
+          </p>
           <span style={{
             backgroundColor: '#16a34a',
             color: 'white',
@@ -315,7 +458,7 @@ const HomePage = ({ setCurrentView }) => {
             fontSize: '0.75rem',
             fontWeight: '600'
           }}>
-            ✅ COMPLETE
+            ✅ READY
           </span>
         </div>
 
@@ -327,7 +470,10 @@ const HomePage = ({ setCurrentView }) => {
           textAlign: 'center'
         }}>
           <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>📄</div>
-          <h3 style={{ fontSize: '1rem', margin: '0 0 0.5rem 0' }}>Export Reports</h3>
+          <h3 style={{ fontSize: '1rem', margin: '0 0 0.5rem 0' }}>Healthcare Reports</h3>
+          <p style={{ fontSize: '0.8rem', color: '#64748b', margin: '0 0 0.5rem 0' }}>
+            Professional summaries for doctors
+          </p>
           <span style={{
             backgroundColor: '#16a34a',
             color: 'white',
@@ -336,12 +482,12 @@ const HomePage = ({ setCurrentView }) => {
             fontSize: '0.75rem',
             fontWeight: '600'
           }}>
-            ✅ COMPLETE
+            ✅ READY
           </span>
         </div>
       </div>
 
-      {/* Usage Guide */}
+      {/* Safe Usage Guide */}
       <div style={{
         backgroundColor: '#f0f9ff',
         border: '1px solid #bae6fd',
@@ -349,7 +495,7 @@ const HomePage = ({ setCurrentView }) => {
         borderRadius: '12px'
       }}>
         <h3 style={{ color: '#0369a1', marginBottom: '1.5rem', textAlign: 'center' }}>
-          🎯 Your Complete Medical Tracking System
+          🎯 Best Practices for Health Tracking
         </h3>
         <div style={{ 
           display: 'grid', 
@@ -358,27 +504,27 @@ const HomePage = ({ setCurrentView }) => {
           textAlign: 'left' 
         }}>
           <div>
-            <h4 style={{ color: '#0c4a6e', margin: '0 0 0.5rem 0' }}>📊 Track Daily Health</h4>
+            <h4 style={{ color: '#0c4a6e', margin: '0 0 0.5rem 0' }}>📝 Accurate Recording</h4>
             <p style={{ color: '#0c4a6e', fontSize: '0.9rem', margin: 0 }}>
-              Log symptoms with severity levels, notes, and timestamps. Quick-select common symptoms for faster entry.
+              Log symptoms and medications accurately as they occur. Include relevant details like timing, severity, and circumstances.
             </p>
           </div>
           <div>
-            <h4 style={{ color: '#0c4a6e', margin: '0 0 0.5rem 0' }}>💊 Medication Management</h4>
+            <h4 style={{ color: '#0c4a6e', margin: '0 0 0.5rem 0' }}>⚕️ Share with Doctors</h4>
             <p style={{ color: '#0c4a6e', fontSize: '0.9rem', margin: 0 }}>
-              Track medications and dosages. Log when you take them to monitor compliance and effectiveness.
+              Use generated reports during medical appointments. This helps healthcare providers make informed decisions.
             </p>
           </div>
           <div>
-            <h4 style={{ color: '#0c4a6e', margin: '0 0 0.5rem 0' }}>📈 Visual Timeline</h4>
+            <h4 style={{ color: '#0c4a6e', margin: '0 0 0.5rem 0' }}>🔒 Privacy Protection</h4>
             <p style={{ color: '#0c4a6e', fontSize: '0.9rem', margin: 0 }}>
-              See all your health data in chronological order. Filter by date ranges and event types to spot patterns.
+              Your data stays on your device. Regularly export backups to prevent data loss from device issues.
             </p>
           </div>
           <div>
-            <h4 style={{ color: '#0c4a6e', margin: '0 0 0.5rem 0' }}>📄 Professional Reports</h4>
+            <h4 style={{ color: '#0c4a6e', margin: '0 0 0.5rem 0' }}>🚨 Know Limitations</h4>
             <p style={{ color: '#0c4a6e', fontSize: '0.9rem', margin: 0 }}>
-              Generate comprehensive reports with statistics and summaries. Print or save as PDF for doctor visits.
+              This app tracks data only. For medical emergencies, diagnosis, or treatment decisions, consult healthcare professionals immediately.
             </p>
           </div>
         </div>
