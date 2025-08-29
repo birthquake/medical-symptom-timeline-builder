@@ -194,3 +194,54 @@ export const getSeverityLabel = (severity) => {
   if (severity <= 6) return 'Moderate';
   return 'Severe';
 };
+
+// NEW ADDITIONS FOR COMPONENT COMPATIBILITY
+
+// Aliases for component compatibility
+export const SymptomIcon = SymptomsIcon;
+export const MedicationIcon = MedsIcon; 
+export const MedicalInfoIcon = InfoIcon;
+export const XIcon = CloseIcon;
+
+// Additional missing icons
+export const ChevronDownIcon = ({ size = 20, color = "#64748B" }) => (
+  <Icon size={size} color={color}>
+    <polyline points="6,9 12,15 18,9" />
+  </Icon>
+);
+
+export const AlertCircleIcon = ({ size = 20, color = "#F59E0B" }) => (
+  <Icon size={size} color={color}>
+    <circle cx="12" cy="12" r="10" />
+    <line x1="12" y1="8" x2="12" y2="12" />
+    <circle cx="12" cy="16" r="1" fill={color} />
+  </Icon>
+);
+
+export const TrendUpIcon = ({ size = 20, color = "#10B981" }) => (
+  <Icon size={size} color={color}>
+    <polyline points="23,6 13.5,15.5 8.5,10.5 1,18" />
+    <polyline points="17,6 23,6 23,12" />
+  </Icon>
+);
+
+export const LockIcon = ({ size = 20, color = "#64748B" }) => (
+  <Icon size={size} color={color}>
+    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+    <path d="M7 11V7C7 5.67392 7.52678 4.40215 8.46447 3.46447C9.40215 2.52678 10.6739 2 12 2C13.3261 2 14.5979 2.52678 15.5355 3.46447C16.4732 4.40215 17 5.67392 17 7V11" />
+  </Icon>
+);
+
+// Severity dot component
+export const SeverityDot = ({ level, size = 12 }) => {
+  return (
+    <div style={{
+      width: size,
+      height: size,
+      borderRadius: '50%',
+      backgroundColor: getSeverityColor(level),
+      border: '2px solid white',
+      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.12)'
+    }} />
+  );
+};
