@@ -1,14 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
 // SVG Icons
-const DownloadIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-    <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 19.5304 3 19V15" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-    <polyline points="7,10 12,15 17,10" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-    <line x1="12" y1="15" x2="12" y2="3" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-);
-
 const PrintIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
     <polyline points="6,9 6,2 18,2 18,9" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -140,30 +132,6 @@ const Reports = () => {
       window.print();
       setIsGenerating(false);
     }, 500);
-  };
-
-  const handleExportData = () => {
-    const filtered = getFilteredData();
-    const exportData = {
-      reportGenerated: new Date().toISOString(),
-      dateRange: {
-        start: reportSettings.startDate,
-        end: reportSettings.endDate
-      },
-      symptoms: filtered.symptoms,
-      medicationLogs: filtered.medicationLogs,
-      medications: reportData.medications,
-      statistics: generateStatistics(filtered.symptoms, filtered.medicationLogs)
-    };
-
-    const dataStr = JSON.stringify(exportData, null, 2);
-    const dataBlob = new Blob([dataStr], { type: 'application/json' });
-    const url = URL.createObjectURL(dataBlob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `trackrx-report-${reportSettings.startDate}-to-${reportSettings.endDate}.json`;
-    link.click();
-    URL.revokeObjectURL(url);
   };
 
   const getSeverityColor = (severity) => {
@@ -347,59 +315,34 @@ const Reports = () => {
           </div>
         </div>
 
-        {/* Action Buttons */}
-        <div style={{ display: 'flex', gap: '0.75rem' }}>
-          <button
-            onClick={handlePrint}
-            disabled={isGenerating}
-            style={{
-              flex: 1,
-              backgroundColor: '#3B82F6',
-              color: 'white',
-              border: 'none',
-              padding: '0.75rem 1rem',
-              borderRadius: '8px',
-              fontSize: '0.875rem',
-              fontWeight: '600',
-              cursor: isGenerating ? 'not-allowed' : 'pointer',
-              opacity: isGenerating ? 0.6 : 1,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '0.5rem',
-              transition: 'all 0.2s'
-            }}
-            onMouseEnter={(e) => !isGenerating && (e.target.style.backgroundColor = '#2563EB')}
-            onMouseLeave={(e) => !isGenerating && (e.target.style.backgroundColor = '#3B82F6')}
-          >
-            <PrintIcon />
-            {isGenerating ? 'Generating...' : 'Print Report'}
-          </button>
-          <button
-            onClick={handleExportData}
-            style={{
-              flex: 1,
-              backgroundColor: '#10B981',
-              color: 'white',
-              border: 'none',
-              padding: '0.75rem 1rem',
-              borderRadius: '8px',
-              fontSize: '0.875rem',
-              fontWeight: '600',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '0.5rem',
-              transition: 'all 0.2s'
-            }}
-            onMouseEnter={(e) => e.target.style.backgroundColor = '#059669'}
-            onMouseLeave={(e) => e.target.style.backgroundColor = '#10B981'}
-          >
-            <DownloadIcon />
-            Export Data
-          </button>
-        </div>
+        {/* Action Button */}
+        <button
+          onClick={handlePrint}
+          disabled={isGenerating}
+          style={{
+            width: '100%',
+            backgroundColor: '#3B82F6',
+            color: 'white',
+            border: 'none',
+            padding: '1rem',
+            borderRadius: '12px',
+            fontSize: '1rem',
+            fontWeight: '600',
+            cursor: isGenerating ? 'not-allowed' : 'pointer',
+            opacity: isGenerating ? 0.6 : 1,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '0.75rem',
+            transition: 'all 0.2s',
+            boxShadow: '0 4px 12px rgba(59, 130, 246, 0.25)'
+          }}
+          onMouseEnter={(e) => !isGenerating && (e.target.style.backgroundColor = '#2563EB')}
+          onMouseLeave={(e) => !isGenerating && (e.target.style.backgroundColor = '#3B82F6')}
+        >
+          <PrintIcon />
+          {isGenerating ? 'Generating Report...' : 'Print Report for Doctor'}
+        </button>
       </div>
 
       {/* Preview Statistics */}
@@ -610,8 +553,8 @@ const Reports = () => {
             fontSize: '0.875rem',
             lineHeight: '1.5'
           }}>
-            Print your report or save the data file to share with your doctor. 
-            These insights can help your healthcare provider understand your health patterns and make more informed decisions about your care.
+            Print your report to share with your doctor. These insights can help your healthcare provider 
+            understand your health patterns and make more informed decisions about your care.
           </p>
         </div>
       )}
