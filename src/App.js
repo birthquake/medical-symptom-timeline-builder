@@ -243,57 +243,7 @@ function App() {
 const HomePage = ({ setCurrentView }) => {
   return (
     <div style={{ textAlign: 'center' }}>
-      {/* Medical Safety Notice */}
-      <div style={{
-        backgroundColor: '#fef2f2',
-        border: '1px solid #fecaca',
-        padding: '1.5rem',
-        borderRadius: '12px',
-        marginBottom: '2rem',
-        textAlign: 'left'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
-          <span style={{ fontSize: '1.5rem', marginRight: '0.75rem' }}>🚨</span>
-          <h3 style={{ margin: 0, color: '#dc2626', fontSize: '1.2rem' }}>
-            Important: Read Before Using
-          </h3>
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem', marginBottom: '1rem' }}>
-          <div>
-            <h4 style={{ color: '#991b1b', margin: '0 0 0.5rem 0', fontSize: '1rem' }}>
-              🚑 Medical Emergencies
-            </h4>
-            <p style={{ color: '#991b1b', margin: 0, fontSize: '0.9rem' }}>
-              Call 911 immediately for emergencies. Do not use this app during medical emergencies.
-            </p>
-          </div>
-          <div>
-            <h4 style={{ color: '#991b1b', margin: '0 0 0.5rem 0', fontSize: '1rem' }}>
-              ⚕️ Healthcare Decisions
-            </h4>
-            <p style={{ color: '#991b1b', margin: 0, fontSize: '0.9rem' }}>
-              This app tracks data only. Always consult healthcare professionals for medical decisions.
-            </p>
-          </div>
-        </div>
-        <div style={{ textAlign: 'center' }}>
-          <button
-            onClick={() => setCurrentView('disclaimer')}
-            style={{
-              backgroundColor: '#dc2626',
-              color: 'white',
-              border: 'none',
-              padding: '0.75rem 1.5rem',
-              borderRadius: '8px',
-              fontSize: '1rem',
-              cursor: 'pointer',
-              fontWeight: '600'
-            }}
-          >
-            📋 Read Full Medical Disclaimer & Usage Guidelines
-          </button>
-        </div>
-      </div>
+
 
       {/* Main Welcome Section */}
       <div style={{
