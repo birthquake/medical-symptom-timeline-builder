@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import SymptomTracker from './components/SymptomTracker';
+import MedicationTracker from './components/MedicationTracker';
 
 function App() {
   const [currentView, setCurrentView] = useState('home');
@@ -8,6 +9,8 @@ function App() {
     switch(currentView) {
       case 'symptoms':
         return <SymptomTracker />;
+      case 'medications':
+        return <MedicationTracker />;
       case 'home':
       default:
         return <HomePage setCurrentView={setCurrentView} />;
@@ -89,7 +92,21 @@ function App() {
               fontSize: '0.9rem'
             }}
           >
-            📊 Track Symptoms
+            📊 Symptoms
+          </button>
+          <button
+            onClick={() => setCurrentView('medications')}
+            style={{
+              padding: '0.5rem 1rem',
+              backgroundColor: currentView === 'medications' ? '#2563eb' : 'white',
+              color: currentView === 'medications' ? 'white' : '#64748b',
+              border: '1px solid #e2e8f0',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              fontSize: '0.9rem'
+            }}
+          >
+            💊 Medications
           </button>
           <button
             style={{
@@ -103,7 +120,7 @@ function App() {
             }}
             disabled
           >
-            💊 Medications (Coming Soon)
+            📈 Timeline (Soon)
           </button>
           <button
             style={{
@@ -117,7 +134,7 @@ function App() {
             }}
             disabled
           >
-            📈 Timeline (Coming Soon)
+            📄 Reports (Soon)
           </button>
         </div>
       </nav>
@@ -141,7 +158,7 @@ function App() {
         borderTop: '1px solid #e2e8f0',
         backgroundColor: 'white'
       }}>
-        © 2025 Medical Symptom Timeline Builder - Your health data stays private and secure
+        © 2025 Medical Symptom Timeline Builder - Your data stays private
       </footer>
     </div>
   );
@@ -151,217 +168,137 @@ function App() {
 const HomePage = ({ setCurrentView }) => {
   return (
     <div style={{ textAlign: 'center' }}>
-      {/* Welcome Section */}
       <div style={{
         backgroundColor: 'white',
         padding: '2rem',
         borderRadius: '12px',
-        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
         marginBottom: '2rem',
         border: '1px solid #e2e8f0'
       }}>
-        <h2 style={{ 
-          color: '#16a34a', 
-          marginBottom: '1rem',
-          fontSize: '1.5rem'
-        }}>
-          ✅ Your App is Running Successfully!
+        <h2 style={{ color: '#16a34a', marginBottom: '1rem' }}>
+          ✅ Core Features Ready!
         </h2>
-        <p style={{ 
-          marginBottom: '1.5rem', 
-          color: '#64748b',
-          fontSize: '1.1rem'
-        }}>
-          Welcome to your Medical Symptom Timeline Builder. Start tracking your health journey today.
+        <p style={{ marginBottom: '1.5rem', color: '#64748b' }}>
+          Your medical tracking app now has symptom and medication tracking.
         </p>
         
-        <button
-          onClick={() => setCurrentView('symptoms')}
-          style={{
-            backgroundColor: '#2563eb',
-            color: 'white',
-            border: 'none',
-            padding: '1rem 2rem',
-            borderRadius: '8px',
-            fontSize: '1.1rem',
-            cursor: 'pointer',
-            fontWeight: '600',
-            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
-          }}
-        >
-          📊 Start Tracking Symptoms
-        </button>
+        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+          <button
+            onClick={() => setCurrentView('symptoms')}
+            style={{
+              backgroundColor: '#2563eb',
+              color: 'white',
+              border: 'none',
+              padding: '0.75rem 1.5rem',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontWeight: '600'
+            }}
+          >
+            📊 Track Symptoms
+          </button>
+          <button
+            onClick={() => setCurrentView('medications')}
+            style={{
+              backgroundColor: '#16a34a',
+              color: 'white',
+              border: 'none',
+              padding: '0.75rem 1.5rem',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontWeight: '600'
+            }}
+          >
+            💊 Manage Medications
+          </button>
+        </div>
       </div>
 
-      {/* Feature Cards */}
+      {/* Status Grid */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-        gap: '1.5rem',
-        marginBottom: '2rem'
+        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+        gap: '1rem'
       }}>
         <div style={{
           backgroundColor: 'white',
-          padding: '1.5rem',
+          padding: '1rem',
           borderRadius: '8px',
-          border: '1px solid #e2e8f0',
-          textAlign: 'center',
-          boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
+          border: '1px solid #e2e8f0'
         }}>
-          <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>📊</div>
-          <h3 style={{ 
-            marginBottom: '0.5rem', 
-            color: '#1e293b',
-            fontSize: '1.2rem'
-          }}>
-            Track Symptoms
-          </h3>
-          <p style={{ 
-            fontSize: '0.9rem', 
-            color: '#64748b',
-            marginBottom: '1rem'
-          }}>
-            Log symptoms with severity levels, notes, and timestamps. Quick selection from common symptoms.
-          </p>
+          <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>📊</div>
+          <h3 style={{ fontSize: '1rem', margin: '0 0 0.5rem 0' }}>Symptom Tracking</h3>
           <span style={{
             backgroundColor: '#16a34a',
             color: 'white',
-            padding: '0.25rem 0.75rem',
+            padding: '0.25rem 0.5rem',
             borderRadius: '12px',
             fontSize: '0.75rem',
             fontWeight: '600'
           }}>
-            ✅ Available Now
+            ✅ LIVE
           </span>
         </div>
 
         <div style={{
           backgroundColor: 'white',
-          padding: '1.5rem',
+          padding: '1rem',
           borderRadius: '8px',
-          border: '1px solid #e2e8f0',
-          textAlign: 'center',
-          boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
+          border: '1px solid #e2e8f0'
         }}>
-          <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>💊</div>
-          <h3 style={{ 
-            marginBottom: '0.5rem', 
-            color: '#1e293b',
-            fontSize: '1.2rem'
+          <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>💊</div>
+          <h3 style={{ fontSize: '1rem', margin: '0 0 0.5rem 0' }}>Medication Tracking</h3>
+          <span style={{
+            backgroundColor: '#16a34a',
+            color: 'white',
+            padding: '0.25rem 0.5rem',
+            borderRadius: '12px',
+            fontSize: '0.75rem',
+            fontWeight: '600'
           }}>
-            Medication Tracking
-          </h3>
-          <p style={{ 
-            fontSize: '0.9rem', 
-            color: '#64748b',
-            marginBottom: '1rem'
-          }}>
-            Track medications, dosages, and monitor effectiveness over time.
-          </p>
+            ✅ LIVE
+          </span>
+        </div>
+
+        <div style={{
+          backgroundColor: 'white',
+          padding: '1rem',
+          borderRadius: '8px',
+          border: '1px solid #e2e8f0'
+        }}>
+          <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>📈</div>
+          <h3 style={{ fontSize: '1rem', margin: '0 0 0.5rem 0' }}>Timeline View</h3>
           <span style={{
             backgroundColor: '#d97706',
             color: 'white',
-            padding: '0.25rem 0.75rem',
+            padding: '0.25rem 0.5rem',
             borderRadius: '12px',
             fontSize: '0.75rem',
             fontWeight: '600'
           }}>
-            🚧 Coming Next
+            🚧 NEXT
           </span>
         </div>
 
         <div style={{
           backgroundColor: 'white',
-          padding: '1.5rem',
+          padding: '1rem',
           borderRadius: '8px',
-          border: '1px solid #e2e8f0',
-          textAlign: 'center',
-          boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
+          border: '1px solid #e2e8f0'
         }}>
-          <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>📈</div>
-          <h3 style={{ 
-            marginBottom: '0.5rem', 
-            color: '#1e293b',
-            fontSize: '1.2rem'
-          }}>
-            Visual Timeline
-          </h3>
-          <p style={{ 
-            fontSize: '0.9rem', 
-            color: '#64748b',
-            marginBottom: '1rem'
-          }}>
-            Interactive timeline showing symptom patterns and correlations over time.
-          </p>
+          <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>📄</div>
+          <h3 style={{ fontSize: '1rem', margin: '0 0 0.5rem 0' }}>Export Reports</h3>
           <span style={{
             backgroundColor: '#64748b',
             color: 'white',
-            padding: '0.25rem 0.75rem',
+            padding: '0.25rem 0.5rem',
             borderRadius: '12px',
             fontSize: '0.75rem',
             fontWeight: '600'
           }}>
-            📋 Planned
+            📋 PLANNED
           </span>
         </div>
-
-        <div style={{
-          backgroundColor: 'white',
-          padding: '1.5rem',
-          borderRadius: '8px',
-          border: '1px solid #e2e8f0',
-          textAlign: 'center',
-          boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
-        }}>
-          <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>📄</div>
-          <h3 style={{ 
-            marginBottom: '0.5rem', 
-            color: '#1e293b',
-            fontSize: '1.2rem'
-          }}>
-            Export Reports
-          </h3>
-          <p style={{ 
-            fontSize: '0.9rem', 
-            color: '#64748b',
-            marginBottom: '1rem'
-          }}>
-            Generate professional reports to share with healthcare providers.
-          </p>
-          <span style={{
-            backgroundColor: '#64748b',
-            color: 'white',
-            padding: '0.25rem 0.75rem',
-            borderRadius: '12px',
-            fontSize: '0.75rem',
-            fontWeight: '600'
-          }}>
-            📋 Planned
-          </span>
-        </div>
-      </div>
-
-      {/* Quick Stats */}
-      <div style={{
-        backgroundColor: '#f0fdf4',
-        border: '1px solid #bbf7d0',
-        padding: '1.5rem',
-        borderRadius: '8px',
-        marginBottom: '2rem'
-      }}>
-        <h3 style={{ 
-          color: '#15803d', 
-          marginBottom: '0.5rem',
-          fontSize: '1.1rem'
-        }}>
-          🎯 Ready to Use Features
-        </h3>
-        <p style={{ color: '#166534', margin: 0 }}>
-          ✅ Symptom tracking with severity scales<br/>
-          ✅ Local data storage (your data never leaves your device)<br/>
-          ✅ Responsive design (works on all devices)<br/>
-          ✅ PWA ready (can be installed as an app)
-        </p>
       </div>
     </div>
   );
