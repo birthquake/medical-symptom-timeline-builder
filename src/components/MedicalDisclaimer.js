@@ -237,49 +237,67 @@ const MedicalDisclaimer = ({ onAccept, showInline = false }) => {
           backgroundColor: '#f8fafc'
         }}>
           <div style={{ marginBottom: '1rem' }}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <label style={{ 
+              display: 'flex', 
+              alignItems: 'flex-start', 
+              gap: '0.75rem',
+              cursor: 'pointer',
+              padding: '0.5rem',
+              border: '1px solid #d1d5db',
+              borderRadius: '6px',
+              backgroundColor: 'white'
+            }}>
               <input
                 type="checkbox"
                 checked={hasRead}
                 onChange={(e) => setHasRead(e.target.checked)}
-                style={{ transform: 'scale(1.2)' }}
+                style={{ 
+                  transform: 'scale(1.3)',
+                  marginTop: '0.25rem'
+                }}
               />
-              <span style={{ fontSize: '0.9rem', color: '#374151' }}>
-                I have read and understand all sections of this medical disclaimer
+              <span style={{ fontSize: '0.95rem', color: '#374151', lineHeight: '1.4' }}>
+                <strong>I acknowledge that I have read and understand all sections of this medical disclaimer.</strong>
+                <br />
+                <span style={{ fontSize: '0.85rem', color: '#64748b' }}>
+                  By checking this box, I confirm that I understand this app is for tracking purposes only and does not provide medical advice.
+                </span>
               </span>
             </label>
           </div>
           
-          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
-            <button
-              onClick={() => window.close()}
-              style={{
-                padding: '0.75rem 1.5rem',
-                border: '1px solid #d1d5db',
-                backgroundColor: 'white',
-                color: '#374151',
-                borderRadius: '6px',
-                cursor: 'pointer'
-              }}
-            >
-              Cancel
-            </button>
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
             <button
               onClick={onAccept}
               disabled={!hasRead}
               style={{
-                padding: '0.75rem 1.5rem',
+                padding: '1rem 2rem',
                 border: 'none',
-                backgroundColor: hasRead ? '#2563eb' : '#94a3b8',
+                backgroundColor: hasRead ? '#16a34a' : '#94a3b8',
                 color: 'white',
-                borderRadius: '6px',
+                borderRadius: '8px',
                 cursor: hasRead ? 'pointer' : 'not-allowed',
-                fontWeight: '600'
+                fontWeight: '600',
+                fontSize: '1.1rem',
+                minWidth: '200px',
+                opacity: hasRead ? 1 : 0.6
               }}
             >
-              I Understand & Continue
+              {hasRead ? '✅ I Understand & Continue' : '⏳ Please read disclaimer first'}
             </button>
           </div>
+          
+          {!hasRead && (
+            <div style={{
+              marginTop: '1rem',
+              textAlign: 'center',
+              color: '#dc2626',
+              fontSize: '0.9rem',
+              fontWeight: '600'
+            }}>
+              ↑ Please check the box above to continue
+            </div>
+          )}
         </div>
       </div>
     </div>
