@@ -5,7 +5,8 @@ const DisclaimerTab = () => {
 
   const disclaimerSections = {
     overview: {
-      title: "⚕️ Important Medical Information",
+      title: "⚕️ Overview",
+      fullTitle: "Important Medical Information",
       content: (
         <div>
           <div style={{ backgroundColor: '#fef2f2', border: '1px solid #fecaca', padding: '1.5rem', borderRadius: '12px', marginBottom: '2rem' }}>
@@ -55,7 +56,8 @@ const DisclaimerTab = () => {
       )
     },
     usage: {
-      title: "📋 Safe Usage Guidelines",
+      title: "📋 Usage",
+      fullTitle: "Safe Usage Guidelines",
       content: (
         <div>
           <div style={{ display: 'grid', gap: '2rem' }}>
@@ -144,7 +146,8 @@ const DisclaimerTab = () => {
       )
     },
     privacy: {
-      title: "🔒 Privacy & Data Security",
+      title: "🔒 Privacy",
+      fullTitle: "Privacy & Data Security",
       content: (
         <div>
           <div style={{ backgroundColor: '#f0f9ff', border: '2px solid #2563eb', padding: '2rem', borderRadius: '12px', marginBottom: '2rem' }}>
@@ -206,7 +209,8 @@ const DisclaimerTab = () => {
       )
     },
     legal: {
-      title: "⚖️ Legal Information",
+      title: "⚖️ Legal",
+      fullTitle: "Legal Information",
       content: (
         <div>
           <div style={{ backgroundColor: '#f9fafb', border: '2px solid #6b7280', padding: '2rem', borderRadius: '12px', marginBottom: '2rem' }}>
@@ -305,22 +309,25 @@ const DisclaimerTab = () => {
         borderRadius: '8px 8px 0 0',
         border: '1px solid #e2e8f0',
         overflow: 'hidden',
-        marginBottom: 0
+        marginBottom: 0,
+        flexWrap: 'wrap'
       }}>
         {Object.keys(disclaimerSections).map(section => (
           <button
             key={section}
             onClick={() => setCurrentSection(section)}
             style={{
-              flex: 1,
-              padding: '1rem',
+              flex: '1 1 auto',
+              minWidth: '120px',
+              padding: '1rem 0.5rem',
               border: 'none',
               backgroundColor: currentSection === section ? '#2563eb' : 'white',
               color: currentSection === section ? 'white' : '#64748b',
               cursor: 'pointer',
               fontSize: '0.9rem',
               fontWeight: currentSection === section ? '600' : '400',
-              transition: 'all 0.2s'
+              transition: 'all 0.2s',
+              textAlign: 'center'
             }}
           >
             {disclaimerSections[section].title}
