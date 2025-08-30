@@ -1,10 +1,94 @@
-import React, { useState, useEffect } from 'react';
+{/* Smart Reminders - Special Feature Card */}
+          <button
+            onClick={() => setCurrentView('reminders')}
+            style={{
+              padding: '1.25rem',
+              border: '2px solid #BBF7D0',
+              backgroundColor: '#F0FDF4',
+              borderRadius: '12px',
+              cursor: 'pointer',
+              textAlign: 'left',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '1rem',
+              transition: 'all 0.2s',
+              position: 'relative',
+              overflow: 'hidden'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.backgroundColor = '#ECFDF5';
+              e.target.style.borderColor = '#86EFAC';
+              e.target.style.transform = 'translateY(-2px)';
+              e.target.style.boxShadow = '0 4px 12px rgba(5, 150, 105, 0.15)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.backgroundColor = '#F0FDF4';
+              e.target.style.borderColor = '#BBF7D0';
+              e.target.style.transform = 'translateY(0)';
+              e.target.style.boxShadow = 'none';
+            }}
+          >
+            <div style={{
+              width: '48px',
+              height: '48px',
+              backgroundColor: '#059669',
+              borderRadius: '12px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0
+            }}>
+              <NotificationBellIcon active={false} />
+            </div>
+            <div style={{ flex: 1 }}>
+              <div style={{ 
+                fontSize: '1.125rem', 
+                fontWeight: '700', 
+                color: '#065F46',
+                margin: '0 0 0.25rem 0',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem'
+              }}>
+                Smart Reminders
+                <div style={{
+                  backgroundColor: '#DC2626',
+                  color: 'white',
+                  fontSize: '0.625rem',
+                  fontWeight: '700',
+                  padding: '0.125rem 0.375rem',
+                  borderRadius: '8px',
+                  textTransform: 'uppercase'
+                }}>
+                  New
+                </div>
+              </div>
+              <div style={{ 
+                fontSize: '0.875rem', 
+                color: '#047857',
+                lineHeight: '1.4'
+              }}>
+                Never miss medications or daily check-ins. Build healthy tracking habits.
+              </div>
+            </div>
+            <div style={{
+              position: 'absolute',
+              top: '-10px',
+              right: '-10px',
+              width: '40px',
+              height: '40px',
+              background: 'linear-gradient(45deg, #FEF3C7, #FDE68A)',
+              borderRadius: '20px',
+              opacity: 0.6
+            }} />
+          </button>import React, { useState, useEffect } from 'react';
 import SymptomTracker from './components/SymptomTracker';
 import MedicationTracker from './components/MedicationTracker';
 import Timeline from './components/Timeline';
 import Reports from './components/Reports';
 import DoctorVisitPrep from './components/DoctorVisitPrep';
 import DisclaimerTab from './components/DisclaimerTab';
+import NotificationManager from './components/NotificationManager';
 
 // Inline SVG Icons (working version)
 const HomeIcon = ({ active = false }) => (
@@ -153,6 +237,26 @@ const PlusIcon = () => (
   </svg>
 );
 
+const NotificationBellIcon = ({ active = false }) => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+    <path 
+      d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" 
+      stroke={active ? "#059669" : "#64748B"} 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+      fill={active ? "#F0FDF4" : "none"}
+    />
+    <path 
+      d="M13.73 21a2 2 0 0 1-3.46 0" 
+      stroke={active ? "#059669" : "#64748B"} 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
 function App() {
   const [currentView, setCurrentView] = useState('home');
   const [showQuickAdd, setShowQuickAdd] = useState(false);
@@ -178,6 +282,8 @@ function App() {
         return <Reports />;
       case 'doctor-prep':
         return <DoctorVisitPrep />;
+      case 'reminders':
+        return <NotificationManager />;
       case 'disclaimer':
         return <DisclaimerTab />;
       case 'home':
@@ -679,6 +785,109 @@ const HomePage = ({ setCurrentView, streak }) => {
             </p>
           </div>
         )}
+      </div>
+
+      {/* Smart Reminders - Special Feature Card */}
+      <div style={{
+        backgroundColor: 'white',
+        borderRadius: '16px',
+        padding: '1.5rem',
+        border: '1px solid #E2E8F0',
+        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)'
+      }}>
+        <h3 style={{
+          fontSize: '1.125rem',
+          fontWeight: '600',
+          color: '#1E293B',
+          margin: '0 0 1rem 0'
+        }}>
+          Stay on Track
+        </h3>
+        
+        <button
+          onClick={() => setCurrentView('reminders')}
+          style={{
+            width: '100%',
+            padding: '1.25rem',
+            border: '2px solid #BBF7D0',
+            backgroundColor: '#F0FDF4',
+            borderRadius: '12px',
+            cursor: 'pointer',
+            textAlign: 'left',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '1rem',
+            transition: 'all 0.2s',
+            position: 'relative',
+            overflow: 'hidden'
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.backgroundColor = '#ECFDF5';
+            e.target.style.borderColor = '#86EFAC';
+            e.target.style.transform = 'translateY(-2px)';
+            e.target.style.boxShadow = '0 4px 12px rgba(5, 150, 105, 0.15)';
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.backgroundColor = '#F0FDF4';
+            e.target.style.borderColor = '#BBF7D0';
+            e.target.style.transform = 'translateY(0)';
+            e.target.style.boxShadow = 'none';
+          }}
+        >
+          <div style={{
+            width: '48px',
+            height: '48px',
+            backgroundColor: '#059669',
+            borderRadius: '12px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: 0
+          }}>
+            <NotificationBellIcon />
+          </div>
+          <div style={{ flex: 1 }}>
+            <div style={{ 
+              fontSize: '1.125rem', 
+              fontWeight: '700', 
+              color: '#065F46',
+              margin: '0 0 0.25rem 0',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem'
+            }}>
+              Smart Reminders
+              <div style={{
+                backgroundColor: '#DC2626',
+                color: 'white',
+                fontSize: '0.625rem',
+                fontWeight: '700',
+                padding: '0.125rem 0.375rem',
+                borderRadius: '8px',
+                textTransform: 'uppercase'
+              }}>
+                New
+              </div>
+            </div>
+            <div style={{ 
+              fontSize: '0.875rem', 
+              color: '#047857',
+              lineHeight: '1.4'
+            }}>
+              Never miss medications or daily check-ins. Build healthy tracking habits.
+            </div>
+          </div>
+          <div style={{
+            position: 'absolute',
+            top: '-10px',
+            right: '-10px',
+            width: '40px',
+            height: '40px',
+            background: 'linear-gradient(45deg, #FEF3C7, #FDE68A)',
+            borderRadius: '20px',
+            opacity: 0.6
+          }} />
+        </button>
       </div>
 
       {/* Quick Actions */}
