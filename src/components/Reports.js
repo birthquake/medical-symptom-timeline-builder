@@ -1,12 +1,62 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  ReportsIcon,
-  PrintIcon, 
-  CalendarIcon, 
-  ChartIcon,
-  getSeverityColor,
-  getSeverityLabel
-} from './Icons';
+
+// Inline SVG Icons
+const ReportsIcon = ({ color = "#8B5CF6", size = 24 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <path 
+      d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" 
+      stroke={color} 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+      fill="none"
+    />
+    <polyline 
+      points="14,2 14,8 20,8" 
+      stroke={color} 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+    />
+    <line 
+      x1="16" y1="13" x2="8" y2="13" 
+      stroke={color} 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+    />
+    <line 
+      x1="16" y1="17" x2="8" y2="17" 
+      stroke={color} 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+const PrintIcon = ({ color = "white", size = 20 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <polyline points="6,9 6,2 18,2 18,9" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M6 18H4C3.46957 18 2.96086 17.7893 2.58579 17.4142C2.21071 17.0391 2 16.5304 2 16V11C2 10.4696 2.21071 9.96086 2.58579 9.58579C2.96086 9.21071 3.46957 9 4 9H20C20.5304 9 21.0391 9.21071 21.4142 9.58579C21.7893 9.96086 22 10.4696 22 11V16C22 16.5304 21.7893 17.0391 21.4142 17.4142C21.0391 17.7893 20.5304 18 20 18H18" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <rect x="6" y="14" width="12" height="8" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const CalendarIcon = ({ size = 16, color = "#64748B" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke={color} strokeWidth="2"/>
+    <line x1="16" y1="2" x2="16" y2="6" stroke={color} strokeWidth="2" strokeLinecap="round"/>
+    <line x1="8" y1="2" x2="8" y2="6" stroke={color} strokeWidth="2" strokeLinecap="round"/>
+    <line x1="3" y1="10" x2="21" y2="10" stroke={color} strokeWidth="2" strokeLinecap="round"/>
+  </svg>
+);
+
+const ChartIcon = ({ size = 16, color = "#3B82F6" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <polyline points="22,12 18,12 15,21 9,3 6,12 2,12" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
 
 const Reports = () => {
   const [reportData, setReportData] = useState({
@@ -116,6 +166,18 @@ const Reports = () => {
       window.print();
       setIsGenerating(false);
     }, 500);
+  };
+
+  const getSeverityColor = (severity) => {
+    if (severity <= 3) return '#10B981';
+    if (severity <= 6) return '#F59E0B'; 
+    return '#EF4444';
+  };
+
+  const getSeverityLabel = (severity) => {
+    if (severity <= 3) return 'Mild';
+    if (severity <= 6) return 'Moderate';
+    return 'Severe';
   };
 
   const filtered = getFilteredData();
@@ -619,18 +681,6 @@ const Reports = () => {
             alignItems: 'center',
             gap: '0.5rem'
           }}>
-            <div style={{
-              width: '24px',
-              height: '24px',
-              backgroundColor: '#3B82F6',
-              borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '0.875rem'
-            }}>
-              💡
-            </div>
             Sharing with Healthcare Providers
           </h4>
           <p style={{
