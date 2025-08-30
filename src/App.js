@@ -4,15 +4,134 @@ import MedicationTracker from './components/MedicationTracker';
 import Timeline from './components/Timeline';
 import Reports from './components/Reports';
 import DisclaimerTab from './components/DisclaimerTab';
-import { 
-  HomeIcon, 
-  SymptomsIcon, 
-  MedsIcon, 
-  TimelineIcon, 
-  ReportsIcon, 
-  InfoIcon, 
-  PlusIcon 
-} from './components/Icons';
+
+// Inline SVG Icons (working version)
+const HomeIcon = ({ active = false }) => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+    <path 
+      d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" 
+      stroke={active ? "#3B82F6" : "#64748B"} 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+      fill={active ? "#EFF6FF" : "none"}
+    />
+    <path 
+      d="M9 22V12H15V22" 
+      stroke={active ? "#3B82F6" : "#64748B"} 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+const SymptomsIcon = ({ active = false }) => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+    <path 
+      d="M9 11H15M9 15H15M17 21H7C6.46957 21 5.96086 20.7893 5.58579 20.4142C5.21071 20.0391 5 19.5304 5 19V5C5 4.46957 5.21071 3.96086 5.58579 3.58579C5.96086 3.21071 6.46957 3 7 3H12.586C12.8512 3.00006 13.1055 3.10545 13.293 3.293L18.707 8.707C18.8946 8.8945 18.9999 9.14881 19 9.414V19C19 19.5304 18.7893 20.0391 18.4142 20.4142C18.0391 20.7893 17.5304 21 17 21Z" 
+      stroke={active ? "#3B82F6" : "#64748B"} 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+      fill={active ? "#EFF6FF" : "none"}
+    />
+  </svg>
+);
+
+const MedsIcon = ({ active = false }) => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+    <rect 
+      x="3" y="8" width="18" height="13" rx="2" ry="2"
+      stroke={active ? "#3B82F6" : "#64748B"} 
+      strokeWidth="2"
+      fill={active ? "#EFF6FF" : "none"}
+    />
+    <path 
+      d="M7 3V8M17 3V8M7 12H17M7 16H12" 
+      stroke={active ? "#3B82F6" : "#64748B"} 
+      strokeWidth="2" 
+      strokeLinecap="round"
+    />
+  </svg>
+);
+
+const TimelineIcon = ({ active = false }) => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+    <path 
+      d="M3 3V21L21 12L3 3Z" 
+      stroke={active ? "#3B82F6" : "#64748B"} 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+      fill={active ? "#EFF6FF" : "none"}
+    />
+  </svg>
+);
+
+const ReportsIcon = ({ active = false }) => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+    <path 
+      d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" 
+      stroke={active ? "#3B82F6" : "#64748B"} 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+      fill={active ? "#EFF6FF" : "none"}
+    />
+    <polyline 
+      points="14,2 14,8 20,8" 
+      stroke={active ? "#3B82F6" : "#64748B"} 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+    />
+    <line 
+      x1="16" y1="13" x2="8" y2="13" 
+      stroke={active ? "#3B82F6" : "#64748B"} 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+    />
+    <line 
+      x1="16" y1="17" x2="8" y2="17" 
+      stroke={active ? "#3B82F6" : "#64748B"} 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+const InfoIcon = ({ active = false }) => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+    <circle 
+      cx="12" cy="12" r="10" 
+      stroke={active ? "#DC2626" : "#64748B"} 
+      strokeWidth="2"
+      fill={active ? "#FEF2F2" : "none"}
+    />
+    <path 
+      d="M12 16V12M12 8H12.01" 
+      stroke={active ? "#DC2626" : "#64748B"} 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+const PlusIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+    <path 
+      d="M12 5V19M5 12H19" 
+      stroke="white" 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+    />
+  </svg>
+);
 
 function App() {
   const [currentView, setCurrentView] = useState('home');
@@ -111,9 +230,9 @@ function App() {
           maxWidth: '420px',
           margin: '0 auto',
           display: 'grid',
-          gridTemplateColumns: 'repeat(5, 1fr)',
-          gap: '0.5rem',
-          padding: '0 1rem'
+          gridTemplateColumns: 'repeat(6, 1fr)',
+          gap: '0.25rem',
+          padding: '0 0.5rem'
         }}>
           <button
             onClick={() => setCurrentView('home')}
@@ -122,7 +241,7 @@ function App() {
               flexDirection: 'column',
               alignItems: 'center',
               gap: '0.25rem',
-              padding: '0.5rem',
+              padding: '0.5rem 0.25rem',
               border: 'none',
               backgroundColor: 'transparent',
               cursor: 'pointer',
@@ -132,7 +251,7 @@ function App() {
           >
             <HomeIcon active={currentView === 'home'} />
             <span style={{ 
-              fontSize: '0.75rem', 
+              fontSize: '0.625rem', 
               fontWeight: '500',
               color: currentView === 'home' ? '#3B82F6' : '#64748B'
             }}>
@@ -147,7 +266,7 @@ function App() {
               flexDirection: 'column',
               alignItems: 'center',
               gap: '0.25rem',
-              padding: '0.5rem',
+              padding: '0.5rem 0.25rem',
               border: 'none',
               backgroundColor: 'transparent',
               cursor: 'pointer',
@@ -157,7 +276,7 @@ function App() {
           >
             <SymptomsIcon active={currentView === 'symptoms'} />
             <span style={{ 
-              fontSize: '0.75rem', 
+              fontSize: '0.625rem', 
               fontWeight: '500',
               color: currentView === 'symptoms' ? '#3B82F6' : '#64748B'
             }}>
@@ -172,7 +291,7 @@ function App() {
               flexDirection: 'column',
               alignItems: 'center',
               gap: '0.25rem',
-              padding: '0.5rem',
+              padding: '0.5rem 0.25rem',
               border: 'none',
               backgroundColor: 'transparent',
               cursor: 'pointer',
@@ -182,7 +301,7 @@ function App() {
           >
             <MedsIcon active={currentView === 'medications'} />
             <span style={{ 
-              fontSize: '0.75rem', 
+              fontSize: '0.625rem', 
               fontWeight: '500',
               color: currentView === 'medications' ? '#3B82F6' : '#64748B'
             }}>
@@ -197,7 +316,7 @@ function App() {
               flexDirection: 'column',
               alignItems: 'center',
               gap: '0.25rem',
-              padding: '0.5rem',
+              padding: '0.5rem 0.25rem',
               border: 'none',
               backgroundColor: 'transparent',
               cursor: 'pointer',
@@ -207,7 +326,7 @@ function App() {
           >
             <TimelineIcon active={currentView === 'timeline'} />
             <span style={{ 
-              fontSize: '0.75rem', 
+              fontSize: '0.625rem', 
               fontWeight: '500',
               color: currentView === 'timeline' ? '#3B82F6' : '#64748B'
             }}>
@@ -222,7 +341,7 @@ function App() {
               flexDirection: 'column',
               alignItems: 'center',
               gap: '0.25rem',
-              padding: '0.5rem',
+              padding: '0.5rem 0.25rem',
               border: 'none',
               backgroundColor: 'transparent',
               cursor: 'pointer',
@@ -232,11 +351,36 @@ function App() {
           >
             <ReportsIcon active={currentView === 'reports'} />
             <span style={{ 
-              fontSize: '0.75rem', 
+              fontSize: '0.625rem', 
               fontWeight: '500',
               color: currentView === 'reports' ? '#3B82F6' : '#64748B'
             }}>
               Reports
+            </span>
+          </button>
+
+          <button
+            onClick={() => setCurrentView('disclaimer')}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '0.25rem',
+              padding: '0.5rem 0.25rem',
+              border: 'none',
+              backgroundColor: 'transparent',
+              cursor: 'pointer',
+              borderRadius: '8px',
+              transition: 'all 0.2s'
+            }}
+          >
+            <InfoIcon active={currentView === 'disclaimer'} />
+            <span style={{ 
+              fontSize: '0.625rem', 
+              fontWeight: '500',
+              color: currentView === 'disclaimer' ? '#3B82F6' : '#64748B'
+            }}>
+              Medical
             </span>
           </button>
         </div>
@@ -634,54 +778,6 @@ const HomePage = ({ setCurrentView, streak }) => {
             </div>
           </button>
         </div>
-      </div>
-
-      {/* Medical Info Card - Bottom tab access only */}
-      <div style={{
-        backgroundColor: 'white',
-        borderRadius: '16px',
-        padding: '1.5rem',
-        border: '1px solid #E2E8F0',
-        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
-          <InfoIcon />
-          <h3 style={{
-            fontSize: '1.125rem',
-            fontWeight: '600',
-            color: '#DC2626',
-            margin: 0
-          }}>
-            Medical Information
-          </h3>
-        </div>
-        
-        <p style={{
-          color: '#991B1B',
-          margin: '0 0 1rem 0',
-          fontSize: '0.875rem',
-          lineHeight: '1.5'
-        }}>
-          TrackRX is for tracking purposes only and does not provide medical advice. 
-          Always consult healthcare professionals for medical decisions.
-        </p>
-        
-        <button
-          onClick={() => setCurrentView('disclaimer')}
-          style={{
-            backgroundColor: '#DC2626',
-            color: 'white',
-            border: 'none',
-            padding: '0.75rem 1rem',
-            borderRadius: '8px',
-            fontSize: '0.875rem',
-            fontWeight: '500',
-            cursor: 'pointer',
-            width: '100%'
-          }}
-        >
-          Read Full Medical Disclaimer
-        </button>
       </div>
     </div>
   );
