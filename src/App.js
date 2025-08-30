@@ -3,6 +3,7 @@ import SymptomTracker from './components/SymptomTracker';
 import MedicationTracker from './components/MedicationTracker';
 import Timeline from './components/Timeline';
 import Reports from './components/Reports';
+import DoctorVisitPrep from './components/DoctorVisitPrep';
 import DisclaimerTab from './components/DisclaimerTab';
 
 // Inline SVG Icons (working version)
@@ -103,6 +104,25 @@ const ReportsIcon = ({ active = false }) => (
   </svg>
 );
 
+const DoctorPrepIcon = ({ active = false }) => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+    <path 
+      d="M22 12h-4l-3 9L9 3l-3 9H2" 
+      stroke={active ? "#059669" : "#64748B"} 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+      fill={active ? "#F0FDF4" : "none"}
+    />
+    <circle 
+      cx="12" cy="6" r="2" 
+      stroke={active ? "#059669" : "#64748B"} 
+      strokeWidth="2"
+      fill={active ? "#059669" : "none"}
+    />
+  </svg>
+);
+
 const InfoIcon = ({ active = false }) => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
     <circle 
@@ -156,6 +176,8 @@ function App() {
         return <Timeline />;
       case 'reports':
         return <Reports />;
+      case 'doctor-prep':
+        return <DoctorVisitPrep />;
       case 'disclaimer':
         return <DisclaimerTab />;
       case 'home':
@@ -215,7 +237,7 @@ function App() {
         {renderCurrentView()}
       </main>
 
-      {/* Bottom Navigation */}
+      {/* Bottom Navigation - Updated to 7 tabs */}
       <nav style={{
         position: 'fixed',
         bottom: 0,
@@ -230,9 +252,9 @@ function App() {
           maxWidth: '420px',
           margin: '0 auto',
           display: 'grid',
-          gridTemplateColumns: 'repeat(6, 1fr)',
-          gap: '0.25rem',
-          padding: '0 0.5rem'
+          gridTemplateColumns: 'repeat(7, 1fr)',
+          gap: '0.125rem',
+          padding: '0 0.25rem'
         }}>
           <button
             onClick={() => setCurrentView('home')}
@@ -241,7 +263,7 @@ function App() {
               flexDirection: 'column',
               alignItems: 'center',
               gap: '0.25rem',
-              padding: '0.5rem 0.25rem',
+              padding: '0.5rem 0.125rem',
               border: 'none',
               backgroundColor: 'transparent',
               cursor: 'pointer',
@@ -251,7 +273,7 @@ function App() {
           >
             <HomeIcon active={currentView === 'home'} />
             <span style={{ 
-              fontSize: '0.625rem', 
+              fontSize: '0.5rem', 
               fontWeight: '500',
               color: currentView === 'home' ? '#3B82F6' : '#64748B'
             }}>
@@ -266,7 +288,7 @@ function App() {
               flexDirection: 'column',
               alignItems: 'center',
               gap: '0.25rem',
-              padding: '0.5rem 0.25rem',
+              padding: '0.5rem 0.125rem',
               border: 'none',
               backgroundColor: 'transparent',
               cursor: 'pointer',
@@ -276,7 +298,7 @@ function App() {
           >
             <SymptomsIcon active={currentView === 'symptoms'} />
             <span style={{ 
-              fontSize: '0.625rem', 
+              fontSize: '0.5rem', 
               fontWeight: '500',
               color: currentView === 'symptoms' ? '#3B82F6' : '#64748B'
             }}>
@@ -291,7 +313,7 @@ function App() {
               flexDirection: 'column',
               alignItems: 'center',
               gap: '0.25rem',
-              padding: '0.5rem 0.25rem',
+              padding: '0.5rem 0.125rem',
               border: 'none',
               backgroundColor: 'transparent',
               cursor: 'pointer',
@@ -301,7 +323,7 @@ function App() {
           >
             <MedsIcon active={currentView === 'medications'} />
             <span style={{ 
-              fontSize: '0.625rem', 
+              fontSize: '0.5rem', 
               fontWeight: '500',
               color: currentView === 'medications' ? '#3B82F6' : '#64748B'
             }}>
@@ -316,7 +338,7 @@ function App() {
               flexDirection: 'column',
               alignItems: 'center',
               gap: '0.25rem',
-              padding: '0.5rem 0.25rem',
+              padding: '0.5rem 0.125rem',
               border: 'none',
               backgroundColor: 'transparent',
               cursor: 'pointer',
@@ -326,7 +348,7 @@ function App() {
           >
             <TimelineIcon active={currentView === 'timeline'} />
             <span style={{ 
-              fontSize: '0.625rem', 
+              fontSize: '0.5rem', 
               fontWeight: '500',
               color: currentView === 'timeline' ? '#3B82F6' : '#64748B'
             }}>
@@ -341,7 +363,7 @@ function App() {
               flexDirection: 'column',
               alignItems: 'center',
               gap: '0.25rem',
-              padding: '0.5rem 0.25rem',
+              padding: '0.5rem 0.125rem',
               border: 'none',
               backgroundColor: 'transparent',
               cursor: 'pointer',
@@ -351,11 +373,36 @@ function App() {
           >
             <ReportsIcon active={currentView === 'reports'} />
             <span style={{ 
-              fontSize: '0.625rem', 
+              fontSize: '0.5rem', 
               fontWeight: '500',
               color: currentView === 'reports' ? '#3B82F6' : '#64748B'
             }}>
               Reports
+            </span>
+          </button>
+
+          <button
+            onClick={() => setCurrentView('doctor-prep')}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '0.25rem',
+              padding: '0.5rem 0.125rem',
+              border: 'none',
+              backgroundColor: 'transparent',
+              cursor: 'pointer',
+              borderRadius: '8px',
+              transition: 'all 0.2s'
+            }}
+          >
+            <DoctorPrepIcon active={currentView === 'doctor-prep'} />
+            <span style={{ 
+              fontSize: '0.5rem', 
+              fontWeight: '500',
+              color: currentView === 'doctor-prep' ? '#059669' : '#64748B'
+            }}>
+              Dr Prep
             </span>
           </button>
 
@@ -366,7 +413,7 @@ function App() {
               flexDirection: 'column',
               alignItems: 'center',
               gap: '0.25rem',
-              padding: '0.5rem 0.25rem',
+              padding: '0.5rem 0.125rem',
               border: 'none',
               backgroundColor: 'transparent',
               cursor: 'pointer',
@@ -376,9 +423,9 @@ function App() {
           >
             <InfoIcon active={currentView === 'disclaimer'} />
             <span style={{ 
-              fontSize: '0.625rem', 
+              fontSize: '0.5rem', 
               fontWeight: '500',
-              color: currentView === 'disclaimer' ? '#3B82F6' : '#64748B'
+              color: currentView === 'disclaimer' ? '#DC2626' : '#64748B'
             }}>
               Medical
             </span>
@@ -774,6 +821,49 @@ const HomePage = ({ setCurrentView, streak }) => {
                 color: '#64748B'
               }}>
                 See your health patterns over time
+              </div>
+            </div>
+          </button>
+
+          {/* New Doctor Prep Quick Action */}
+          <button
+            onClick={() => setCurrentView('doctor-prep')}
+            style={{
+              padding: '1rem',
+              border: '1px solid #BBF7D0',
+              backgroundColor: '#F0FDF4',
+              borderRadius: '12px',
+              cursor: 'pointer',
+              textAlign: 'left',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.75rem',
+              transition: 'all 0.2s'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.backgroundColor = '#ECFDF5';
+              e.target.style.borderColor = '#86EFAC';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.backgroundColor = '#F0FDF4';
+              e.target.style.borderColor = '#BBF7D0';
+            }}
+          >
+            <DoctorPrepIcon active={false} />
+            <div>
+              <div style={{ 
+                fontSize: '1rem', 
+                fontWeight: '500', 
+                color: '#1E293B',
+                margin: '0 0 0.25rem 0'
+              }}>
+                Prepare for Doctor Visit
+              </div>
+              <div style={{ 
+                fontSize: '0.875rem', 
+                color: '#64748B'
+              }}>
+                Get ready with insights and questions
               </div>
             </div>
           </button>
