@@ -81,10 +81,10 @@ const Reports = () => {
     
     setReportData({ symptoms, medications, medicationLogs });
 
-    // Set default date range (last 30 days)
+    // Set default date range (last 30 days inclusive)
     const endDate = new Date().toISOString().split('T')[0];
     const startDate = new Date();
-    startDate.setDate(startDate.getDate() - 30);
+    startDate.setDate(startDate.getDate() - 29); // 29 days ago + today = 30 days total
     
     setReportSettings(prev => ({
       ...prev,
@@ -242,7 +242,7 @@ const Reports = () => {
           Report Settings
         </h3>
         
-        {/* Date Range */}
+        {/* Date Range - FIXED OVERFLOW */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',
@@ -265,12 +265,13 @@ const Reports = () => {
                 value={reportSettings.startDate}
                 onChange={(e) => setReportSettings(prev => ({ ...prev, startDate: e.target.value }))}
                 style={{
-                  width: '100%',
+                  width: 'calc(100% - 1.5rem)', // Fixed: Account for padding
                   padding: '0.75rem 0.75rem 0.75rem 2.5rem',
                   border: '1px solid #D1D5DB',
                   borderRadius: '8px',
                   fontSize: '0.875rem',
-                  backgroundColor: '#FAFAFA'
+                  backgroundColor: '#FAFAFA',
+                  boxSizing: 'border-box' // Added for proper sizing
                 }}
               />
               <div style={{
@@ -300,12 +301,13 @@ const Reports = () => {
                 value={reportSettings.endDate}
                 onChange={(e) => setReportSettings(prev => ({ ...prev, endDate: e.target.value }))}
                 style={{
-                  width: '100%',
+                  width: 'calc(100% - 1.5rem)', // Fixed: Account for padding
                   padding: '0.75rem 0.75rem 0.75rem 2.5rem',
                   border: '1px solid #D1D5DB',
                   borderRadius: '8px',
                   fontSize: '0.875rem',
-                  backgroundColor: '#FAFAFA'
+                  backgroundColor: '#FAFAFA',
+                  boxSizing: 'border-box' // Added for proper sizing
                 }}
               />
               <div style={{
