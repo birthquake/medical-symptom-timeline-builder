@@ -114,9 +114,22 @@ const Reports = () => {
 
   // Generate statistics
   const generateStatistics = (symptoms, medicationLogs) => {
+    // Calculate actual days with data (not date range span)
+    const uniqueDates = new Set();
+    symptoms.forEach(symptom => {
+      const date = new Date(symptom.timestamp).toISOString().split('T')[0];
+      uniqueDates.add(date);
+    });
+    medicationLogs.forEach(log => {
+      const date = new Date(log.timestamp).toISOString().split('T')[0];
+      uniqueDates.add(date);
+    });
+    const actualDaysWithData = uniqueDates.size;
+
     const stats = {
       totalSymptoms: symptoms.length,
       totalMedicationDoses: medicationLogs.length,
+      actualDaysTracked: actualDaysWithData,
       avgSeverity: symptoms.length > 0 
         ? (symptoms.reduce((sum, s) => sum + s.severity, 0) / symptoms.length).toFixed(1)
         : 0,
@@ -152,10 +165,10 @@ const Reports = () => {
     stats.mostTakenMedication = Object.keys(medicationCounts).reduce((a, b) => 
       medicationCounts[a] > medicationCounts[b] ? a : b, '') || 'None';
 
-    // Daily averages
-    const daysDiff = Math.ceil((new Date(reportSettings.endDate) - new Date(reportSettings.startDate)) / (1000 * 60 * 60 * 24)) + 1;
-    stats.dailyAverages.symptomsPerDay = (symptoms.length / daysDiff).toFixed(1);
-    stats.dailyAverages.medicationsPerDay = (medicationLogs.length / daysDiff).toFixed(1);
+    // Daily averages (use actual days with data, not date range)
+    const daysForAverages = actualDaysWithData > 0 ? actualDaysWithData : 1; // Avoid division by zero
+    stats.dailyAverages.symptomsPerDay = (symptoms.length / daysForAverages).toFixed(1);
+    stats.dailyAverages.medicationsPerDay = (medicationLogs.length / daysForAverages).toFixed(1);
 
     return stats;
   };
@@ -547,7 +560,7 @@ const Reports = () => {
                 color: '#1E40AF',
                 margin: '0 0 0.25rem 0'
               }}>
-                {Math.ceil((new Date(reportSettings.endDate) - new Date(reportSettings.startDate)) / (1000 * 60 * 60 * 24)) + 1}
+                {statistics.actualDaysTracked}
               </div>
               <div style={{
                 fontSize: '0.75rem',
