@@ -164,7 +164,6 @@ const SparkleIcon = () => (
 
 function App() {
   const [currentView, setCurrentView] = useState('home');
-  const [showQuickAdd, setShowQuickAdd] = useState(false);
   const [streak, setStreak] = useState(0);
 
   // Load streak data
@@ -195,11 +194,6 @@ function App() {
       default:
         return <HomePage setCurrentView={setCurrentView} streak={streak} />;
     }
-  };
-
-  const handleQuickAdd = (type) => {
-    setShowQuickAdd(false);
-    setCurrentView(type);
   };
 
   return (
@@ -416,49 +410,6 @@ function App() {
           </button>
         </div>
       </nav>
-
-      {/* Contextual Floating Action Button - Only on Home */}
-      {currentView === 'home' && (
-        <button
-          onClick={() => setShowQuickAdd(!showQuickAdd)}
-          className="fixed bottom-20 right-4 w-14 h-14 bg-primary-600 text-white rounded-full shadow-xl z-40 transition"
-          style={{
-            boxShadow: '0 8px 25px -8px rgba(37, 99, 235, 0.4)',
-            transform: showQuickAdd ? 'rotate(45deg) scale(1.05)' : 'rotate(0deg) scale(1)'
-          }}
-          onMouseEnter={(e) => {
-            if (!showQuickAdd) e.currentTarget.style.transform = 'scale(1.1)';
-          }}
-          onMouseLeave={(e) => {
-            if (!showQuickAdd) e.currentTarget.style.transform = 'scale(1)';
-          }}
-        >
-          <div className="flex items-center justify-center">
-            <PlusIcon />
-          </div>
-        </button>
-      )}
-
-      {/* Quick Add Menu - Only on Home */}
-      {showQuickAdd && currentView === 'home' && (
-        <div className="fixed bottom-36 right-4 bg-white rounded-xl shadow-2xl border border-slate-200 z-40 min-w-48"
-             style={{ animation: 'fadeIn 0.2s ease-out' }}>
-          <div className="p-2">
-            <QuickAddButton
-              icon={SymptomsIcon}
-              title="Log Symptom"
-              description="How are you feeling?"
-              onClick={() => handleQuickAdd('symptoms')}
-            />
-            <QuickAddButton
-              icon={MedsIcon}
-              title="Add Medication"
-              description="Track your meds"
-              onClick={() => handleQuickAdd('medications')}
-            />
-          </div>
-        </div>
-      )}
 
       {/* Overlay */}
       {showQuickAdd && (
