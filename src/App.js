@@ -417,8 +417,8 @@ function App() {
         </div>
       </nav>
 
-      {/* Premium Floating Action Button */}
-      {(currentView === 'home' || currentView === 'symptoms' || currentView === 'medications') && (
+      {/* Contextual Floating Action Button - Only on Home */}
+      {currentView === 'home' && (
         <button
           onClick={() => setShowQuickAdd(!showQuickAdd)}
           className="fixed bottom-20 right-4 w-14 h-14 bg-primary-600 text-white rounded-full shadow-xl z-40 transition"
@@ -439,8 +439,8 @@ function App() {
         </button>
       )}
 
-      {/* Premium Quick Add Menu */}
-      {showQuickAdd && (
+      {/* Quick Add Menu - Only on Home */}
+      {showQuickAdd && currentView === 'home' && (
         <div className="fixed bottom-36 right-4 bg-white rounded-xl shadow-2xl border border-slate-200 z-40 min-w-48"
              style={{ animation: 'fadeIn 0.2s ease-out' }}>
           <div className="p-2">
