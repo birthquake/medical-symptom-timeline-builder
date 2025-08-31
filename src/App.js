@@ -411,13 +411,7 @@ function App() {
         </div>
       </nav>
 
-      {/* Overlay */}
-      {showQuickAdd && (
-        <div
-          className="fixed inset-0 z-30"
-          onClick={() => setShowQuickAdd(false)}
-        />
-      )}
+      {/* Overlay - Remove completely */}
 
       <style jsx>{`
         @keyframes fadeIn {
