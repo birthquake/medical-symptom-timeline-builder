@@ -596,28 +596,4 @@ const HomePage = ({ setCurrentView, streak }) => {
   );
 };
 
-// Action Button Component
-const ActionButton = ({ icon: Icon, title, description, onClick, highlight = false }) => (
-  <button
-    onClick={onClick}
-    className={`p-4 border rounded-lg hover:shadow-sm transition-all duration-200 text-left flex items-center gap-3 ${
-      highlight 
-        ? 'bg-success-50 border-success-200 hover:bg-success-100 hover:border-success-300' 
-        : 'bg-slate-50 border-slate-200 hover:bg-slate-100 hover:border-slate-300'
-    }`}
-  >
-    <div className={highlight ? 'text-success-600' : 'text-slate-600'}>
-      <Icon />
-    </div>
-    <div className="flex-1">
-      <div className="text-body font-medium text-slate-900 mb-1">
-        {title}
-      </div>
-      <div className="text-body-small text-slate-600">
-        {description}
-      </div>
-    </div>
-  </button>
-);
-
 export default App;
