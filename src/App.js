@@ -142,12 +142,6 @@ const InfoIcon = ({ active = false }) => (
   </svg>
 );
 
-const PlusIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3">
-    <path d="M12 5V19M5 12H19"/>
-  </svg>
-);
-
 const NotificationBellIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
     <path d="M18 8A6 6 0 0 0 6 8C6 15 3 17 3 17H21S18 15 18 8"/>
@@ -410,36 +404,11 @@ function App() {
           </button>
         </div>
       </nav>
-
-      {/* Overlay - Remove completely */}
-
-      <style jsx>{`
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-      `}</style>
     </div>
   );
 }
 
-// Premium Home Page Component
-const QuickAddButton = ({ icon: Icon, title, description, onClick }) => (
-  <button
-    onClick={onClick}
-    className="w-full p-3 rounded-lg text-left hover:bg-slate-50 transition-colors flex items-center gap-3"
-  >
-    <div className="text-slate-600">
-      <Icon />
-    </div>
-    <div>
-      <div className="text-body font-medium text-slate-900">{title}</div>
-      <div className="text-body-small text-slate-600">{description}</div>
-    </div>
-  </button>
-);
-
-// Premium Home Page Component
+// Clean Home Page Component
 const HomePage = ({ setCurrentView, streak }) => {
   const [todayData, setTodayData] = useState({ symptoms: 0, medications: 0 });
 
@@ -551,45 +520,6 @@ const HomePage = ({ setCurrentView, streak }) => {
             {/* Decorative Element */}
             <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-br from-warning-200 to-warning-300 rounded-full opacity-60" />
           </button>
-        </div>
-      </div>
-
-      {/* Quick Actions */}
-      <div className="health-card">
-        <div className="health-card-header">
-          <h3 className="text-heading-3 text-slate-900">Quick Actions</h3>
-        </div>
-        <div className="health-card-body">
-          <div className="flex flex-col gap-3">
-            <ActionButton
-              icon={SymptomsIcon}
-              title="Log a Symptom"
-              description="How are you feeling right now?"
-              onClick={() => setCurrentView('symptoms')}
-            />
-            
-            <ActionButton
-              icon={MedsIcon}
-              title="Track Medication"
-              description="Add or log your medications"
-              onClick={() => setCurrentView('medications')}
-            />
-            
-            <ActionButton
-              icon={TimelineIcon}
-              title="View Your Timeline"
-              description="See your health patterns over time"
-              onClick={() => setCurrentView('timeline')}
-            />
-            
-            <ActionButton
-              icon={DoctorPrepIcon}
-              title="Prepare for Doctor Visit"
-              description="Get ready with insights and questions"
-              onClick={() => setCurrentView('doctor-prep')}
-              highlight
-            />
-          </div>
         </div>
       </div>
     </div>
