@@ -195,36 +195,44 @@ const MedicationTracker = () => {
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Header Card */}
+      {/* Streamlined Header Card */}
       <div className="health-card">
         <div className="health-card-body">
-          <h2 className="text-heading-1 text-slate-900 mb-3">
-            Your Medications
-          </h2>
-          <p className="text-body text-slate-600 mb-6 leading-relaxed">
-            Track your prescribed medications and dosing schedule.
-          </p>
-
-          {/* Today's Summary */}
-          <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 flex justify-between items-center">
+          <div className="flex justify-between items-start mb-4">
             <div>
-              <div className="text-body-small text-slate-600 font-medium mb-1">
-                Doses taken today
-              </div>
-              <div className={`text-medical-large font-bold text-metric ${
-                todayCount > 0 ? 'text-success-600' : 'text-slate-400'
-              }`}>
-                {todayCount}
-              </div>
+              <h2 className="text-heading-1 text-slate-900 mb-2">
+                Your Medications
+              </h2>
+              <p className="text-body text-slate-600">
+                Track your prescribed medications and dosing schedule.
+              </p>
             </div>
-            
             <button
               onClick={() => setShowForm(true)}
-              className="btn btn-success btn-lg flex items-center gap-2"
+              className="btn btn-success flex items-center gap-2 flex-shrink-0"
             >
               <PlusIcon />
               Add Medication
             </button>
+          </div>
+
+          {/* Streamlined Today's Summary */}
+          <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg border border-slate-200">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-success-100 rounded-lg flex items-center justify-center">
+                <CheckCircleIcon size={20} className="text-success-600" />
+              </div>
+              <div>
+                <div className="text-body-small text-slate-600 font-medium">
+                  Doses taken today
+                </div>
+                <div className={`text-lg font-bold text-metric ${
+                  todayCount > 0 ? 'text-success-600' : 'text-slate-400'
+                }`}>
+                  {todayCount}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
