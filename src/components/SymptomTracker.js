@@ -35,6 +35,16 @@ const CloseIcon = () => (
 );
 
 const DocumentIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-warning-600">
+    <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z"/>
+    <polyline points="14,2 14,8 20,8"/>
+    <line x1="16" y1="13" x2="8" y2="13"/>
+    <line x1="16" y1="17" x2="8" y2="17"/>
+    <line x1="10" y1="9" x2="8" y2="9"/>
+  </svg>
+);
+
+const EmptyDocumentIcon = () => (
   <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
     <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z"/>
     <polyline points="14,2 14,8 20,8"/>
@@ -167,36 +177,44 @@ const SymptomTracker = () => {
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Header Card */}
+      {/* Streamlined Header Card */}
       <div className="health-card">
         <div className="health-card-body">
-          <h2 className="text-heading-1 text-slate-900 mb-3">
-            How are you feeling?
-          </h2>
-          <p className="text-body text-slate-600 mb-6 leading-relaxed">
-            Track your symptoms to identify patterns and share with your healthcare provider.
-          </p>
-
-          {/* Today's Summary */}
-          <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 flex justify-between items-center">
+          <div className="flex justify-between items-start mb-4">
             <div>
-              <div className="text-body-small text-slate-600 font-medium mb-1">
-                Symptoms logged today
-              </div>
-              <div className={`text-medical-large font-bold text-metric ${
-                todayCount > 0 ? 'text-warning-600' : 'text-slate-400'
-              }`}>
-                {todayCount}
-              </div>
+              <h2 className="text-heading-1 text-slate-900 mb-2">
+                How are you feeling?
+              </h2>
+              <p className="text-body text-slate-600">
+                Track your symptoms to identify patterns and share with your healthcare provider.
+              </p>
             </div>
-            
             <button
               onClick={() => setShowForm(true)}
-              className="btn btn-primary btn-lg flex items-center gap-2"
+              className="btn btn-primary flex items-center gap-2 flex-shrink-0"
             >
               <PlusIcon />
               Log Symptom
             </button>
+          </div>
+
+          {/* Streamlined Today's Summary */}
+          <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg border border-slate-200">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-warning-100 rounded-lg flex items-center justify-center">
+                <DocumentIcon />
+              </div>
+              <div>
+                <div className="text-body-small text-slate-600 font-medium">
+                  Symptoms logged today
+                </div>
+                <div className={`text-lg font-bold text-metric ${
+                  todayCount > 0 ? 'text-warning-600' : 'text-slate-400'
+                }`}>
+                  {todayCount}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -358,7 +376,7 @@ const SymptomTracker = () => {
           {symptoms.length === 0 ? (
             <div className="text-center py-12">
               <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-400">
-                <DocumentIcon />
+                <EmptyDocumentIcon />
               </div>
               <h4 className="text-heading-3 text-slate-800 mb-2">
                 No symptoms logged yet
