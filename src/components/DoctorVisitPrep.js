@@ -391,7 +391,6 @@ const handleEmailDraft = () => {
 
   const sinceLastVisit = getTimeFrameData();
 
-  return (
 return (
   <div className="flex flex-col gap-6">      {/* Header */}
       {/* Streamlined Header */}
@@ -907,6 +906,7 @@ return (
         }}>
           This generates a doctor-friendly summary of your concerns, questions, and health patterns
         </p>
+           </div>
       </div>
     </div>
   );
