@@ -53,17 +53,17 @@ const ShareIcon = ({ color = "white", size = 20 }) => (
   </svg>
 );
 
-const CopyIcon = ({ color = "#64748B", size = 20 }) => (
+const CopyIcon = ({ size = 20 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" stroke="currentColor" strokeWidth="2"/>
+    <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" stroke="currentColor" strokeWidth="2"/>
   </svg>
 );
 
-const EmailIcon = ({ color = "#64748B", size = 20 }) => (
+const EmailIcon = ({ size = 20 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-    <polyline points="22,6 12,13 2,6" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" strokeWidth="2"/>
+    <polyline points="22,6 12,13 2,6" stroke="currentColor" strokeWidth="2"/>
   </svg>
 );
 
@@ -140,7 +140,6 @@ const Reports = () => {
       generateTrendAnalysis();
     }
   }, [activeTab, selectedTimeframe, reportData]);
-
   // Filter data based on date range
   const getFilteredData = () => {
     const start = new Date(reportSettings.startDate);
@@ -407,14 +406,12 @@ const Reports = () => {
           text: reportText
         });
       } catch (err) {
-        // Fallback to clipboard if share is cancelled
         if (err.name !== 'AbortError') {
           await navigator.clipboard.writeText(reportText);
           alert('Report copied to clipboard!');
         }
       }
     } else {
-      // Fallback for browsers without Web Share API
       await navigator.clipboard.writeText(reportText);
       alert('Report copied to clipboard!');
     }
@@ -436,9 +433,9 @@ const Reports = () => {
   };
 
   const getSeverityColor = (severity) => {
-    if (severity <= 3) return '#10B981';
-    if (severity <= 6) return '#F59E0B'; 
-    return '#EF4444';
+    if (severity <= 3) return 'var(--success-600)';
+    if (severity <= 6) return 'var(--warning-600)'; 
+    return 'var(--error-600)';
   };
 
   const filtered = getFilteredData();
@@ -452,459 +449,192 @@ const Reports = () => {
       default: return 'Past Month';
     }
   };
-
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-      {/* Header */}
-      <div style={{
-        backgroundColor: 'white',
-        borderRadius: '16px',
-        padding: '1.5rem',
-        border: '1px solid #E2E8F0',
-        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
-          <div style={{
-            width: '48px',
-            height: '48px',
-            backgroundColor: '#8B5CF6',
-            borderRadius: '12px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}>
-            {activeTab === 'summary' ? <ReportsIcon color="#FFFFFF" size={24} /> : <TrendsIcon color="#FFFFFF" size={24} />}
+    <div className="flex flex-col gap-6">
+      {/* Streamlined Header */}
+      <div className="health-card">
+        <div className="health-card-body">
+          <div className="flex justify-between items-start mb-4">
+            <div>
+              <h2 className="text-heading-1">Health Reports</h2>
+              <p className="text-body">Generate summaries and discover patterns</p>
+            </div>
+            <button 
+              className="btn btn-primary"
+              onClick={handleShare}
+              disabled={isSharing}
+            >
+              <ShareIcon />
+              {isSharing ? 'Sharing...' : 'Share'}
+            </button>
           </div>
-          <div>
-            <h2 style={{ 
-              fontSize: '1.5rem',
-              fontWeight: '700',
-              color: '#1E293B',
-              margin: '0'
-            }}>
-              Health Reports & Insights
-            </h2>
-            <p style={{ 
-              color: '#64748B', 
-              margin: '0.25rem 0 0 0',
-              fontSize: '0.875rem'
-            }}>
-              Generate summaries and discover patterns for your healthcare provider
-            </p>
+          
+          {/* Compact Summary */}
+          <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-secondary-100 rounded-lg flex items-center justify-center">
+                {activeTab === 'summary' ? <ReportsIcon color="var(--secondary-600)" size={20} /> : <TrendsIcon color="var(--secondary-600)" size={20} />}
+              </div>
+              <div>
+                <div className="text-body-small">{activeTab === 'summary' ? 'Report Period' : 'Analysis Period'}</div>
+                <div className="text-lg font-bold text-metric">
+                  {activeTab === 'summary' ? `${statistics.actualDaysTracked} days` : getTimeframeName()}
+                </div>
+              </div>
+            </div>
+            <div className="h-8 w-px bg-slate-300"></div>
+            <div className="flex items-center gap-4">
+              <div className="text-center">
+                <div className="text-sm font-bold text-error-600">{activeTab === 'summary' ? statistics.totalSymptoms : insights.dataQuality.symptoms}</div>
+                <div className="text-xs text-slate-600">Symptoms</div>
+              </div>
+              <div className="text-center">
+                <div className="text-sm font-bold text-success-600">{activeTab === 'summary' ? statistics.totalMedicationDoses : insights.dataQuality.medications}</div>
+                <div className="text-xs text-slate-600">Medications</div>
+              </div>
+            </div>
           </div>
-        </div>
-
-        {/* Tab Navigation */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: '0.5rem',
-          backgroundColor: '#F8FAFC',
-          padding: '0.25rem',
-          borderRadius: '8px',
-          border: '1px solid #E2E8F0'
-        }}>
-          <button
-            onClick={() => setActiveTab('summary')}
-            style={{
-              padding: '0.75rem 1rem',
-              border: 'none',
-              backgroundColor: activeTab === 'summary' ? '#8B5CF6' : 'transparent',
-              color: activeTab === 'summary' ? 'white' : '#64748B',
-              borderRadius: '6px',
-              fontSize: '0.875rem',
-              fontWeight: '600',
-              cursor: 'pointer',
-              transition: 'all 0.15s ease',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '0.5rem'
-            }}
-          >
-            <ReportsIcon color={activeTab === 'summary' ? 'white' : '#64748B'} size={16} />
-            Summary Report
-          </button>
-          <button
-            onClick={() => setActiveTab('insights')}
-            style={{
-              padding: '0.75rem 1rem',
-              border: 'none',
-              backgroundColor: activeTab === 'insights' ? '#8B5CF6' : 'transparent',
-              color: activeTab === 'insights' ? 'white' : '#64748B',
-              borderRadius: '6px',
-              fontSize: '0.875rem',
-              fontWeight: '600',
-              cursor: 'pointer',
-              transition: 'all 0.15s ease',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '0.5rem'
-            }}
-          >
-            <TrendsIcon color={activeTab === 'insights' ? 'white' : '#64748B'} size={16} />
-            Pattern Insights
-          </button>
         </div>
       </div>
 
-      {/* Content based on active tab */}
+      {/* Tab Navigation */}
+      <div className="health-card">
+        <div className="health-card-body">
+          <div className="grid grid-cols-2 gap-2 bg-slate-50 p-1 rounded-lg">
+            <button
+              onClick={() => setActiveTab('summary')}
+              className={`flex items-center justify-center gap-2 px-4 py-3 rounded-md font-medium text-sm transition-all ${
+                activeTab === 'summary' ? 'bg-secondary-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <ReportsIcon color={activeTab === 'summary' ? 'white' : '#64748B'} size={16} />
+              Summary Report
+            </button>
+            <button
+              onClick={() => setActiveTab('insights')}
+              className={`flex items-center justify-center gap-2 px-4 py-3 rounded-md font-medium text-sm transition-all ${
+                activeTab === 'insights' ? 'bg-secondary-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <TrendsIcon color={activeTab === 'insights' ? 'white' : '#64748B'} size={16} />
+              Pattern Insights
+            </button>
+          </div>
+        </div>
+      </div>
+{/* Content based on active tab */}
       {activeTab === 'summary' ? (
         <>
           {/* Report Settings */}
-          <div style={{
-            backgroundColor: 'white',
-            borderRadius: '16px',
-            padding: '1.5rem',
-            border: '1px solid #E2E8F0',
-            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
-          }}>
-            <h3 style={{ 
-              fontSize: '1.125rem',
-              fontWeight: '600',
-              color: '#1E293B',
-              margin: '0 0 1rem 0'
-            }}>
-              Report Settings
-            </h3>
-            
-            {/* Date Range */}
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              gap: '1rem',
-              marginBottom: '1.5rem'
-            }}>
-              <div>
-                <label style={{ 
-                  display: 'block', 
-                  marginBottom: '0.5rem', 
-                  fontWeight: '600',
-                  color: '#374151',
-                  fontSize: '0.875rem'
-                }}>
-                  Start Date:
-                </label>
-                <div style={{ position: 'relative' }}>
-                  <input
-                    type="date"
-                    value={reportSettings.startDate}
-                    onChange={(e) => setReportSettings(prev => ({ ...prev, startDate: e.target.value }))}
-                    style={{
-                      width: 'calc(100% - 1.5rem)',
-                      padding: '0.75rem 0.75rem 0.75rem 2.5rem',
-                      border: '1px solid #D1D5DB',
-                      borderRadius: '8px',
-                      fontSize: '0.875rem',
-                      backgroundColor: '#FAFAFA',
-                      boxSizing: 'border-box'
-                    }}
-                  />
-                  <div style={{
-                    position: 'absolute',
-                    left: '0.75rem',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    pointerEvents: 'none'
-                  }}>
-                    <CalendarIcon />
-                  </div>
-                </div>
-              </div>
-              <div>
-                <label style={{ 
-                  display: 'block', 
-                  marginBottom: '0.5rem', 
-                  fontWeight: '600',
-                  color: '#374151',
-                  fontSize: '0.875rem'
-                }}>
-                  End Date:
-                </label>
-                <div style={{ position: 'relative' }}>
-                  <input
-                    type="date"
-                    value={reportSettings.endDate}
-                    onChange={(e) => setReportSettings(prev => ({ ...prev, endDate: e.target.value }))}
-                    style={{
-                      width: 'calc(100% - 1.5rem)',
-                      padding: '0.75rem 0.75rem 0.75rem 2.5rem',
-                      border: '1px solid #D1D5DB',
-                      borderRadius: '8px',
-                      fontSize: '0.875rem',
-                      backgroundColor: '#FAFAFA',
-                      boxSizing: 'border-box'
-                    }}
-                  />
-                  <div style={{
-                    position: 'absolute',
-                    left: '0.75rem',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    pointerEvents: 'none'
-                  }}>
-                    <CalendarIcon />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Include Options */}
-            <div style={{ marginBottom: '1.5rem' }}>
-              <label style={{ 
-                display: 'block', 
-                marginBottom: '0.75rem', 
-                fontWeight: '600',
-                color: '#374151',
-                fontSize: '0.875rem'
-              }}>
-                Include in Report:
-              </label>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                {[
-                  { key: 'includeSymptoms', label: 'Symptoms & Severity Levels' },
-                  { key: 'includeMedications', label: 'Current Medications' },
-                  { key: 'includeStatistics', label: 'Summary Statistics' }
-                ].map(option => (
-                  <label key={option.key} style={{ 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    gap: '0.75rem',
-                    padding: '0.75rem',
-                    backgroundColor: '#F8FAFC',
-                    borderRadius: '8px',
-                    border: '1px solid #E2E8F0',
-                    cursor: 'pointer',
-                    transition: 'background-color 0.15s ease'
-                  }}
-                  onMouseEnter={(e) => e.target.style.backgroundColor = '#F1F5F9'}
-                  onMouseLeave={(e) => e.target.style.backgroundColor = '#F8FAFC'}
-                  >
+          <div className="health-card">
+            <div className="health-card-body">
+              <h3 className="text-heading-3 mb-4">Report Settings</h3>
+              
+              {/* Date Range */}
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Start Date:</label>
+                  <div className="relative">
                     <input
-                      type="checkbox"
-                      checked={reportSettings[option.key]}
-                      onChange={(e) => setReportSettings(prev => ({ ...prev, [option.key]: e.target.checked }))}
-                      style={{ 
-                        transform: 'scale(1.2)',
-                        accentColor: '#3B82F6'
-                      }}
+                      type="date"
+                      value={reportSettings.startDate}
+                      onChange={(e) => setReportSettings(prev => ({ ...prev, startDate: e.target.value }))}
+                      className="form-input pl-10"
                     />
-                    <span style={{ 
-                      fontSize: '0.875rem', 
-                      fontWeight: '500', 
-                      color: '#374151',
-                      flex: 1
-                    }}>
-                      {option.label}
-                    </span>
-                  </label>
-                ))}
+                    <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                      <CalendarIcon />
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">End Date:</label>
+                  <div className="relative">
+                    <input
+                      type="date"
+                      value={reportSettings.endDate}
+                      onChange={(e) => setReportSettings(prev => ({ ...prev, endDate: e.target.value }))}
+                      className="form-input pl-10"
+                    />
+                    <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                      <CalendarIcon />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Include Options */}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-3">Include in Report:</label>
+                <div className="space-y-2">
+                  {[
+                    { key: 'includeSymptoms', label: 'Symptoms & Severity Levels' },
+                    { key: 'includeMedications', label: 'Current Medications' },
+                    { key: 'includeStatistics', label: 'Summary Statistics' }
+                  ].map(option => (
+                    <label key={option.key} className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-100 transition-colors">
+                      <input
+                        type="checkbox"
+                        checked={reportSettings[option.key]}
+                        onChange={(e) => setReportSettings(prev => ({ ...prev, [option.key]: e.target.checked }))}
+                        className="w-4 h-4 text-primary-600 bg-white border-slate-300 rounded focus:ring-primary-500 focus:ring-2"
+                      />
+                      <span className="text-sm font-medium text-slate-700 flex-1">{option.label}</span>
+                    </label>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
-
-          {/* Preview Statistics */}
+{/* Statistics Preview */}
           {reportSettings.includeStatistics && (filtered.symptoms.length > 0 || filtered.medicationLogs.length > 0) && (
-            <div style={{
-              backgroundColor: 'white',
-              borderRadius: '16px',
-              padding: '1.5rem',
-              border: '1px solid #E2E8F0',
-              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-                <ChartIcon />
-                <h3 style={{ 
-                  fontSize: '1.125rem',
-                  fontWeight: '600',
-                  color: '#1E293B',
-                  margin: 0
-                }}>
-                  Report Preview
-                </h3>
-              </div>
+            <div className="health-card">
+              <div className="health-card-body">
+                <div className="flex items-center gap-2 mb-4">
+                  <ChartIcon />
+                  <h3 className="text-heading-3">Report Preview</h3>
+                </div>
 
-              {/* Stats Grid */}
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
-                gap: '1rem',
-                marginBottom: '1.5rem'
-              }}>
-                <div style={{
-                  textAlign: 'center',
-                  padding: '1.25rem 1rem',
-                  background: 'linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%)',
-                  borderRadius: '12px',
-                  border: '1px solid #FECACA',
-                  transition: 'transform 0.2s ease'
-                }}
-                onMouseEnter={(e) => e.target.style.transform = 'translateY(-2px)'}
-                onMouseLeave={(e) => e.target.style.transform = 'translateY(0)'}
-                >
-                  <div style={{
-                    fontSize: '2rem',
-                    fontWeight: '800',
-                    color: '#DC2626',
-                    margin: '0 0 0.25rem 0'
-                  }}>
-                    {statistics.totalSymptoms}
+                {/* Stats Grid */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                  <div className="text-center p-4 bg-gradient-to-br from-error-50 to-error-100 rounded-lg border border-error-200 transform transition-transform hover:-translate-y-0.5">
+                    <div className="text-2xl font-bold text-error-600 mb-1">{statistics.totalSymptoms}</div>
+                    <div className="text-xs text-error-700 font-medium">Symptoms</div>
                   </div>
-                  <div style={{
-                    fontSize: '0.75rem',
-                    color: '#991B1B',
-                    fontWeight: '600'
-                  }}>
-                    Total Symptoms
+
+                  <div className="text-center p-4 bg-gradient-to-br from-success-50 to-success-100 rounded-lg border border-success-200 transform transition-transform hover:-translate-y-0.5">
+                    <div className="text-2xl font-bold text-success-600 mb-1">{statistics.totalMedicationDoses}</div>
+                    <div className="text-xs text-success-700 font-medium">Medications</div>
+                  </div>
+
+                  <div className="text-center p-4 bg-gradient-to-br from-warning-50 to-warning-100 rounded-lg border border-warning-200 transform transition-transform hover:-translate-y-0.5">
+                    <div className="text-2xl font-bold" style={{ color: getSeverityColor(parseFloat(statistics.avgSeverity)) }}>
+                      {statistics.avgSeverity}
+                    </div>
+                    <div className="text-xs text-warning-700 font-medium">Avg Severity</div>
+                  </div>
+
+                  <div className="text-center p-4 bg-gradient-to-br from-primary-50 to-primary-100 rounded-lg border border-primary-200 transform transition-transform hover:-translate-y-0.5">
+                    <div className="text-2xl font-bold text-primary-600 mb-1">{statistics.actualDaysTracked}</div>
+                    <div className="text-xs text-primary-700 font-medium">Days Tracked</div>
                   </div>
                 </div>
 
-                <div style={{
-                  textAlign: 'center',
-                  padding: '1.25rem 1rem',
-                  background: 'linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%)',
-                  borderRadius: '12px',
-                  border: '1px solid #BBF7D0',
-                  transition: 'transform 0.2s ease'
-                }}
-                onMouseEnter={(e) => e.target.style.transform = 'translateY(-2px)'}
-                onMouseLeave={(e) => e.target.style.transform = 'translateY(0)'}
-                >
-                  <div style={{
-                    fontSize: '2rem',
-                    fontWeight: '800',
-                    color: '#059669',
-                    margin: '0 0 0.25rem 0'
-                  }}>
-                    {statistics.totalMedicationDoses}
-                  </div>
-                  <div style={{
-                    fontSize: '0.75rem',
-                    color: '#047857',
-                    fontWeight: '600'
-                  }}>
-                    Med Doses Taken
-                  </div>
-                </div>
-
-                <div style={{
-                  textAlign: 'center',
-                  padding: '1.25rem 1rem',
-                  background: 'linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%)',
-                  borderRadius: '12px',
-                  border: '1px solid #FDE68A',
-                  transition: 'transform 0.2s ease'
-                }}
-                onMouseEnter={(e) => e.target.style.transform = 'translateY(-2px)'}
-                onMouseLeave={(e) => e.target.style.transform = 'translateY(0)'}
-                >
-                  <div style={{
-                    fontSize: '2rem',
-                    fontWeight: '800',
-                    color: getSeverityColor(parseFloat(statistics.avgSeverity)),
-                    margin: '0 0 0.25rem 0'
-                  }}>
-                    {statistics.avgSeverity}
-                  </div>
-                  <div style={{
-                    fontSize: '0.75rem',
-                    color: '#92400E',
-                    fontWeight: '600'
-                  }}>
-                    Avg Severity
-                  </div>
-                </div>
-
-                <div style={{
-                  textAlign: 'center',
-                  padding: '1.25rem 1rem',
-                  background: 'linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%)',
-                  borderRadius: '12px',
-                  border: '1px solid #BFDBFE',
-                  transition: 'transform 0.2s ease'
-                }}
-                onMouseEnter={(e) => e.target.style.transform = 'translateY(-2px)'}
-                onMouseLeave={(e) => e.target.style.transform = 'translateY(0)'}
-                >
-                  <div style={{
-                    fontSize: '2rem',
-                    fontWeight: '800',
-                    color: '#1E40AF',
-                    margin: '0 0 0.25rem 0'
-                  }}>
-                    {statistics.actualDaysTracked}
-                  </div>
-                  <div style={{
-                    fontSize: '0.75rem',
-                    color: '#1E40AF',
-                    fontWeight: '600'
-                  }}>
-                    Days Tracked
-                  </div>
-                </div>
-              </div>
-
-              {/* Key Insights */}
-              <div style={{
-                background: 'linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%)',
-                borderRadius: '12px',
-                padding: '1.25rem',
-                border: '1px solid #E2E8F0'
-              }}>
-                <h4 style={{
-                  fontSize: '1rem',
-                  fontWeight: '600',
-                  color: '#374151',
-                  margin: '0 0 0.75rem 0'
-                }}>
-                  Key Insights for Your Doctor:
-                </h4>
-                <div style={{ 
-                  fontSize: '0.875rem', 
-                  color: '#4B5563', 
-                  lineHeight: '1.6',
-                  display: 'grid',
-                  gap: '0.5rem'
-                }}>
-                  <div style={{ 
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.5rem'
-                  }}>
-                    <div style={{
-                      width: '6px',
-                      height: '6px',
-                      backgroundColor: '#DC2626',
-                      borderRadius: '50%'
-                    }} />
-                    Most common symptom: <strong style={{ color: '#DC2626' }}>{statistics.mostCommonSymptom}</strong>
-                  </div>
-                  <div style={{ 
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.5rem'
-                  }}>
-                    <div style={{
-                      width: '6px',
-                      height: '6px',
-                      backgroundColor: '#059669',
-                      borderRadius: '50%'
-                    }} />
-                    Most taken medication: <strong style={{ color: '#059669' }}>{statistics.mostTakenMedication}</strong>
-                  </div>
-                  <div style={{ 
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.5rem'
-                  }}>
-                    <div style={{
-                      width: '6px',
-                      height: '6px',
-                      backgroundColor: '#3B82F6',
-                      borderRadius: '50%'
-                    }} />
-                    Daily averages: <strong>{statistics.dailyAverages.symptomsPerDay}</strong> symptoms, <strong>{statistics.dailyAverages.medicationsPerDay}</strong> medications per day
+                {/* Key Insights */}
+                <div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
+                  <h4 className="text-heading-4 mb-3">Key Insights:</h4>
+                  <div className="space-y-2 text-sm text-slate-700">
+                    <div className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 bg-error-500 rounded-full"></div>
+                      Most common symptom: <strong className="text-error-600">{statistics.mostCommonSymptom}</strong>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 bg-success-500 rounded-full"></div>
+                      Most taken medication: <strong className="text-success-600">{statistics.mostTakenMedication}</strong>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 bg-primary-500 rounded-full"></div>
+                      Daily averages: <strong>{statistics.dailyAverages.symptomsPerDay}</strong> symptoms, <strong>{statistics.dailyAverages.medicationsPerDay}</strong> medications
+                    </div>
                   </div>
                 </div>
               </div>
@@ -914,323 +644,111 @@ const Reports = () => {
       ) : (
         <>
           {/* Insights Content */}
-          <div style={{
-            backgroundColor: 'white',
-            borderRadius: '16px',
-            padding: '1.5rem',
-            border: '1px solid #E2E8F0',
-            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
-          }}>
-            <h3 style={{ 
-              fontSize: '1.125rem',
-              fontWeight: '600',
-              color: '#1E293B',
-              margin: '0 0 1rem 0'
-            }}>
-              Analysis Period - {getTimeframeName()}
-            </h3>
+          <div className="health-card">
+            <div className="health-card-body">
+              <h3 className="text-heading-3 mb-4">Analysis Period - {getTimeframeName()}</h3>
 
-            {/* Timeframe Selector */}
-            <div style={{
-              display: 'flex',
-              gap: '0.5rem',
-              backgroundColor: '#F8FAFC',
-              padding: '0.25rem',
-              borderRadius: '8px',
-              border: '1px solid #E2E8F0',
-              marginBottom: '1.5rem'
-            }}>
-              {['week', 'month', 'quarter'].map(timeframe => (
-                <button
-                  key={timeframe}
-                  onClick={() => setSelectedTimeframe(timeframe)}
-                  style={{
-                    flex: 1,
-                    padding: '0.5rem 1rem',
-                    border: 'none',
-                    backgroundColor: selectedTimeframe === timeframe ? '#8B5CF6' : 'transparent',
-                    color: selectedTimeframe === timeframe ? 'white' : '#64748B',
-                    borderRadius: '6px',
-                    fontSize: '0.875rem',
-                    fontWeight: '500',
-                    cursor: 'pointer',
-                    transition: 'all 0.15s ease'
-                  }}
-                >
-                  {timeframe === 'week' ? '7 Days' : timeframe === 'month' ? '30 Days' : '90 Days'}
-                </button>
-              ))}
-            </div>
-
-            {/* Data Quality Overview */}
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
-              gap: '1rem',
-              marginBottom: '1.5rem'
-            }}>
-              <div style={{
-                textAlign: 'center',
-                padding: '1rem',
-                backgroundColor: '#FEF2F2',
-                borderRadius: '12px',
-                border: '1px solid #FECACA'
-              }}>
-                <div style={{
-                  fontSize: '1.75rem',
-                  fontWeight: '800',
-                  color: '#DC2626',
-                  margin: '0 0 0.25rem 0'
-                }}>
-                  {insights.dataQuality.symptoms}
-                </div>
-                <div style={{
-                  fontSize: '0.75rem',
-                  color: '#991B1B',
-                  fontWeight: '600'
-                }}>
-                  Symptoms Tracked
-                </div>
-              </div>
-
-              <div style={{
-                textAlign: 'center',
-                padding: '1rem',
-                backgroundColor: '#EFF6FF',
-                borderRadius: '12px',
-                border: '1px solid #BFDBFE'
-              }}>
-                <div style={{
-                  fontSize: '1.75rem',
-                  fontWeight: '800',
-                  color: '#1E40AF',
-                  margin: '0 0 0.25rem 0'
-                }}>
-                  {insights.dataQuality.days}
-                </div>
-                <div style={{
-                  fontSize: '0.75rem',
-                  color: '#1E40AF',
-                  fontWeight: '600'
-                }}>
-                  Active Days
-                </div>
-              </div>
-
-              <div style={{
-                textAlign: 'center',
-                padding: '1rem',
-                backgroundColor: '#F0FDF4',
-                borderRadius: '12px',
-                border: '1px solid #BBF7D0'
-              }}>
-                <div style={{
-                  fontSize: '1.75rem',
-                  fontWeight: '800',
-                  color: '#059669',
-                  margin: '0 0 0.25rem 0'
-                }}>
-                  {insights.dataQuality.medications}
-                </div>
-                <div style={{
-                  fontSize: '0.75rem',
-                  color: '#047857',
-                  fontWeight: '600'
-                }}>
-                  Medications
-                </div>
-              </div>
-            </div>
-
-            {/* Key Findings */}
-            <div style={{
-              backgroundColor: '#FAF5FF',
-              borderRadius: '12px',
-              padding: '1.25rem',
-              border: '1px solid #D8B4FE'
-            }}>
-              <h4 style={{
-                fontSize: '1rem',
-                fontWeight: '600',
-                color: '#581C87',
-                margin: '0 0 0.75rem 0'
-              }}>
-                Key Insights:
-              </h4>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                {insights.keyFindings.map((finding, index) => (
-                  <div key={index} style={{
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    gap: '0.75rem'
-                  }}>
-                    <div style={{
-                      width: '18px',
-                      height: '18px',
-                      backgroundColor: '#8B5CF6',
-                      borderRadius: '50%',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexShrink: 0,
-                      marginTop: '2px'
-                    }}>
-                      <span style={{
-                        color: 'white',
-                        fontSize: '0.75rem',
-                        fontWeight: '700'
-                      }}>
-                        {index + 1}
-                      </span>
-                    </div>
-                    <span style={{
-                      fontSize: '0.875rem',
-                      color: '#581C87',
-                      lineHeight: '1.5',
-                      fontWeight: '500'
-                    }}>
-                      {finding}
-                    </span>
-                  </div>
+              {/* Timeframe Selector */}
+              <div className="flex gap-2 bg-slate-50 p-1 rounded-lg mb-6">
+                {['week', 'month', 'quarter'].map(timeframe => (
+                  <button
+                    key={timeframe}
+                    onClick={() => setSelectedTimeframe(timeframe)}
+                    className={`flex-1 px-3 py-2 rounded-md text-sm font-medium transition-all ${
+                      selectedTimeframe === timeframe 
+                        ? 'bg-secondary-600 text-white shadow-sm' 
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-white'
+                    }`}
+                  >
+                    {timeframe === 'week' ? '7 Days' : timeframe === 'month' ? '30 Days' : '90 Days'}
+                  </button>
                 ))}
+              </div>
+
+              {/* Data Quality Overview */}
+              <div className="grid grid-cols-3 gap-4 mb-6">
+                <div className="text-center p-4 bg-error-50 border border-error-200 rounded-lg">
+                  <div className="text-2xl font-bold text-error-600 mb-1">{insights.dataQuality.symptoms}</div>
+                  <div className="text-xs text-error-700 font-medium">Symptoms Tracked</div>
+                </div>
+
+                <div className="text-center p-4 bg-primary-50 border border-primary-200 rounded-lg">
+                  <div className="text-2xl font-bold text-primary-600 mb-1">{insights.dataQuality.days}</div>
+                  <div className="text-xs text-primary-700 font-medium">Active Days</div>
+                </div>
+
+                <div className="text-center p-4 bg-success-50 border border-success-200 rounded-lg">
+                  <div className="text-2xl font-bold text-success-600 mb-1">{insights.dataQuality.medications}</div>
+                  <div className="text-xs text-success-700 font-medium">Medications</div>
+                </div>
+              </div>
+
+              {/* Key Findings */}
+              <div className="bg-secondary-50 rounded-lg p-4 border border-secondary-200">
+                <h4 className="text-heading-4 mb-3 text-secondary-900">Key Insights:</h4>
+                <div className="space-y-2">
+                  {insights.keyFindings.map((finding, index) => (
+                    <div key={index} className="flex items-start gap-3">
+                      <div className="w-5 h-5 bg-secondary-600 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="text-white text-xs font-bold">{index + 1}</span>
+                      </div>
+                      <span className="text-sm text-secondary-800 font-medium leading-relaxed">{finding}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
-
-          {/* Day Patterns */}
+{/* Day Patterns */}
           {insights.dayPatterns.length > 0 && (
-            <div style={{
-              backgroundColor: 'white',
-              borderRadius: '16px',
-              padding: '1.5rem',
-              border: '1px solid #E2E8F0',
-              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-                <CalendarIcon color="#059669" />
-                <h3 style={{ 
-                  fontSize: '1.125rem',
-                  fontWeight: '600',
-                  color: '#1E293B',
-                  margin: 0
-                }}>
-                  Day-of-Week Patterns
-                </h3>
-              </div>
+            <div className="health-card">
+              <div className="health-card-body">
+                <div className="flex items-center gap-2 mb-4">
+                  <CalendarIcon color="#059669" />
+                  <h3 className="text-heading-3">Day-of-Week Patterns</h3>
+                </div>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                {insights.dayPatterns.map((pattern, index) => (
-                  <div key={index} style={{
-                    padding: '1rem',
-                    backgroundColor: '#F0FDF4',
-                    borderRadius: '8px',
-                    border: '1px solid #BBF7D0',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center'
-                  }}>
-                    <div>
-                      <div style={{
-                        fontSize: '0.875rem',
-                        color: '#166534',
-                        fontWeight: '600',
-                        marginBottom: '0.25rem'
-                      }}>
-                        {pattern.day}s
+                <div className="space-y-3">
+                  {insights.dayPatterns.map((pattern, index) => (
+                    <div key={index} className="flex items-center justify-between p-4 bg-success-50 border border-success-200 rounded-lg">
+                      <div>
+                        <div className="font-semibold text-success-900 mb-1">{pattern.day}s</div>
+                        <div className="text-sm text-success-700">{pattern.insight}</div>
                       </div>
-                      <div style={{
-                        fontSize: '0.75rem',
-                        color: '#15803D'
-                      }}>
-                        {pattern.insight}
+                      <div className="text-right">
+                        <div className="text-2xl font-bold text-success-600">{pattern.count}</div>
+                        <div className="text-xs text-success-600">avg {pattern.avgSeverity}</div>
                       </div>
                     </div>
-                    <div style={{ textAlign: 'right' }}>
-                      <div style={{
-                        fontSize: '1.5rem',
-                        fontWeight: '800',
-                        color: '#059669'
-                      }}>
-                        {pattern.count}
-                      </div>
-                      <div style={{
-                        fontSize: '0.75rem',
-                        color: '#059669'
-                      }}>
-                        avg {pattern.avgSeverity}
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
           )}
 
           {/* Time Patterns */}
           {insights.timePatterns.length > 0 && (
-            <div style={{
-              backgroundColor: 'white',
-              borderRadius: '16px',
-              padding: '1.5rem',
-              border: '1px solid #E2E8F0',
-              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-                <ClockIcon />
-                <h3 style={{ 
-                  fontSize: '1.125rem',
-                  fontWeight: '600',
-                  color: '#1E293B',
-                  margin: 0
-                }}>
-                  Time-of-Day Patterns
-                </h3>
-              </div>
+            <div className="health-card">
+              <div className="health-card-body">
+                <div className="flex items-center gap-2 mb-4">
+                  <ClockIcon />
+                  <h3 className="text-heading-3">Time-of-Day Patterns</h3>
+                </div>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                {insights.timePatterns.map((pattern, index) => (
-                  <div key={index} style={{
-                    padding: '1rem',
-                    backgroundColor: '#EFF6FF',
-                    borderRadius: '8px',
-                    border: '1px solid #BFDBFE',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center'
-                  }}>
-                    <div>
-                      <div style={{
-                        fontSize: '0.875rem',
-                        color: '#1E40AF',
-                        fontWeight: '600',
-                        marginBottom: '0.25rem'
-                      }}>
-                        {pattern.period}
+                <div className="space-y-3">
+                  {insights.timePatterns.map((pattern, index) => (
+                    <div key={index} className="flex items-center justify-between p-4 bg-primary-50 border border-primary-200 rounded-lg">
+                      <div>
+                        <div className="font-semibold text-primary-900 mb-1">{pattern.period}</div>
+                        <div className="text-sm text-primary-700">Average severity: {pattern.avgSeverity}</div>
                       </div>
-                      <div style={{
-                        fontSize: '0.75rem',
-                        color: '#2563EB'
-                      }}>
-                        Average severity: {pattern.avgSeverity}
+                      <div className="text-right">
+                        <div className="text-2xl font-bold text-primary-600">{pattern.percentage}%</div>
+                        <div className="text-xs text-primary-600">of symptoms</div>
                       </div>
                     </div>
-                    <div style={{ textAlign: 'right' }}>
-                      <div style={{
-                        fontSize: '1.5rem',
-                        fontWeight: '800',
-                        color: '#3B82F6'
-                      }}>
-                        {pattern.percentage}%
-                      </div>
-                      <div style={{
-                        fontSize: '0.75rem',
-                        color: '#3B82F6'
-                      }}>
-                        of symptoms
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
           )}
@@ -1238,211 +756,72 @@ const Reports = () => {
       )}
 
       {/* Mobile-First Sharing Actions */}
-      <div style={{
-        backgroundColor: 'white',
-        borderRadius: '16px',
-        padding: '1.5rem',
-        border: '1px solid #E2E8F0',
-        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
-      }}>
-        <h3 style={{
-          fontSize: '1.125rem',
-          fontWeight: '600',
-          color: '#1E293B',
-          margin: '0 0 1rem 0'
-        }}>
-          Share with Your Doctor
-        </h3>
+      <div className="health-card">
+        <div className="health-card-body">
+          <h3 className="text-heading-3 mb-4">Share with Your Doctor</h3>
 
-        {/* Primary Share Button */}
-        <button
-          onClick={handleShare}
-          disabled={isSharing}
-          style={{
-            width: '100%',
-            backgroundColor: isSharing ? '#9CA3AF' : '#3B82F6',
-            color: 'white',
-            border: 'none',
-            padding: '1rem',
-            borderRadius: '12px',
-            fontSize: '1rem',
-            fontWeight: '600',
-            cursor: isSharing ? 'not-allowed' : 'pointer',
-            opacity: isSharing ? 0.6 : 1,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '0.75rem',
-            transition: 'all 0.2s',
-            boxShadow: '0 4px 12px rgba(59, 130, 246, 0.25)',
-            marginBottom: '1rem'
-          }}
-          onMouseEnter={(e) => {
-            if (!isSharing) {
-              e.target.style.backgroundColor = '#2563EB';
-              e.target.style.transform = 'translateY(-1px)';
-              e.target.style.boxShadow = '0 6px 16px rgba(59, 130, 246, 0.35)';
-            }
-          }}
-          onMouseLeave={(e) => {
-            if (!isSharing) {
-              e.target.style.backgroundColor = '#3B82F6';
-              e.target.style.transform = 'translateY(0)';
-              e.target.style.boxShadow = '0 4px 12px rgba(59, 130, 246, 0.25)';
-            }
-          }}
-        >
-          <ShareIcon />
-          {isSharing ? 'Preparing...' : 'Share Report'}
-        </button>
-
-        {/* Alternative Actions */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: '1rem'
-        }}>
+          {/* Primary Share Button */}
           <button
-            onClick={handleCopy}
+            onClick={handleShare}
+            disabled={isSharing}
+            className="btn btn-primary w-full mb-4 flex items-center justify-center gap-3 py-4 text-base shadow-lg"
             style={{
-              padding: '0.75rem',
-              border: '1px solid #D1D5DB',
-              backgroundColor: 'white',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '0.5rem',
-              fontSize: '0.875rem',
-              fontWeight: '500',
-              color: '#374151',
-              transition: 'all 0.15s ease'
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.backgroundColor = '#F9FAFB';
-              e.target.style.borderColor = '#9CA3AF';
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.backgroundColor = 'white';
-              e.target.style.borderColor = '#D1D5DB';
+              background: isSharing ? '#9CA3AF' : 'linear-gradient(135deg, #3B82F6 0%, #1E40AF 100%)',
+              opacity: isSharing ? 0.6 : 1,
+              cursor: isSharing ? 'not-allowed' : 'pointer'
             }}
           >
-            <CopyIcon />
-            Copy Text
+            <ShareIcon />
+            {isSharing ? 'Preparing...' : 'Share Report'}
           </button>
 
-          <button
-            onClick={handleEmailDraft}
-            style={{
-              padding: '0.75rem',
-              border: '1px solid #D1D5DB',
-              backgroundColor: 'white',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '0.5rem',
-              fontSize: '0.875rem',
-              fontWeight: '500',
-              color: '#374151',
-              transition: 'all 0.15s ease'
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.backgroundColor = '#F9FAFB';
-              e.target.style.borderColor = '#9CA3AF';
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.backgroundColor = 'white';
-              e.target.style.borderColor = '#D1D5DB';
-            }}
-          >
-            <EmailIcon />
-            Email Draft
-          </button>
-        </div>
-
-        <p style={{
-          margin: '1rem 0 0 0',
-          fontSize: '0.75rem',
-          color: '#64748B',
-          textAlign: 'center',
-          lineHeight: '1.4'
-        }}>
-          Share generates a text summary perfect for messaging, email, or notes apps
-        </p>
-      </div>
-
-      {/* Empty State */}
-      {filtered.symptoms.length === 0 && filtered.medicationLogs.length === 0 && (
-        <div style={{
-          backgroundColor: 'white',
-          borderRadius: '16px',
-          padding: '3rem 1rem',
-          border: '1px solid #E2E8F0',
-          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
-          textAlign: 'center'
-        }}>
-          <div style={{
-            width: '64px',
-            height: '64px',
-            backgroundColor: '#F3F4F6',
-            borderRadius: '32px',
-            margin: '0 auto 1rem',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}>
-            <ChartIcon size={32} color="#9CA3AF" />
+          {/* Alternative Actions */}
+          <div className="grid grid-cols-2 gap-3">
+            <button onClick={handleCopy} className="btn btn-secondary">
+              <CopyIcon />
+              Copy Text
+            </button>
+            <button onClick={handleEmailDraft} className="btn btn-secondary">
+              <EmailIcon />
+              Email Draft
+            </button>
           </div>
-          <h3 style={{ 
-            fontSize: '1.125rem',
-            fontWeight: '600',
-            color: '#374151',
-            margin: '0 0 0.5rem 0'
-          }}>
-            No data for selected period
-          </h3>
-          <p style={{ 
-            margin: 0, 
-            fontSize: '0.875rem',
-            color: '#64748B',
-            lineHeight: '1.5'
-          }}>
-            Try selecting a different date range or add some symptoms and medications first.
+
+          <p className="mt-4 text-xs text-slate-600 text-center leading-relaxed">
+            Share generates a text summary perfect for messaging, email, or notes apps
           </p>
+        </div>
+      </div>
+{/* Empty State */}
+      {filtered.symptoms.length === 0 && filtered.medicationLogs.length === 0 && (
+        <div className="health-card text-center py-12">
+          <div className="health-card-body">
+            <div className="w-16 h-16 bg-slate-100 rounded-full mx-auto mb-4 flex items-center justify-center">
+              <ChartIcon size={24} />
+            </div>
+            <h3 className="text-heading-3 mb-2">No data for selected period</h3>
+            <p className="text-body text-slate-600">
+              Try selecting a different date range or add some symptoms and medications first.
+            </p>
+          </div>
         </div>
       )}
 
       {/* Usage Tips */}
       {(filtered.symptoms.length > 0 || filtered.medicationLogs.length > 0) && (
-        <div style={{
-          background: 'linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%)',
-          borderRadius: '16px',
-          padding: '1.5rem',
-          border: '1px solid #BFDBFE'
-        }}>
-          <h4 style={{
-            color: '#1E40AF',
-            fontSize: '1rem',
-            fontWeight: '600',
-            margin: '0 0 0.75rem 0',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.5rem'
-          }}>
+        <div className="bg-gradient-to-br from-primary-50 to-primary-100 rounded-2xl p-6 border border-primary-200">
+          <h4 className="text-primary-900 font-semibold mb-2 flex items-center gap-2">
+            <div className="w-5 h-5 bg-primary-600 rounded flex items-center justify-center">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="white"/>
+              </svg>
+            </div>
             Sharing with Healthcare Providers
           </h4>
-          <p style={{
-            color: '#1E40AF',
-            margin: 0,
-            fontSize: '0.875rem',
-            lineHeight: '1.6'
-          }}>
+          <p className="text-primary-800 text-sm leading-relaxed">
             Use the share button to send your {activeTab === 'insights' ? 'insights and patterns' : 'health summary'} via 
-            text, email, or any messaging app. These data-driven insights can help your healthcare provider 
-            understand your health patterns and make more informed decisions about your care.
+            text, email, or any messaging app. These data-driven insights help your healthcare provider 
+            understand your health patterns and make more informed decisions.
           </p>
         </div>
       )}
