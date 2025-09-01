@@ -517,7 +517,7 @@ return (
         </div>
       </div>
 
-      {/* Since Last Visit Summary */}
+      {/* Since Last Visit Summary
       {sinceLastVisit && (
         <div className="health-card">
   <div className="health-card-body">
@@ -614,7 +614,7 @@ return (
           </div>
         </div>
       )}
-
+*/
       {/* Concerns to Discuss */}
       {visitData.concerns.length > 0 && (
     <div className="health-card">
