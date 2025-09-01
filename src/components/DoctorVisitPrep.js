@@ -906,9 +906,9 @@ return (
         }}>
           This generates a doctor-friendly summary of your concerns, questions, and health patterns
         </p>
-           </div>
       </div>
     </div>
+  </div>
   );
 };
 
