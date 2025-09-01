@@ -469,7 +469,7 @@ const DisclaimerTab = () => {
       {/* Tab Navigation */}
       <div className="health-card">
         <div className="health-card-body">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 bg-slate-50 p-1 rounded-lg">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {sections.map(section => {
               const IconComponent = section.icon;
               const isActive = currentSection === section.id;
@@ -478,14 +478,10 @@ const DisclaimerTab = () => {
                 <button
                   key={section.id}
                   onClick={() => setCurrentSection(section.id)}
-                  className={`flex flex-col items-center justify-center gap-2 p-3 rounded-md font-medium text-xs transition-all min-h-[60px] ${
-                    isActive 
-                      ? 'bg-secondary-600 text-white shadow-sm' 
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-white'
-                  }`}
+                  className={`btn ${isActive ? 'btn-primary' : 'btn-secondary'} flex items-center justify-center gap-2`}
                 >
                   <IconComponent 
-                    size={20} 
+                    size={16} 
                     color={isActive ? 'white' : section.color}
                   />
                   <span>{section.title}</span>
