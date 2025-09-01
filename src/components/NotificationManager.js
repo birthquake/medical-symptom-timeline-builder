@@ -1,14 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 // Inline SVG Icons
-const NotificationIcon = ({ color = "#059669", size = 24 }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M13.73 21a2 2 0 0 1-3.46 0" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-);
-
-const BellIcon = ({ size = 16, color = "#059669" }) => (
+const BellIcon = ({ size = 24, color = "#3B82F6" }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
     <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
     <path d="M13.73 21a2 2 0 0 1-3.46 0" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -22,135 +15,161 @@ const ClockIcon = ({ size = 16, color = "#3B82F6" }) => (
   </svg>
 );
 
-const SettingsIcon = ({ size = 16, color = "#64748B" }) => (
+const CalendarIcon = ({ size = 16, color = "#64748B" }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-    <circle cx="12" cy="12" r="3" stroke={color} strokeWidth="2"/>
-    <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z" stroke={color} strokeWidth="2"/>
+    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke={color} strokeWidth="2"/>
+    <line x1="16" y1="2" x2="16" y2="6" stroke={color} strokeWidth="2" strokeLinecap="round"/>
+    <line x1="8" y1="2" x2="8" y2="6" stroke={color} strokeWidth="2" strokeLinecap="round"/>
+    <line x1="3" y1="10" x2="21" y2="10" stroke={color} strokeWidth="2" strokeLinecap="round"/>
   </svg>
 );
 
-const CheckIcon = ({ size = 16, color = "#059669" }) => (
+const EmailIcon = ({ size = 16, color = "#64748B" }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-    <polyline points="20,6 9,17 4,12" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke={color} strokeWidth="2"/>
+    <polyline points="22,6 12,13 2,6" stroke={color} strokeWidth="2"/>
+  </svg>
+);
+
+const SmartphoneIcon = ({ size = 16, color = "#64748B" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <rect x="5" y="2" width="14" height="20" rx="2" ry="2" stroke={color} strokeWidth="2"/>
+    <line x1="12" y1="18" x2="12.01" y2="18" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const AlertCircleIcon = ({ size = 16, color = "#F59E0B" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <circle cx="12" cy="12" r="10" stroke={color} strokeWidth="2"/>
+    <line x1="12" y1="8" x2="12" y2="12" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <line x1="12" y1="16" x2="12.01" y2="16" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const DownloadIcon = ({ size = 16, color = "#64748B" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
 
 const NotificationManager = () => {
-  const [notificationSettings, setNotificationSettings] = useState({
-    enabled: false,
-    medicationReminders: true,
-    dailyCheckins: true,
-    checkInTime: '20:00',
-    quietHoursStart: '22:00',
-    quietHoursEnd: '07:00',
-    snoozeMinutes: 15
+  const [reminderSettings, setReminderSettings] = useState({
+    inAppReminders: true,
+    homeScreenBadges: true,
+    smartSuggestions: true,
+    defaultCheckInTime: '20:00'
   });
   const [medications, setMedications] = useState([]);
-  const [permissionStatus, setPermissionStatus] = useState('default');
-  const [activeReminders, setActiveReminders] = useState([]);
+  const [overdueTasks, setOverdueTasks] = useState([]);
+  const [lastActivity, setLastActivity] = useState({});
+  const [browserSupport, setBrowserSupport] = useState({
+    notifications: false,
+    pwa: false,
+    platform: 'unknown'
+  });
 
   useEffect(() => {
-    // Load saved settings
-    const savedSettings = localStorage.getItem('notificationSettings');
+    // Load settings and data
+    const savedSettings = localStorage.getItem('reminderSettings');
     if (savedSettings) {
-      setNotificationSettings(JSON.parse(savedSettings));
+      setReminderSettings(JSON.parse(savedSettings));
     }
 
-    // Load medications
     const savedMedications = JSON.parse(localStorage.getItem('medications') || '[]');
     setMedications(savedMedications);
 
-    // Check current permission status
-    if ('Notification' in window) {
-      setPermissionStatus(Notification.permission);
-    }
-
-    // Load active reminders
-    loadActiveReminders();
+    // Detect platform capabilities
+    detectBrowserCapabilities();
+    
+    // Calculate overdue tasks
+    calculateOverdueTasks();
+    
+    // Load last activity timestamps
+    loadLastActivity();
   }, []);
 
-  const saveSettings = (newSettings) => {
-    setNotificationSettings(newSettings);
-    localStorage.setItem('notificationSettings', JSON.stringify(newSettings));
-  };
-
-  const loadActiveReminders = () => {
-    const reminders = JSON.parse(localStorage.getItem('scheduledReminders') || '[]');
-    setActiveReminders(reminders);
-  };
-
-  const requestNotificationPermission = async () => {
-    if (!('Notification' in window)) {
-      alert('This browser does not support notifications');
-      return false;
-    }
-
-    if (Notification.permission === 'granted') {
-      return true;
-    }
-
-    const permission = await Notification.requestPermission();
-    setPermissionStatus(permission);
+  const detectBrowserCapabilities = () => {
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    const isIOSSafari = isIOS && isSafari;
+    const isPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
     
-    if (permission === 'granted') {
-      // Show welcome notification
-      new Notification('TrackRX Reminders Enabled', {
-        body: 'You\'ll receive helpful medication and check-in reminders',
-        icon: '/favicon.ico',
-        tag: 'welcome'
-      });
-      return true;
-    }
+    setBrowserSupport({
+      notifications: 'Notification' in window && Notification.permission !== 'denied' && !isIOSSafari,
+      pwa: isPWA,
+      platform: isIOSSafari ? 'ios-safari' : isIOS ? 'ios' : 'other'
+    });
+  };
+
+  const loadLastActivity = () => {
+    const symptoms = JSON.parse(localStorage.getItem('symptoms') || '[]');
+    const medicationLogs = JSON.parse(localStorage.getItem('medicationLogs') || '[]');
     
-    return false;
-  };
-
-  const enableNotifications = async () => {
-    const hasPermission = await requestNotificationPermission();
-    if (hasPermission) {
-      const newSettings = { ...notificationSettings, enabled: true };
-      saveSettings(newSettings);
-      scheduleAllReminders();
-    }
-  };
-
-  const disableNotifications = () => {
-    const newSettings = { ...notificationSettings, enabled: false };
-    saveSettings(newSettings);
-    clearAllReminders();
-  };
-
-  const scheduleAllReminders = () => {
-    clearAllReminders();
+    const lastSymptom = symptoms.length > 0 ? new Date(symptoms[symptoms.length - 1].timestamp) : null;
+    const lastMedication = medicationLogs.length > 0 ? new Date(medicationLogs[medicationLogs.length - 1].timestamp) : null;
     
-    if (!notificationSettings.enabled) return;
-
-    const scheduledReminders = [];
-
-    // Schedule medication reminders
-    if (notificationSettings.medicationReminders) {
-      medications.forEach(medication => {
-        const reminders = scheduleMedicationReminders(medication);
-        scheduledReminders.push(...reminders);
-      });
-    }
-
-    // Schedule daily check-in
-    if (notificationSettings.dailyCheckins) {
-      const checkInReminder = scheduleDailyCheckin();
-      if (checkInReminder) {
-        scheduledReminders.push(checkInReminder);
-      }
-    }
-
-    // Save scheduled reminders
-    localStorage.setItem('scheduledReminders', JSON.stringify(scheduledReminders));
-    setActiveReminders(scheduledReminders);
+    setLastActivity({
+      lastSymptomLog: lastSymptom,
+      lastMedicationLog: lastMedication,
+      daysSinceSymptom: lastSymptom ? Math.floor((new Date() - lastSymptom) / (1000 * 60 * 60 * 24)) : null,
+      daysSinceMedication: lastMedication ? Math.floor((new Date() - lastMedication) / (1000 * 60 * 60 * 24)) : null
+    });
   };
 
-  const scheduleMedicationReminders = (medication) => {
-    const reminders = [];
+  const calculateOverdueTasks = () => {
     const now = new Date();
+    const today = now.toDateString();
+    const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000).toDateString();
+    
+    const symptoms = JSON.parse(localStorage.getItem('symptoms') || '[]');
+    const medicationLogs = JSON.parse(localStorage.getItem('medicationLogs') || '[]');
+    
+    // Check if user has logged anything today
+    const todaySymptoms = symptoms.filter(s => new Date(s.timestamp).toDateString() === today);
+    const todayMedications = medicationLogs.filter(m => new Date(m.timestamp).toDateString() === today);
+    
+    const overdue = [];
+    
+    // Check for missed check-ins (if no activity today after check-in time)
+    const checkInTime = reminderSettings.defaultCheckInTime;
+    const [checkHours, checkMinutes] = checkInTime.split(':').map(Number);
+    const checkInDateTime = new Date();
+    checkInDateTime.setHours(checkHours, checkMinutes, 0, 0);
+    
+    if (now > checkInDateTime && todaySymptoms.length === 0 && todayMedications.length === 0) {
+      overdue.push({
+        type: 'daily-checkin',
+        title: 'Daily Health Check-in',
+        description: 'Log how you\'re feeling today',
+        priority: 'medium',
+        action: 'symptoms'
+      });
+    }
+    
+    // Check for medication reminders based on frequency
+    medications.forEach(medication => {
+      const todayLogs = medicationLogs.filter(log => 
+        log.medicationName === medication.name && 
+        new Date(log.timestamp).toDateString() === today
+      );
+      
+      const expectedDoses = getExpectedDoses(medication.frequency);
+      if (todayLogs.length < expectedDoses && now.getHours() > 10) { // After 10 AM
+        overdue.push({
+          type: 'medication',
+          title: `${medication.name}`,
+          description: `${medication.dosage} - ${expectedDoses - todayLogs.length} dose(s) remaining today`,
+          priority: 'high',
+          action: 'medications',
+          medicationId: medication.id
+        });
+      }
+    });
+    
+    setOverdueTasks(overdue);
+  };
+
+  const getExpectedDoses = (frequency) => {
     const frequencyMap = {
       'daily': 1,
       'twice-daily': 2,
@@ -158,695 +177,336 @@ const NotificationManager = () => {
       'four-times': 4,
       'as-needed': 0
     };
-
-    const dailyDoses = frequencyMap[medication.frequency] || 1;
-    if (dailyDoses === 0) return reminders; // Skip as-needed medications
-
-    // Calculate reminder times
-    const reminderTimes = [];
-    if (dailyDoses === 1) {
-      reminderTimes.push('08:00');
-    } else if (dailyDoses === 2) {
-      reminderTimes.push('08:00', '20:00');
-    } else if (dailyDoses === 3) {
-      reminderTimes.push('08:00', '14:00', '20:00');
-    } else if (dailyDoses === 4) {
-      reminderTimes.push('08:00', '12:00', '16:00', '20:00');
-    }
-
-    reminderTimes.forEach((time, index) => {
-      const [hours, minutes] = time.split(':');
-      const reminderTime = new Date();
-      reminderTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
-
-      // If time has passed today, schedule for tomorrow
-      if (reminderTime <= now) {
-        reminderTime.setDate(reminderTime.getDate() + 1);
-      }
-
-      const reminderId = `med-${medication.id}-${index}-${Date.now()}`;
-      const timeoutId = setTimeout(() => {
-        showMedicationReminder(medication, time);
-        // Reschedule for next day
-        setTimeout(() => scheduleMedicationReminders(medication), 24 * 60 * 60 * 1000);
-      }, reminderTime.getTime() - now.getTime());
-
-      reminders.push({
-        id: reminderId,
-        type: 'medication',
-        medicationName: medication.name,
-        scheduledTime: time,
-        nextReminder: reminderTime.toISOString(),
-        timeoutId: timeoutId
-      });
-    });
-
-    return reminders;
+    return frequencyMap[frequency] || 1;
   };
 
-  const scheduleDailyCheckin = () => {
-    const now = new Date();
-    const [hours, minutes] = notificationSettings.checkInTime.split(':');
-    const checkInTime = new Date();
-    checkInTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
-
-    // If time has passed today, schedule for tomorrow
-    if (checkInTime <= now) {
-      checkInTime.setDate(checkInTime.getDate() + 1);
-    }
-
-    const reminderId = `checkin-${Date.now()}`;
-    const timeoutId = setTimeout(() => {
-      showDailyCheckin();
-      // Reschedule for next day
-      setTimeout(scheduleDailyCheckin, 24 * 60 * 60 * 1000);
-    }, checkInTime.getTime() - now.getTime());
-
-    return {
-      id: reminderId,
-      type: 'checkin',
-      scheduledTime: notificationSettings.checkInTime,
-      nextReminder: checkInTime.toISOString(),
-      timeoutId: timeoutId
-    };
-  };
-
-  const showMedicationReminder = (medication, time) => {
-    if (isQuietHours()) return;
-
-    const notification = new Notification(`Time for ${medication.name}`, {
-      body: `${medication.dosage} - ${time}`,
-      icon: '/favicon.ico',
-      tag: `med-${medication.id}`,
-      requireInteraction: true,
-      actions: [
-        { action: 'taken', title: 'Mark as Taken' },
-        { action: 'snooze', title: 'Snooze 15 min' }
-      ]
-    });
-
-    notification.onclick = () => {
-      window.focus();
-      // Navigate to medications tab
-      window.postMessage({ type: 'navigate', view: 'medications' }, '*');
-      notification.close();
-    };
-
-    // Auto-close after 30 seconds if not interacted with
-    setTimeout(() => notification.close(), 30000);
-  };
-
-  const showDailyCheckin = () => {
-    if (isQuietHours()) return;
-
-    const notification = new Notification('Daily Check-in', {
-      body: 'How are you feeling today? Quick symptom check-in.',
-      icon: '/favicon.ico',
-      tag: 'daily-checkin',
-      requireInteraction: true
-    });
-
-    notification.onclick = () => {
-      window.focus();
-      // Navigate to symptoms tab
-      window.postMessage({ type: 'navigate', view: 'symptoms' }, '*');
-      notification.close();
-    };
-
-    setTimeout(() => notification.close(), 45000);
-  };
-
-  const isQuietHours = () => {
-    const now = new Date();
-    const currentHour = now.getHours();
-    const currentMinute = now.getMinutes();
-    const currentTime = currentHour * 60 + currentMinute;
-
-    const [startHour, startMinute] = notificationSettings.quietHoursStart.split(':').map(Number);
-    const [endHour, endMinute] = notificationSettings.quietHoursEnd.split(':').map(Number);
-    
-    const quietStart = startHour * 60 + startMinute;
-    const quietEnd = endHour * 60 + endMinute;
-
-    // Handle overnight quiet hours (e.g., 22:00 to 07:00)
-    if (quietStart > quietEnd) {
-      return currentTime >= quietStart || currentTime <= quietEnd;
-    }
-    
-    return currentTime >= quietStart && currentTime <= quietEnd;
-  };
-
-  const clearAllReminders = () => {
-    const reminders = JSON.parse(localStorage.getItem('scheduledReminders') || '[]');
-    reminders.forEach(reminder => {
-      if (reminder.timeoutId) {
-        clearTimeout(reminder.timeoutId);
-      }
-    });
-    localStorage.removeItem('scheduledReminders');
-    setActiveReminders([]);
+  const saveSettings = (newSettings) => {
+    setReminderSettings(newSettings);
+    localStorage.setItem('reminderSettings', JSON.stringify(newSettings));
   };
 
   const handleSettingChange = (key, value) => {
-    const newSettings = { ...notificationSettings, [key]: value };
-    saveSettings(newSettings);
+    saveSettings({ ...reminderSettings, [key]: value });
+  };
+
+  const generateCalendarEvent = (type, title, time = '20:00') => {
+    const [hours, minutes] = time.split(':');
+    const eventDate = new Date();
+    eventDate.setHours(parseInt(hours), parseInt(minutes), 0, 0);
     
-    // Reschedule reminders if relevant settings changed
-    if (['medicationReminders', 'dailyCheckins', 'checkInTime'].includes(key)) {
-      scheduleAllReminders();
+    // If time has passed today, set for tomorrow
+    if (eventDate <= new Date()) {
+      eventDate.setDate(eventDate.getDate() + 1);
+    }
+    
+    const startTime = eventDate.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+    const endTime = new Date(eventDate.getTime() + 15 * 60 * 1000).toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+    
+    const calendarUrl = `data:text/calendar;charset=utf8,BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//TrackRX//Smart Reminders//EN
+BEGIN:VEVENT
+UID:trackrx-${type}-${Date.now()}
+DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z'}
+DTSTART:${startTime}
+DTEND:${endTime}
+SUMMARY:${title}
+DESCRIPTION:TrackRX Health Reminder
+RRULE:FREQ=DAILY;INTERVAL=1
+END:VEVENT
+END:VCALENDAR`;
+    
+    const link = document.createElement('a');
+    link.href = calendarUrl;
+    link.download = `trackrx-${type}-reminder.ics`;
+    link.click();
+  };
+
+  const generateEmailReminder = () => {
+    const subject = 'TrackRX Daily Health Reminder Setup';
+    const body = `Hi there!
+
+Set up these daily reminders to stay consistent with your health tracking:
+
+DAILY REMINDERS:
+• ${reminderSettings.defaultCheckInTime} - TrackRX Health Check-in
+• Take medications as prescribed
+• Log any symptoms you experience
+
+WEEKLY REMINDER:
+• Review your health patterns in Reports
+• Prepare questions for doctor visits
+
+You can set these up in your phone's reminders app, calendar, or email yourself.
+
+Best,
+Your TrackRX App`;
+
+    const mailtoLink = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailtoLink;
+  };
+
+  const getReminderStatusMessage = () => {
+    if (browserSupport.platform === 'ios-safari') {
+      return 'iOS Safari limits web notifications. We\'ll help you set up alternative reminders.';
+    } else if (!browserSupport.notifications) {
+      return 'Browser notifications not available. We\'ll show smart in-app reminders instead.';
+    } else {
+      return 'Your browser supports notifications for better reminder delivery.';
     }
   };
 
-  const getNextReminderTime = () => {
-    if (activeReminders.length === 0) return 'No reminders scheduled';
+  const getActivityInsight = () => {
+    const { daysSinceSymptom, daysSinceMedication } = lastActivity;
     
-    const nextReminder = activeReminders
-      .sort((a, b) => new Date(a.nextReminder) - new Date(b.nextReminder))[0];
-    
-    const nextTime = new Date(nextReminder.nextReminder);
-    const now = new Date();
-    const diff = nextTime - now;
-    
-    if (diff < 60 * 60 * 1000) { // Less than 1 hour
-      const minutes = Math.floor(diff / (60 * 1000));
-      return `Next reminder in ${minutes} minutes`;
-    } else if (diff < 24 * 60 * 60 * 1000) { // Less than 24 hours
-      const hours = Math.floor(diff / (60 * 60 * 1000));
-      return `Next reminder in ${hours} hour${hours > 1 ? 's' : ''}`;
-    } else {
-      return nextTime.toLocaleDateString() + ' at ' + nextTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    if (daysSinceSymptom === null && daysSinceMedication === null) {
+      return 'Start tracking to build healthy habits and generate insights.';
     }
+    
+    if (daysSinceSymptom !== null && daysSinceSymptom > 3) {
+      return `It's been ${daysSinceSymptom} days since your last symptom log. Consider a daily check-in.`;
+    }
+    
+    if (daysSinceMedication !== null && daysSinceMedication > 1) {
+      return `Last medication log was ${daysSinceMedication} day${daysSinceMedication > 1 ? 's' : ''} ago.`;
+    }
+    
+    return 'Great job staying consistent with your health tracking!';
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-      {/* Header */}
-      <div style={{
-        backgroundColor: 'white',
-        borderRadius: '16px',
-        padding: '1.5rem',
-        border: '1px solid #E2E8F0',
-        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
-          <div style={{
-            width: '48px',
-            height: '48px',
-            backgroundColor: '#059669',
-            borderRadius: '12px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}>
-            <NotificationIcon color="#FFFFFF" size={24} />
-          </div>
-          <div>
-            <h2 style={{ 
-              fontSize: '1.5rem',
-              fontWeight: '700',
-              color: '#1E293B',
-              margin: '0'
-            }}>
-              Smart Reminders
-            </h2>
-            <p style={{ 
-              color: '#64748B', 
-              margin: '0.25rem 0 0 0',
-              fontSize: '0.875rem'
-            }}>
-              Stay consistent with medication and symptom tracking
-            </p>
+    <div className="flex flex-col gap-6">
+      {/* Streamlined Header */}
+      <div className="health-card">
+        <div className="health-card-body">
+          <div className="flex justify-between items-start">
+            <div>
+              <h2 className="text-heading-1">Smart Reminders</h2>
+              <p className="text-body">Stay consistent with intelligent tracking prompts</p>
+            </div>
+            <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
+              <BellIcon size={20} />
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Permission Status */}
-      {permissionStatus !== 'granted' && (
-        <div style={{
-          backgroundColor: 'white',
-          borderRadius: '16px',
-          padding: '1.5rem',
-          border: '1px solid #FED7AA',
-          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
-          background: 'linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%)'
-        }}>
-          <h3 style={{ 
-            fontSize: '1.125rem',
-            fontWeight: '600',
-            color: '#92400E',
-            margin: '0 0 0.75rem 0'
-          }}>
-            Enable Notifications
-          </h3>
-          <p style={{
-            color: '#A16207',
-            margin: '0 0 1rem 0',
-            fontSize: '0.875rem',
-            lineHeight: '1.5'
-          }}>
-            Get helpful reminders to take medications and log symptoms for better health tracking.
-          </p>
-          <button
-            onClick={enableNotifications}
-            style={{
-              backgroundColor: '#F59E0B',
-              color: 'white',
-              border: 'none',
-              padding: '0.75rem 1.5rem',
-              borderRadius: '8px',
-              fontSize: '0.875rem',
-              fontWeight: '600',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              transition: 'all 0.15s ease'
-            }}
-            onMouseEnter={(e) => e.target.style.backgroundColor = '#D97706'}
-            onMouseLeave={(e) => e.target.style.backgroundColor = '#F59E0B'}
-          >
-            <BellIcon color="white" />
-            Enable Reminders
-          </button>
-        </div>
-      )}
-
-      {/* Main Settings */}
-      {permissionStatus === 'granted' && (
-        <>
-          {/* Status Overview */}
-          <div style={{
-            backgroundColor: 'white',
-            borderRadius: '16px',
-            padding: '1.5rem',
-            border: '1px solid #E2E8F0',
-            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
-          }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-              <h3 style={{ 
-                fontSize: '1.125rem',
-                fontWeight: '600',
-                color: '#1E293B',
-                margin: 0
-              }}>
-                Reminder Status
-              </h3>
-              <div style={{
-                padding: '0.5rem 1rem',
-                backgroundColor: notificationSettings.enabled ? '#DCFCE7' : '#FEE2E2',
-                borderRadius: '20px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem'
-              }}>
-                <div style={{
-                  width: '8px',
-                  height: '8px',
-                  backgroundColor: notificationSettings.enabled ? '#16A34A' : '#DC2626',
-                  borderRadius: '50%'
-                }} />
-                <span style={{
-                  fontSize: '0.875rem',
-                  fontWeight: '600',
-                  color: notificationSettings.enabled ? '#166534' : '#991B1B'
-                }}>
-                  {notificationSettings.enabled ? 'Active' : 'Disabled'}
-                </span>
-              </div>
-            </div>
-
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              gap: '1rem',
-              marginBottom: '1rem'
-            }}>
-              <div style={{
-                padding: '1rem',
-                backgroundColor: '#F0FDF4',
-                borderRadius: '8px',
-                border: '1px solid #BBF7D0',
-                textAlign: 'center'
-              }}>
-                <div style={{
-                  fontSize: '1.5rem',
-                  fontWeight: '800',
-                  color: '#059669',
-                  margin: '0 0 0.25rem 0'
-                }}>
-                  {activeReminders.filter(r => r.type === 'medication').length}
-                </div>
-                <div style={{
-                  fontSize: '0.75rem',
-                  color: '#047857',
-                  fontWeight: '600'
-                }}>
-                  Med Reminders
-                </div>
-              </div>
-
-              <div style={{
-                padding: '1rem',
-                backgroundColor: '#EFF6FF',
-                borderRadius: '8px',
-                border: '1px solid #BFDBFE',
-                textAlign: 'center'
-              }}>
-                <div style={{
-                  fontSize: '1.5rem',
-                  fontWeight: '800',
-                  color: '#1E40AF',
-                  margin: '0 0 0.25rem 0'
-                }}>
-                  {activeReminders.filter(r => r.type === 'checkin').length}
-                </div>
-                <div style={{
-                  fontSize: '0.75rem',
-                  color: '#1E40AF',
-                  fontWeight: '600'
-                }}>
-                  Daily Check-ins
-                </div>
-              </div>
-            </div>
-
-            <div style={{
-              padding: '1rem',
-              backgroundColor: '#F8FAFC',
-              borderRadius: '8px',
-              border: '1px solid #E2E8F0'
-            }}>
-              <div style={{
-                fontSize: '0.875rem',
-                color: '#64748B',
-                fontWeight: '500'
-              }}>
-                {getNextReminderTime()}
-              </div>
-            </div>
-
-            {/* Master Toggle */}
-            <div style={{
-              marginTop: '1rem',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center'
-            }}>
-              <span style={{
-                fontSize: '0.875rem',
-                fontWeight: '600',
-                color: '#374151'
-              }}>
-                Enable All Reminders
-              </span>
-              <button
-                onClick={() => notificationSettings.enabled ? disableNotifications() : enableNotifications()}
-                style={{
-                  width: '48px',
-                  height: '28px',
-                  backgroundColor: notificationSettings.enabled ? '#059669' : '#D1D5DB',
-                  borderRadius: '14px',
-                  border: 'none',
-                  cursor: 'pointer',
-                  position: 'relative',
-                  transition: 'all 0.15s ease'
-                }}
-              >
-                <div style={{
-                  width: '20px',
-                  height: '20px',
-                  backgroundColor: 'white',
-                  borderRadius: '10px',
-                  position: 'absolute',
-                  top: '4px',
-                  left: notificationSettings.enabled ? '24px' : '4px',
-                  transition: 'all 0.15s ease',
-                  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'
-                }} />
-              </button>
-            </div>
+      {/* Platform Status */}
+      <div className="health-card">
+        <div className="health-card-body">
+          <div className="flex items-center gap-3 mb-4">
+            <AlertCircleIcon />
+            <h3 className="text-heading-3">Platform Compatibility</h3>
+          </div>
+          
+          <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 mb-4">
+            <p className="text-body-small text-slate-700 leading-relaxed">
+              {getReminderStatusMessage()}
+            </p>
           </div>
 
-          {/* Reminder Types */}
-          {notificationSettings.enabled && (
-            <div style={{
-              backgroundColor: 'white',
-              borderRadius: '16px',
-              padding: '1.5rem',
-              border: '1px solid #E2E8F0',
-              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
-            }}>
-              <h3 style={{ 
-                fontSize: '1.125rem',
-                fontWeight: '600',
-                color: '#1E293B',
-                margin: '0 0 1rem 0'
-              }}>
-                Reminder Types
-              </h3>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                {/* Medication Reminders */}
-                <div style={{
-                  padding: '1rem',
-                  backgroundColor: '#F8FAFC',
-                  borderRadius: '8px',
-                  border: '1px solid #E2E8F0'
-                }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <BellIcon />
-                      <span style={{ fontWeight: '600', color: '#374151' }}>Medication Reminders</span>
-                    </div>
-                    <button
-                      onClick={() => handleSettingChange('medicationReminders', !notificationSettings.medicationReminders)}
-                      style={{
-                        width: '44px',
-                        height: '24px',
-                        backgroundColor: notificationSettings.medicationReminders ? '#059669' : '#D1D5DB',
-                        borderRadius: '12px',
-                        border: 'none',
-                        cursor: 'pointer',
-                        position: 'relative',
-                        transition: 'all 0.15s ease'
-                      }}
-                    >
-                      <div style={{
-                        width: '16px',
-                        height: '16px',
-                        backgroundColor: 'white',
-                        borderRadius: '8px',
-                        position: 'absolute',
-                        top: '4px',
-                        left: notificationSettings.medicationReminders ? '24px' : '4px',
-                        transition: 'all 0.15s ease',
-                        boxShadow: '0 1px 2px rgba(0, 0, 0, 0.1)'
-                      }} />
-                    </button>
-                  </div>
-                  <p style={{
-                    fontSize: '0.875rem',
-                    color: '#64748B',
-                    margin: '0 0 0.75rem 0'
-                  }}>
-                    Get notified when it's time to take your medications
-                  </p>
-                  {medications.length > 0 && (
-                    <div style={{ fontSize: '0.75rem', color: '#64748B' }}>
-                      {medications.length} medication{medications.length > 1 ? 's' : ''} configured
-                    </div>
-                  )}
-                </div>
-
-                {/* Daily Check-ins */}
-                <div style={{
-                  padding: '1rem',
-                  backgroundColor: '#F8FAFC',
-                  borderRadius: '8px',
-                  border: '1px solid #E2E8F0'
-                }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <CheckIcon />
-                      <span style={{ fontWeight: '600', color: '#374151' }}>Daily Check-ins</span>
-                    </div>
-                    <button
-                      onClick={() => handleSettingChange('dailyCheckins', !notificationSettings.dailyCheckins)}
-                      style={{
-                        width: '44px',
-                        height: '24px',
-                        backgroundColor: notificationSettings.dailyCheckins ? '#059669' : '#D1D5DB',
-                        borderRadius: '12px',
-                        border: 'none',
-                        cursor: 'pointer',
-                        position: 'relative',
-                        transition: 'all 0.15s ease'
-                      }}
-                    >
-                      <div style={{
-                        width: '16px',
-                        height: '16px',
-                        backgroundColor: 'white',
-                        borderRadius: '8px',
-                        position: 'absolute',
-                        top: '4px',
-                        left: notificationSettings.dailyCheckins ? '24px' : '4px',
-                        transition: 'all 0.15s ease',
-                        boxShadow: '0 1px 2px rgba(0, 0, 0, 0.1)'
-                      }} />
-                    </button>
-                  </div>
-                  <p style={{
-                    fontSize: '0.875rem',
-                    color: '#64748B',
-                    margin: '0 0 0.75rem 0'
-                  }}>
-                    Gentle daily prompts to log how you're feeling
-                  </p>
-                  
-                  {notificationSettings.dailyCheckins && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <ClockIcon />
-                      <span style={{ fontSize: '0.875rem', color: '#64748B' }}>Reminder time:</span>
-                      <input
-                        type="time"
-                        value={notificationSettings.checkInTime}
-                        onChange={(e) => handleSettingChange('checkInTime', e.target.value)}
-                        style={{
-                          padding: '0.25rem 0.5rem',
-                          border: '1px solid #D1D5DB',
-                          borderRadius: '4px',
-                          fontSize: '0.875rem'
-                        }}
-                      />
-                    </div>
-                  )}
-                </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="text-center p-4 bg-primary-50 border border-primary-200 rounded-lg">
+              <div className="text-lg font-bold text-primary-600 mb-1">
+                {browserSupport.platform === 'ios-safari' ? 'Limited' : 'Available'}
               </div>
+              <div className="text-xs text-primary-700 font-medium">Push Notifications</div>
             </div>
-          )}
+            <div className="text-center p-4 bg-success-50 border border-success-200 rounded-lg">
+              <div className="text-lg font-bold text-success-600 mb-1">Active</div>
+              <div className="text-xs text-success-700 font-medium">Smart Prompts</div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-          {/* Advanced Settings */}
-          {notificationSettings.enabled && (
-            <div style={{
-              backgroundColor: 'white',
-              borderRadius: '16px',
-              padding: '1.5rem',
-              border: '1px solid #E2E8F0',
-              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-                <SettingsIcon />
-                <h3 style={{ 
-                  fontSize: '1.125rem',
-                  fontWeight: '600',
-                  color: '#1E293B',
-                  margin: 0
-                }}>
-                  Advanced Settings
-                </h3>
-              </div>
+      {/* Current Activity Insights */}
+      <div className="health-card">
+        <div className="health-card-body">
+          <div className="flex items-center gap-3 mb-4">
+            <ClockIcon />
+            <h3 className="text-heading-3">Activity Overview</h3>
+          </div>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                {/* Quiet Hours */}
-                <div>
-                  <label style={{
-                    display: 'block',
-                    fontSize: '0.875rem',
-                    fontWeight: '600',
-                    color: '#374151',
-                    marginBottom: '0.5rem'
-                  }}>
-                    Quiet Hours (no notifications)
-                  </label>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <input
-                      type="time"
-                      value={notificationSettings.quietHoursStart}
-                      onChange={(e) => handleSettingChange('quietHoursStart', e.target.value)}
-                      style={{
-                        padding: '0.5rem',
-                        border: '1px solid #D1D5DB',
-                        borderRadius: '6px',
-                        fontSize: '0.875rem'
-                      }}
-                    />
-                    <span style={{ color: '#64748B', fontSize: '0.875rem' }}>to</span>
-                    <input
-                      type="time"
-                      value={notificationSettings.quietHoursEnd}
-                      onChange={(e) => handleSettingChange('quietHoursEnd', e.target.value)}
-                      style={{
-                        padding: '0.5rem',
-                        border: '1px solid #D1D5DB',
-                        borderRadius: '6px',
-                        fontSize: '0.875rem'
-                      }}
-                    />
+          <div className="bg-secondary-50 border border-secondary-200 rounded-lg p-4 mb-4">
+            <p className="text-body-small text-secondary-700 font-medium leading-relaxed">
+              {getActivityInsight()}
+            </p>
+          </div>
+
+          {overdueTasks.length > 0 && (
+            <div className="space-y-3">
+              <h4 className="text-heading-4 text-slate-700">Suggested Actions</h4>
+              {overdueTasks.map((task, index) => (
+                <div key={index} className={`flex items-center justify-between p-3 rounded-lg border ${
+                  task.priority === 'high' 
+                    ? 'bg-error-50 border-error-200' 
+                    : 'bg-warning-50 border-warning-200'
+                }`}>
+                  <div>
+                    <div className={`font-medium text-sm ${
+                      task.priority === 'high' ? 'text-error-800' : 'text-warning-800'
+                    }`}>
+                      {task.title}
+                    </div>
+                    <div className={`text-xs ${
+                      task.priority === 'high' ? 'text-error-600' : 'text-warning-600'
+                    }`}>
+                      {task.description}
+                    </div>
                   </div>
-                </div>
-
-                {/* Snooze Duration */}
-                <div>
-                  <label style={{
-                    display: 'block',
-                    fontSize: '0.875rem',
-                    fontWeight: '600',
-                    color: '#374151',
-                    marginBottom: '0.5rem'
-                  }}>
-                    Snooze Duration
-                  </label>
-                  <select
-                    value={notificationSettings.snoozeMinutes}
-                    onChange={(e) => handleSettingChange('snoozeMinutes', parseInt(e.target.value))}
-                    style={{
-                      padding: '0.5rem',
-                      border: '1px solid #D1D5DB',
-                      borderRadius: '6px',
-                      fontSize: '0.875rem',
-                      backgroundColor: 'white'
-                    }}
+                  <button 
+                    className="btn btn-secondary text-xs"
+                    onClick={() => window.postMessage({ type: 'navigate', view: task.action }, '*')}
                   >
-                    <option value={5}>5 minutes</option>
-                    <option value={15}>15 minutes</option>
-                    <option value={30}>30 minutes</option>
-                    <option value={60}>1 hour</option>
-                  </select>
+                    Log Now
+                  </button>
                 </div>
-              </div>
+              ))}
             </div>
           )}
-        </>
-      )}
+        </div>
+      </div>
 
-      {/* Info Footer */}
-      <div style={{
-        background: 'linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%)',
-        borderRadius: '16px',
-        padding: '1.5rem',
-        border: '1px solid #BFDBFE'
-      }}>
-        <h4 style={{
-          color: '#1E40AF',
-          fontSize: '1rem',
-          fontWeight: '600',
-          margin: '0 0 0.75rem 0'
-        }}>
-          How Reminders Help
+      {/* Smart Reminder Settings */}
+      <div className="health-card">
+        <div className="health-card-body">
+          <h3 className="text-heading-3 mb-4">Reminder Preferences</h3>
+
+          <div className="space-y-4">
+            {/* In-App Reminders */}
+            <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-200">
+              <div>
+                <div className="font-medium text-slate-900">In-App Smart Prompts</div>
+                <div className="text-body-small text-slate-600">Show helpful reminders when you open the app</div>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={reminderSettings.inAppReminders}
+                  onChange={(e) => handleSettingChange('inAppReminders', e.target.checked)}
+                  className="sr-only peer"
+                />
+                <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
+              </label>
+            </div>
+
+            {/* Badge Reminders */}
+            <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-200">
+              <div>
+                <div className="font-medium text-slate-900">Visual Indicators</div>
+                <div className="text-body-small text-slate-600">Show badges and counters for overdue tasks</div>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={reminderSettings.homeScreenBadges}
+                  onChange={(e) => handleSettingChange('homeScreenBadges', e.target.checked)}
+                  className="sr-only peer"
+                />
+                <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
+              </label>
+            </div>
+
+            {/* Smart Suggestions */}
+            <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-200">
+              <div>
+                <div className="font-medium text-slate-900">Pattern-Based Suggestions</div>
+                <div className="text-body-small text-slate-600">Get reminders based on your tracking history</div>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={reminderSettings.smartSuggestions}
+                  onChange={(e) => handleSettingChange('smartSuggestions', e.target.checked)}
+                  className="sr-only peer"
+                />
+                <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
+              </label>
+            </div>
+
+            {/* Default Check-in Time */}
+            <div className="p-4 bg-slate-50 rounded-lg border border-slate-200">
+              <div className="flex items-center justify-between mb-3">
+                <div className="font-medium text-slate-900">Preferred Check-in Time</div>
+                <div className="flex items-center gap-2">
+                  <ClockIcon />
+                  <input
+                    type="time"
+                    value={reminderSettings.defaultCheckInTime}
+                    onChange={(e) => handleSettingChange('defaultCheckInTime', e.target.value)}
+                    className="form-input px-3 py-1 text-sm"
+                  />
+                </div>
+              </div>
+              <div className="text-body-small text-slate-600">
+                When you prefer to receive daily health check-in prompts
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* External Reminder Options */}
+      <div className="health-card">
+        <div className="health-card-body">
+          <h3 className="text-heading-3 mb-4">Setup External Reminders</h3>
+          <p className="text-body text-slate-600 mb-6">
+            Create reminders in your device's native apps for the most reliable notifications.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <button
+              onClick={() => generateCalendarEvent('daily-checkin', 'TrackRX Health Check-in', reminderSettings.defaultCheckInTime)}
+              className="btn btn-secondary flex items-center justify-center gap-3 p-4"
+            >
+              <CalendarIcon />
+              <div className="text-left">
+                <div className="font-medium">Calendar Event</div>
+                <div className="text-xs text-slate-600">Download daily reminder</div>
+              </div>
+              <DownloadIcon />
+            </button>
+
+            <button
+              onClick={generateEmailReminder}
+              className="btn btn-secondary flex items-center justify-center gap-3 p-4"
+            >
+              <EmailIcon />
+              <div className="text-left">
+                <div className="font-medium">Email Template</div>
+                <div className="text-xs text-slate-600">Self-reminder setup</div>
+              </div>
+            </button>
+          </div>
+
+          {browserSupport.platform === 'ios-safari' && (
+            <div className="mt-4 p-4 bg-primary-50 border border-primary-200 rounded-lg">
+              <h4 className="font-medium text-primary-800 mb-2">iOS Safari Users</h4>
+              <p className="text-body-small text-primary-700 leading-relaxed">
+                For best reminder experience: Add TrackRX to your Home Screen, then enable notifications in Settings > TrackRX.
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Benefits Footer */}
+      <div className="bg-gradient-to-br from-success-50 to-success-100 rounded-2xl p-6 border border-success-200">
+        <h4 className="text-success-900 font-semibold mb-3 flex items-center gap-2">
+          <div className="w-5 h-5 bg-success-600 rounded-full flex items-center justify-center">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+              <polyline points="20,6 9,17 4,12" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </div>
+          Consistent Tracking Benefits
         </h4>
-        <ul style={{
-          color: '#1E40AF',
-          margin: 0,
-          fontSize: '0.875rem',
-          lineHeight: '1.6',
-          paddingLeft: '1rem'
-        }}>
-          <li>Improve medication compliance and health outcomes</li>
-          <li>Build consistent tracking habits for better insights</li>
-          <li>Never forget to log important symptoms</li>
-          <li>Generate higher quality data for your healthcare provider</li>
-        </ul>
+        <div className="text-success-800 text-sm leading-relaxed space-y-2">
+          <div>• Better medication adherence and health outcomes</div>
+          <div>• More accurate symptom patterns for your doctor</div>
+          <div>• Improved health insights and trend analysis</div>
+          <div>• Enhanced preparation for medical appointments</div>
+        </div>
       </div>
     </div>
   );
