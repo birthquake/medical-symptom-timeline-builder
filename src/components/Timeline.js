@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 const TimelineIcon = ({ color = "#3B82F6", size = 24 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
     <path 
-      d="M3 3V21L21 12L3 3Z" 
+      d="M12 2L15.09 8.26L22 9L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9L8.91 8.26L12 2Z" 
       stroke={color} 
       strokeWidth="2" 
       strokeLinecap="round" 
@@ -16,7 +16,7 @@ const TimelineIcon = ({ color = "#3B82F6", size = 24 }) => (
 
 const FilterIcon = ({ size = 16 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-    <polygon points="22,3 2,3 10,12.46 10,19 14,21 14,12.46 22,3" stroke="#64748B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M4 6H20M7 12H17M10 18H14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
 
@@ -24,9 +24,9 @@ const SymptomsIcon = ({ severity, size = 20, color }) => {
   const getColor = () => {
     if (color) return color;
     if (severity) {
-      if (severity <= 3) return '#10B981';
-      if (severity <= 6) return '#F59E0B'; 
-      return '#EF4444';
+      if (severity <= 3) return '#059669';
+      if (severity <= 6) return '#D97706'; 
+      return '#DC2626';
     }
     return '#64748B';
   };
@@ -39,32 +39,26 @@ const SymptomsIcon = ({ severity, size = 20, color }) => {
   );
 };
 
-const MedsIcon = ({ size = 20, color = "#10B981" }) => (
+const MedsIcon = ({ size = 20, color = "#059669" }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-    <path d="M12 2L15.09 8.26L22 9L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9L8.91 8.26L12 2Z" 
+    <path d="M4.5 12.75L6 11.25L10.5 15.75L18 8.25L19.5 9.75L10.5 18.75L4.5 12.75Z" 
           fill={color} stroke={color} strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
 
-const CalendarIcon = ({ size = 16, color = "#64748B" }) => (
+const CalendarIcon = ({ size = 16 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke={color} strokeWidth="2"/>
-    <line x1="16" y1="2" x2="16" y2="6" stroke={color} strokeWidth="2" strokeLinecap="round"/>
-    <line x1="8" y1="2" x2="8" y2="6" stroke={color} strokeWidth="2" strokeLinecap="round"/>
-    <line x1="3" y1="10" x2="21" y2="10" stroke={color} strokeWidth="2" strokeLinecap="round"/>
+    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke="currentColor" strokeWidth="2"/>
+    <line x1="16" y1="2" x2="16" y2="6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+    <line x1="8" y1="2" x2="8" y2="6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+    <line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
   </svg>
 );
 
-const ClockIcon = ({ size = 12, color = "#64748B" }) => (
+const ClockIcon = ({ size = 12 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-    <circle cx="12" cy="12" r="10" stroke={color} strokeWidth="2"/>
-    <polyline points="12,6 12,12 16,14" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-);
-
-const ChevronDownIcon = ({ size = 16 }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-    <polyline points="6,9 12,15 18,9" stroke="#64748B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+    <polyline points="12,6 12,12 16,14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
 
@@ -89,9 +83,7 @@ const Timeline = () => {
       notes: symptom.notes,
       timestamp: symptom.timestamp,
       date: symptom.date,
-      time: symptom.time,
-      color: getSeverityColor(symptom.severity),
-      bgColor: getSeverityBgColor(symptom.severity)
+      time: symptom.time
     }));
 
     // Transform medication logs to timeline format
@@ -102,9 +94,7 @@ const Timeline = () => {
       dosage: log.dosage,
       timestamp: log.timestamp,
       date: log.date,
-      time: log.time,
-      color: '#10B981',
-      bgColor: '#ECFDF5'
+      time: log.time
     }));
 
     // Combine and sort by timestamp (newest first)
@@ -152,18 +142,6 @@ const Timeline = () => {
 
     setFilteredData(filtered);
   }, [timelineData, filterType, dateRange]);
-
-  const getSeverityColor = (severity) => {
-    if (severity <= 3) return '#10B981'; // Green - mild
-    if (severity <= 6) return '#F59E0B'; // Yellow - moderate  
-    return '#EF4444'; // Red - severe
-  };
-
-  const getSeverityBgColor = (severity) => {
-    if (severity <= 3) return '#ECFDF5'; // Green bg
-    if (severity <= 6) return '#FFFBEB'; // Yellow bg 
-    return '#FEF2F2'; // Red bg
-  };
 
   const getSeverityLabel = (severity) => {
     if (severity <= 3) return 'Mild';
@@ -222,484 +200,192 @@ const Timeline = () => {
   const stats = getStats();
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-      {/* Header */}
-      <div style={{
-        background: 'white',
-        borderRadius: '16px',
-        padding: '1.5rem',
-        border: '1px solid #E2E8F0',
-        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
-          <div style={{
-            width: '48px',
-            height: '48px',
-            backgroundColor: '#3B82F6',
-            borderRadius: '12px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}>
-            <TimelineIcon color="#FFFFFF" size={24} />
+    <div className="flex flex-col gap-6">
+      {/* Streamlined Header */}
+      <div className="health-card">
+        <div className="health-card-body">
+          <div className="flex justify-between items-start mb-4">
+            <div>
+              <h2 className="text-heading-1">Health Timeline</h2>
+              <p className="text-body">Track patterns in your health journey</p>
+            </div>
+            <button 
+              className={`btn ${showFilters ? 'btn-secondary' : 'btn-primary'}`}
+              onClick={() => setShowFilters(!showFilters)}
+            >
+              <FilterIcon />
+              Filter
+            </button>
           </div>
-          <div>
-            <h2 style={{ 
-              fontSize: '1.5rem',
-              fontWeight: '700',
-              color: '#1E293B',
-              margin: '0'
-            }}>
-              Health Timeline
-            </h2>
-            <p style={{ 
-              color: '#64748B', 
-              margin: '0.25rem 0 0 0',
-              fontSize: '0.875rem'
-            }}>
-              See your symptoms and medications in chronological order to identify patterns
-            </p>
-          </div>
-        </div>
-
-        {/* Summary Stats */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: '1rem',
-          marginBottom: '1rem'
-        }}>
-          <div style={{
-            textAlign: 'center',
-            padding: '0.75rem',
-            backgroundColor: '#FEF2F2',
-            borderRadius: '8px',
-            border: '1px solid #FECACA'
-          }}>
-            <div style={{
-              fontSize: '1.5rem',
-              fontWeight: '700',
-              color: stats.symptoms > 0 ? '#DC2626' : '#64748B',
-              margin: '0 0 0.25rem 0'
-            }}>
-              {stats.symptoms}
+          
+          {/* Compact Daily Summary */}
+          <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
+                <TimelineIcon color="var(--primary-600)" size={20} />
+              </div>
+              <div>
+                <div className="text-body-small">Total Events</div>
+                <div className="text-lg font-bold text-metric">{stats.total}</div>
+              </div>
             </div>
-            <div style={{
-              fontSize: '0.75rem',
-              color: '#991B1B',
-              fontWeight: '500'
-            }}>
-              Symptoms
-            </div>
-          </div>
-
-          <div style={{
-            textAlign: 'center',
-            padding: '0.75rem',
-            backgroundColor: '#ECFDF5',
-            borderRadius: '8px',
-            border: '1px solid #BBF7D0'
-          }}>
-            <div style={{
-              fontSize: '1.5rem',
-              fontWeight: '700',
-              color: stats.medications > 0 ? '#059669' : '#64748B',
-              margin: '0 0 0.25rem 0'
-            }}>
-              {stats.medications}
-            </div>
-            <div style={{
-              fontSize: '0.75rem',
-              color: '#047857',
-              fontWeight: '500'
-            }}>
-              Medications
-            </div>
-          </div>
-
-          <div style={{
-            textAlign: 'center',
-            padding: '0.75rem',
-            backgroundColor: '#EFF6FF',
-            borderRadius: '8px',
-            border: '1px solid #BFDBFE'
-          }}>
-            <div style={{
-              fontSize: '1.5rem',
-              fontWeight: '700',
-              color: stats.total > 0 ? '#1E40AF' : '#64748B',
-              margin: '0 0 0.25rem 0'
-            }}>
-              {stats.total}
-            </div>
-            <div style={{
-              fontSize: '0.75rem',
-              color: '#1E40AF',
-              fontWeight: '500'
-            }}>
-              Total Events
+            <div className="h-8 w-px bg-slate-300"></div>
+            <div className="flex items-center gap-4">
+              <div className="text-center">
+                <div className="text-sm font-bold text-error-600">{stats.symptoms}</div>
+                <div className="text-xs text-slate-600">Symptoms</div>
+              </div>
+              <div className="text-center">
+                <div className="text-sm font-bold text-success-600">{stats.medications}</div>
+                <div className="text-xs text-slate-600">Medications</div>
+              </div>
             </div>
           </div>
         </div>
-
-        {/* Filter Toggle */}
-        <button
-          onClick={() => setShowFilters(!showFilters)}
-          style={{
-            width: '100%',
-            backgroundColor: '#F8FAFC',
-            color: '#374151',
-            border: '1px solid #E2E8F0',
-            padding: '0.75rem',
-            borderRadius: '8px',
-            fontSize: '0.875rem',
-            fontWeight: '500',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '0.5rem',
-            transition: 'all 0.15s ease'
-          }}
-          onMouseEnter={(e) => e.target.style.backgroundColor = '#F1F5F9'}
-          onMouseLeave={(e) => e.target.style.backgroundColor = '#F8FAFC'}
-        >
-          <FilterIcon />
-          {showFilters ? 'Hide Filters' : 'Show Filters'}
-          <ChevronDownIcon 
-            style={{ 
-              transform: showFilters ? 'rotate(180deg)' : 'rotate(0deg)',
-              transition: 'transform 0.2s ease'
-            }} 
-          />
-        </button>
       </div>
 
       {/* Filter Controls */}
       {showFilters && (
-        <div style={{
-          backgroundColor: 'white',
-          borderRadius: '16px',
-          padding: '1.5rem',
-          border: '1px solid #E2E8F0',
-          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
-        }}>
-          <h3 style={{
-            fontSize: '1.125rem',
-            fontWeight: '600',
-            color: '#1E293B',
-            margin: '0 0 1rem 0'
-          }}>
-            Filter Your Timeline
-          </h3>
+        <div className="health-card">
+          <div className="health-card-body">
+            <h3 className="text-heading-3 mb-4">Filter Timeline</h3>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <div>
-              <label style={{ 
-                display: 'block', 
-                marginBottom: '0.5rem', 
-                fontWeight: '600',
-                color: '#374151',
-                fontSize: '0.875rem'
-              }}>
-                Show:
-              </label>
-              <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                {[
-                  { value: 'all', label: 'All Events' },
-                  { value: 'symptom', label: 'Symptoms Only' },
-                  { value: 'medication', label: 'Medications Only' }
-                ].map(option => (
-                  <button
-                    key={option.value}
-                    onClick={() => setFilterType(option.value)}
-                    style={{
-                      padding: '0.5rem 0.75rem',
-                      backgroundColor: filterType === option.value ? '#3B82F6' : '#F8FAFC',
-                      color: filterType === option.value ? 'white' : '#374151',
-                      border: '1px solid #E2E8F0',
-                      borderRadius: '6px',
-                      fontSize: '0.75rem',
-                      fontWeight: '500',
-                      cursor: 'pointer',
-                      transition: 'all 0.15s ease'
-                    }}
-                    onMouseEnter={(e) => {
-                      if (filterType !== option.value) {
-                        e.target.style.backgroundColor = '#F1F5F9';
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (filterType !== option.value) {
-                        e.target.style.backgroundColor = '#F8FAFC';
-                      }
-                    }}
-                  >
-                    {option.label}
-                  </button>
-                ))}
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Show:</label>
+                <div className="flex gap-2 flex-wrap">
+                  {[
+                    { value: 'all', label: 'All Events' },
+                    { value: 'symptom', label: 'Symptoms' },
+                    { value: 'medication', label: 'Medications' }
+                  ].map(option => (
+                    <button
+                      key={option.value}
+                      onClick={() => setFilterType(option.value)}
+                      className={`btn btn-sm ${filterType === option.value ? 'btn-primary' : 'btn-secondary'}`}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
 
-            <div>
-              <label style={{ 
-                display: 'block', 
-                marginBottom: '0.5rem', 
-                fontWeight: '600',
-                color: '#374151',
-                fontSize: '0.875rem'
-              }}>
-                Time Range:
-              </label>
-              <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                {[
-                  { value: '1day', label: 'Today' },
-                  { value: '7days', label: '7 Days' },
-                  { value: '30days', label: '30 Days' },
-                  { value: '90days', label: '3 Months' },
-                  { value: 'all', label: 'All Time' }
-                ].map(option => (
-                  <button
-                    key={option.value}
-                    onClick={() => setDateRange(option.value)}
-                    style={{
-                      padding: '0.5rem 0.75rem',
-                      backgroundColor: dateRange === option.value ? '#3B82F6' : '#F8FAFC',
-                      color: dateRange === option.value ? 'white' : '#374151',
-                      border: '1px solid #E2E8F0',
-                      borderRadius: '6px',
-                      fontSize: '0.75rem',
-                      fontWeight: '500',
-                      cursor: 'pointer',
-                      transition: 'all 0.15s ease'
-                    }}
-                    onMouseEnter={(e) => {
-                      if (dateRange !== option.value) {
-                        e.target.style.backgroundColor = '#F1F5F9';
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (dateRange !== option.value) {
-                        e.target.style.backgroundColor = '#F8FAFC';
-                      }
-                    }}
-                  >
-                    {option.label}
-                  </button>
-                ))}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Time Range:</label>
+                <div className="flex gap-2 flex-wrap">
+                  {[
+                    { value: '1day', label: 'Today' },
+                    { value: '7days', label: '7 Days' },
+                    { value: '30days', label: '30 Days' },
+                    { value: '90days', label: '3 Months' },
+                    { value: 'all', label: 'All Time' }
+                  ].map(option => (
+                    <button
+                      key={option.value}
+                      onClick={() => setDateRange(option.value)}
+                      className={`btn btn-sm ${dateRange === option.value ? 'btn-primary' : 'btn-secondary'}`}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* Timeline */}
+      {/* Timeline Content */}
       {filteredData.length === 0 ? (
-        <div style={{
-          backgroundColor: 'white',
-          borderRadius: '16px',
-          padding: '3rem 1rem',
-          border: '1px solid #E2E8F0',
-          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
-          textAlign: 'center'
-        }}>
-          <div style={{
-            width: '64px',
-            height: '64px',
-            backgroundColor: '#EFF6FF',
-            borderRadius: '32px',
-            margin: '0 auto 1rem',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}>
-            <TimelineIcon color="#3B82F6" size={32} />
+        <div className="health-card text-center py-12">
+          <div className="health-card-body">
+            <div className="w-16 h-16 bg-primary-100 rounded-full mx-auto mb-4 flex items-center justify-center">
+              <TimelineIcon color="var(--primary-600)" size={24} />
+            </div>
+            <h3 className="text-heading-3 mb-2">No events found</h3>
+            <p className="text-body text-slate-600">
+              {filterType === 'all' 
+                ? 'Start tracking symptoms or medications to see your timeline.'
+                : `No ${filterType} events found in the selected time range.`
+              }
+            </p>
           </div>
-          <h3 style={{ 
-            fontSize: '1.125rem',
-            fontWeight: '600',
-            color: '#374151',
-            margin: '0 0 0.5rem 0'
-          }}>
-            No events found
-          </h3>
-          <p style={{ 
-            margin: 0, 
-            fontSize: '0.875rem',
-            color: '#64748B',
-            lineHeight: '1.5'
-          }}>
-            {filterType === 'all' 
-              ? 'Start tracking symptoms or medications to see your timeline.'
-              : `No ${filterType} events found in the selected time range.`
-            }
-          </p>
         </div>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-          {groupedData.map((group, groupIndex) => (
-            <div key={group.date} style={{
-              backgroundColor: 'white',
-              borderRadius: '16px',
-              padding: '1.5rem',
-              border: '1px solid #E2E8F0',
-              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
-            }}>
-              {/* Date Header */}
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.75rem',
-                marginBottom: '1rem',
-                paddingBottom: '0.75rem',
-                borderBottom: '1px solid #E2E8F0'
-              }}>
-                <CalendarIcon size={20} color="#3B82F6" />
-                <h3 style={{
-                  fontSize: '1.125rem',
-                  fontWeight: '600',
-                  color: '#1E293B',
-                  margin: 0
-                }}>
-                  {formatDate(group.date)}
-                </h3>
-                <span style={{
-                  fontSize: '0.75rem',
-                  color: '#64748B',
-                  fontWeight: '500',
-                  backgroundColor: '#F1F5F9',
-                  padding: '0.25rem 0.5rem',
-                  borderRadius: '4px'
-                }}>
-                  {group.events.length} event{group.events.length !== 1 ? 's' : ''}
-                </span>
-              </div>
+        <div className="space-y-6">
+          {groupedData.map((group) => (
+            <div key={group.date} className="health-card">
+              <div className="health-card-body">
+                {/* Date Header */}
+                <div className="flex items-center gap-3 mb-6 pb-3 border-b border-slate-200">
+                  <CalendarIcon size={18} />
+                  <h3 className="text-heading-3">{formatDate(group.date)}</h3>
+                  <span className="bg-slate-100 text-slate-600 px-2 py-1 rounded text-xs font-medium">
+                    {group.events.length} event{group.events.length !== 1 ? 's' : ''}
+                  </span>
+                </div>
 
-              {/* Timeline Events */}
-              <div style={{ position: 'relative' }}>
-                {/* Timeline Line */}
-                <div style={{
-                  position: 'absolute',
-                  left: '20px',
-                  top: '0',
-                  bottom: '0',
-                  width: '2px',
-                  backgroundColor: '#E2E8F0'
-                }} />
+                {/* Timeline Events */}
+                <div className="relative">
+                  {/* Timeline Line */}
+                  <div className="absolute left-5 top-0 bottom-0 w-0.5 bg-slate-200" />
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                  {group.events.map((event, eventIndex) => (
-                    <div key={event.id} style={{
-                      display: 'flex',
-                      gap: '1rem',
-                      position: 'relative'
-                    }}>
-                      {/* Timeline Dot */}
-                      <div style={{
-                        width: '40px',
-                        height: '40px',
-                        borderRadius: '20px',
-                        backgroundColor: event.color,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        flexShrink: 0,
-                        border: '3px solid white',
-                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-                        zIndex: 1
-                      }}>
-                        {event.type === 'symptom' ? (
-                          <SymptomsIcon color="white" size={20} />
-                        ) : (
-                          <MedsIcon color="white" size={20} />
-                        )}
-                      </div>
-
-                      {/* Event Card */}
-                      <div style={{
-                        flex: 1,
-                        backgroundColor: event.bgColor,
-                        border: `1px solid ${event.color}`,
-                        borderRadius: '12px',
-                        padding: '1rem'
-                      }}>
-                        <div style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'flex-start',
-                          marginBottom: '0.5rem'
-                        }}>
-                          <h4 style={{ 
-                            margin: 0, 
-                            color: '#1E293B',
-                            fontSize: '1rem',
-                            fontWeight: '600'
-                          }}>
-                            {event.title}
-                          </h4>
-                          <div style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.25rem',
-                            fontSize: '0.75rem',
-                            color: '#64748B',
-                            fontWeight: '500'
-                          }}>
-                            <ClockIcon size={12} />
-                            {event.time}
-                          </div>
+                  <div className="space-y-6">
+                    {group.events.map((event) => (
+                      <div key={event.id} className="flex gap-4 relative">
+                        {/* Timeline Dot */}
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 border-4 border-white shadow-sm z-10 ${
+                          event.type === 'symptom' 
+                            ? event.severity <= 3 ? 'bg-success-500' : event.severity <= 6 ? 'bg-warning-500' : 'bg-error-500'
+                            : 'bg-success-500'
+                        }`}>
+                          {event.type === 'symptom' ? (
+                            <SymptomsIcon color="white" size={16} />
+                          ) : (
+                            <MedsIcon color="white" size={16} />
+                          )}
                         </div>
 
-                        {/* Event-specific details */}
-                        {event.type === 'symptom' && (
-                          <div style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            backgroundColor: event.color,
-                            color: 'white',
-                            padding: '0.25rem 0.75rem',
-                            borderRadius: '12px',
-                            fontSize: '0.75rem',
-                            fontWeight: '600',
-                            marginBottom: event.notes ? '0.75rem' : 0
-                          }}>
-                            {event.severity}/10 {getSeverityLabel(event.severity)}
+                        {/* Event Card */}
+                        <div className={`flex-1 p-4 rounded-lg border ${
+                          event.type === 'symptom' 
+                            ? event.severity <= 3 ? 'bg-success-50 border-success-200' : event.severity <= 6 ? 'bg-warning-50 border-warning-200' : 'bg-error-50 border-error-200'
+                            : 'bg-success-50 border-success-200'
+                        }`}>
+                          <div className="flex justify-between items-start mb-2">
+                            <h4 className="text-heading-4 text-slate-900">{event.title}</h4>
+                            <div className="flex items-center gap-1 text-xs text-slate-500">
+                              <ClockIcon size={12} />
+                              {event.time}
+                            </div>
                           </div>
-                        )}
-                        
-                        {event.type === 'medication' && event.dosage && (
-                          <div style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            backgroundColor: 'white',
-                            color: event.color,
-                            padding: '0.25rem 0.75rem',
-                            borderRadius: '12px',
-                            fontSize: '0.75rem',
-                            fontWeight: '600',
-                            border: `1px solid ${event.color}`
-                          }}>
-                            {event.dosage} taken
-                          </div>
-                        )}
 
-                        {event.notes && (
-                          <p style={{ 
-                            margin: '0.75rem 0 0 0', 
-                            color: '#4B5563',
-                            fontSize: '0.875rem',
-                            fontStyle: 'italic',
-                            backgroundColor: 'rgba(255, 255, 255, 0.7)',
-                            padding: '0.75rem',
-                            borderRadius: '8px',
-                            lineHeight: '1.4'
-                          }}>
-                            "{event.notes}"
-                          </p>
-                        )}
+                          {/* Event-specific details */}
+                          <div className="flex items-center gap-2 mb-2">
+                            {event.type === 'symptom' && (
+                              <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium text-white ${
+                                event.severity <= 3 ? 'bg-success-600' : event.severity <= 6 ? 'bg-warning-600' : 'bg-error-600'
+                              }`}>
+                                {event.severity}/10 {getSeverityLabel(event.severity)}
+                              </span>
+                            )}
+                            
+                            {event.type === 'medication' && event.dosage && (
+                              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-white text-success-700 border border-success-200">
+                                {event.dosage} taken
+                              </span>
+                            )}
+                          </div>
+
+                          {event.notes && (
+                            <div className="bg-white/70 rounded p-3 text-sm text-slate-700 italic">
+                              "{event.notes}"
+                            </div>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -709,31 +395,18 @@ const Timeline = () => {
 
       {/* Pattern Recognition Tip */}
       {filteredData.length > 5 && (
-        <div style={{
-          background: 'linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%)',
-          borderRadius: '16px',
-          padding: '1.5rem',
-          border: '1px solid #BFDBFE'
-        }}>
-          <h4 style={{
-            color: '#1E40AF',
-            fontSize: '1rem',
-            fontWeight: '600',
-            margin: '0 0 0.75rem 0',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.5rem'
-          }}>
+        <div className="bg-gradient-to-br from-primary-50 to-primary-100 rounded-2xl p-6 border border-primary-200">
+          <h4 className="text-primary-900 font-semibold mb-2 flex items-center gap-2">
+            <div className="w-5 h-5 bg-primary-600 rounded flex items-center justify-center">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                <path d="M9.663 17H4a2 2 0 01-2-2V9a2 2 0 012-2h5.663M12 2l3.326 9H22l-7 5 2.674 8L12 19l-5.674 5L9 16l-7-5h6.674L12 2z" 
+                      fill="white"/>
+              </svg>
+            </div>
             Pattern Recognition
           </h4>
-          <p style={{
-            color: '#1E40AF',
-            margin: 0,
-            fontSize: '0.875rem',
-            lineHeight: '1.6'
-          }}>
-            Building your health timeline helps identify patterns. Look for connections: Do symptoms occur at certain times? 
-            Do you feel better after taking medications? Share these insights with your healthcare provider during appointments.
+          <p className="text-primary-800 text-sm leading-relaxed">
+            Your timeline helps identify health patterns. Look for connections between symptoms, timing, and treatments to discuss with your healthcare provider.
           </p>
         </div>
       )}
