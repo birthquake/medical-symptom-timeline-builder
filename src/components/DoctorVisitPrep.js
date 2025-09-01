@@ -392,7 +392,7 @@ const handleEmailDraft = () => {
   const sinceLastVisit = getTimeFrameData();
 
 return (
-  <div className="flex flex-col gap-6">      {/* Header */}
+  <div className="flex flex-col gap-6">     
       {/* Streamlined Header */}
 <div className="health-card">
   <div className="health-card-body">
@@ -517,7 +517,7 @@ return (
         </div>
       </div>
 
-      {/* Since Last Visit Summary
+      {/* Since Last Visit Summary */}
       {sinceLastVisit && (
         <div className="health-card">
   <div className="health-card-body">
