@@ -480,12 +480,9 @@ const DisclaimerTab = () => {
                   onClick={() => setCurrentSection(section.id)}
                   className={`flex flex-col items-center justify-center gap-2 p-3 rounded-md font-medium text-xs transition-all min-h-[60px] ${
                     isActive 
-                      ? 'text-white shadow-sm' 
+                      ? 'bg-secondary-600 text-white shadow-sm' 
                       : 'text-slate-600 hover:text-slate-900 hover:bg-white'
                   }`}
-                  style={{
-                    backgroundColor: isActive ? section.color : 'transparent'
-                  }}
                 >
                   <IconComponent 
                     size={20} 
