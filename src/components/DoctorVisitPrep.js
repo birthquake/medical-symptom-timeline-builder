@@ -440,13 +440,9 @@ return (
 </div>
 
       {/* Visit Dates Setup */}
-      <div style={{
-        backgroundColor: 'white',
-        borderRadius: '16px',
-        padding: '1.5rem',
-        border: '1px solid #E2E8F0',
-        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
-      }}>
+     <div className="health-card">
+  <div className="health-card-body">
+       
         <h3 style={{ 
           fontSize: '1.125rem',
           fontWeight: '600',
@@ -476,15 +472,7 @@ return (
                 type="date"
                 value={visitData.lastVisitDate}
                 onChange={(e) => handleDateChange('lastVisitDate', e.target.value)}
-                style={{
-                  width: 'calc(100% - 1.5rem)',
-                  padding: '0.75rem 0.75rem 0.75rem 2.5rem',
-                  border: '1px solid #D1D5DB',
-                  borderRadius: '8px',
-                  fontSize: '0.875rem',
-                  backgroundColor: '#FAFAFA',
-                  boxSizing: 'border-box'
-                }}
+                className="form-input pl-10"
               />
               <div style={{
                 position: 'absolute',
@@ -513,15 +501,8 @@ return (
                 type="date"
                 value={visitData.nextVisitDate}
                 onChange={(e) => handleDateChange('nextVisitDate', e.target.value)}
-                style={{
-                  width: 'calc(100% - 1.5rem)',
-                  padding: '0.75rem 0.75rem 0.75rem 2.5rem',
-                  border: '1px solid #D1D5DB',
-                  borderRadius: '8px',
-                  fontSize: '0.875rem',
-                  backgroundColor: '#FAFAFA',
-                  boxSizing: 'border-box'
-                }}
+                className="form-input pl-10"
+                  
               />
               <div style={{
                 position: 'absolute',
@@ -539,13 +520,9 @@ return (
 
       {/* Since Last Visit Summary */}
       {sinceLastVisit && (
-        <div style={{
-          backgroundColor: 'white',
-          borderRadius: '16px',
-          padding: '1.5rem',
-          border: '1px solid #E2E8F0',
-          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
-        }}>
+        <div className="health-card">
+  <div className="health-card-body">
+        
           <h3 style={{ 
             fontSize: '1.125rem',
             fontWeight: '600',
@@ -641,13 +618,9 @@ return (
 
       {/* Concerns to Discuss */}
       {visitData.concerns.length > 0 && (
-        <div style={{
-          backgroundColor: 'white',
-          borderRadius: '16px',
-          padding: '1.5rem',
-          border: '1px solid #E2E8F0',
-          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
-        }}>
+    <div className="health-card">
+  <div className="health-card-body">
+        
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
             <AlertIcon />
             <h3 style={{ 
@@ -692,14 +665,10 @@ return (
       )}
 
       {/* Questions to Ask */}
-      <div style={{
-        backgroundColor: 'white',
-        borderRadius: '16px',
-        padding: '1.5rem',
-        border: '1px solid #E2E8F0',
-        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
+     <div className="health-card">
+  <div className="health-card-body">
+       
+       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
           <QuestionIcon />
           <h3 style={{ 
             fontSize: '1.125rem',
@@ -769,13 +738,9 @@ return (
       </div>
 
       {/* Pre-Visit Checklist */}
-      <div style={{
-        backgroundColor: 'white',
-        borderRadius: '16px',
-        padding: '1.5rem',
-        border: '1px solid #E2E8F0',
-        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
-      }}>
+   <div className="health-card">
+  <div className="health-card-body">
+     
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
           <ChecklistIcon />
           <h3 style={{ 
@@ -846,13 +811,9 @@ return (
 
       {/* Key Insights */}
       {visitData.keyInsights.length > 0 && (
-        <div style={{
-          backgroundColor: 'white',
-          borderRadius: '16px',
-          padding: '1.5rem',
-          border: '1px solid #E2E8F0',
-          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
-        }}>
+        <div className="health-card">
+  <div className="health-card-body">
+        
           <h3 style={{ 
             fontSize: '1.125rem',
             fontWeight: '600',
@@ -894,13 +855,9 @@ return (
       )}
 
       {/* Print Button */}
-      <div style={{
-        backgroundColor: 'white',
-        borderRadius: '16px',
-        padding: '1.5rem',
-        border: '1px solid #E2E8F0',
-        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
-      }}>
+     <div className="health-card">
+  <div className="health-card-body">
+       
         <button
           onClick={handlePrintPrep}
           disabled={isGenerating}
