@@ -435,32 +435,13 @@ const DisclaimerTab = () => {
       {/* Streamlined Header */}
       <div className="health-card">
         <div className="health-card-body">
-          <div className="flex justify-between items-start mb-4">
+          <div className="flex justify-between items-start">
             <div>
               <h2 className="text-heading-1">Medical Disclaimers</h2>
               <p className="text-body">Important safety information and usage guidelines</p>
             </div>
             <div className="w-10 h-10 bg-error-100 rounded-lg flex items-center justify-center">
               <AlertTriangleIcon size={20} />
-            </div>
-          </div>
-          
-          {/* Compact Summary */}
-          <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-error-100 rounded-lg flex items-center justify-center">
-                <AlertTriangleIcon size={20} />
-              </div>
-              <div>
-                <div className="text-body-small">Current Section</div>
-                <div className="text-lg font-bold text-metric">
-                  {sections.find(s => s.id === currentSection)?.title || 'Overview'}
-                </div>
-              </div>
-            </div>
-            <div className="h-8 w-px bg-slate-300"></div>
-            <div className="text-xs text-slate-600 leading-relaxed">
-              Review all sections for complete understanding
             </div>
           </div>
         </div>
