@@ -47,6 +47,12 @@ const TrendsIcon = ({ color = "#8B5CF6", size = 24 }) => (
   </svg>
 );
 
+const AnalyticsIcon = ({ color = "#3B82F6", size = 24 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <polyline points="22,12 18,12 15,21 9,3 6,12 2,12" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
 const ShareIcon = ({ color = "white", size = 20 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
     <path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -89,8 +95,38 @@ const ClockIcon = ({ size = 16, color = "#3B82F6" }) => (
   </svg>
 );
 
+const PillIcon = ({ size = 16, color = "#059669" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <path d="M10.5 20.5a6.5 6.5 0 1 0-7-7l7 7z" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M13.5 10.5a6.5 6.5 0 1 0 7 7l-7-7z" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <line x1="12" y1="12" x2="12" y2="12" stroke={color} strokeWidth="2" strokeLinecap="round"/>
+  </svg>
+);
+
+const WarningIcon = ({ size = 16, color = "#F59E0B" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <line x1="12" y1="9" x2="12" y2="13" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <line x1="12" y1="17" x2="12.01" y2="17" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const TrendUpIcon = ({ size = 16, color = "#059669" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <polyline points="23,6 13.5,15.5 8.5,10.5 1,18" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <polyline points="17,6 23,6 23,12" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const TrendDownIcon = ({ size = 16, color = "#DC2626" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <polyline points="23,18 13.5,8.5 8.5,13.5 1,6" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <polyline points="17,18 23,18 23,12" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
 const Reports = () => {
-  const [activeTab, setActiveTab] = useState('summary'); // 'summary' or 'insights'
+  const [activeTab, setActiveTab] = useState('summary'); // 'summary', 'insights', or 'analytics'
   const [reportData, setReportData] = useState({
     symptoms: [],
     medications: [],
@@ -114,6 +150,15 @@ const Reports = () => {
   const [selectedTimeframe, setSelectedTimeframe] = useState('month');
   const [isSharing, setIsSharing] = useState(false);
 
+  // Advanced Analytics State
+  const [analyticsInsights, setAnalyticsInsights] = useState({
+    medicationTimingPatterns: [],
+    symptomClusters: [],
+    temporalPatterns: [],
+    dataCorrelations: [],
+    trackingTrends: []
+  });
+  const [loadingAnalytics, setLoadingAnalytics] = useState(false);
   // Load data on component mount
   useEffect(() => {
     const symptoms = JSON.parse(localStorage.getItem('symptoms') || '[]');
@@ -140,6 +185,14 @@ const Reports = () => {
       generateTrendAnalysis();
     }
   }, [activeTab, selectedTimeframe, reportData]);
+
+  // Process advanced analytics when analytics tab is active
+  useEffect(() => {
+    if (activeTab === 'analytics') {
+      processAdvancedAnalytics();
+    }
+  }, [activeTab, selectedTimeframe, reportData]);
+
   // Filter data based on date range
   const getFilteredData = () => {
     const start = new Date(reportSettings.startDate);
@@ -157,6 +210,34 @@ const Reports = () => {
     });
 
     return { symptoms: filteredSymptoms, medicationLogs: filteredMedicationLogs };
+  };
+
+  const filterDataByTimeframe = (data, timeframe) => {
+    const now = new Date();
+    const cutoffDate = new Date();
+    
+    switch (timeframe) {
+      case 'week':
+        cutoffDate.setDate(now.getDate() - 7);
+        break;
+      case 'month':
+        cutoffDate.setDate(now.getDate() - 30);
+        break;
+      case 'quarter':
+        cutoffDate.setDate(now.getDate() - 90);
+        break;
+      case 'year':
+        cutoffDate.setDate(now.getDate() - 365);
+        break;
+      default:
+        cutoffDate.setDate(now.getDate() - 30);
+    }
+
+    return {
+      symptoms: data.symptoms.filter(s => new Date(s.timestamp) >= cutoffDate),
+      medications: data.medications,
+      medicationLogs: data.medicationLogs.filter(l => new Date(l.timestamp) >= cutoffDate)
+    };
   };
 
   // Generate statistics for summary report
@@ -361,7 +442,306 @@ const Reports = () => {
 
     return findings.slice(0, 5);
   };
+  // Advanced Analytics Functions
+  const processAdvancedAnalytics = async () => {
+    if (reportData.symptoms.length < 5) {
+      setAnalyticsInsights({
+        medicationTimingPatterns: [],
+        symptomClusters: [],
+        temporalPatterns: [],
+        dataCorrelations: [],
+        trackingTrends: []
+      });
+      return;
+    }
 
+    setLoadingAnalytics(true);
+
+    // Filter data by selected timeframe
+    const filteredData = filterDataByTimeframe(reportData, selectedTimeframe);
+    
+    // Process different types of pattern analysis
+    const medicationTimingPatterns = await analyzeMedicationTimingPatterns(filteredData);
+    const symptomClusters = await analyzeAdvancedSymptomClusters(filteredData);
+    const temporalPatterns = await analyzeAdvancedTemporalPatterns(filteredData);
+    const dataCorrelations = await analyzeDataCorrelations(filteredData);
+    const trackingTrends = await analyzeTrackingTrends(filteredData);
+
+    setAnalyticsInsights({
+      medicationTimingPatterns,
+      symptomClusters,
+      temporalPatterns,
+      dataCorrelations,
+      trackingTrends
+    });
+
+    setLoadingAnalytics(false);
+  };
+
+  const analyzeMedicationTimingPatterns = async (data) => {
+    const timingPatterns = [];
+
+    data.medications.forEach(medication => {
+      const medLogs = data.medicationLogs.filter(log => log.medicationName === medication.name);
+      if (medLogs.length < 3) return;
+
+      // Analyze symptom timing patterns around medication logs
+      const timingData = medLogs.map(log => {
+        const logTime = new Date(log.timestamp);
+        
+        // Look for symptoms 6 hours before and 24 hours after medication log
+        const sixHoursBefore = new Date(logTime.getTime() - 6 * 60 * 60 * 1000);
+        const twentyFourHoursAfter = new Date(logTime.getTime() + 24 * 60 * 60 * 1000);
+        
+        const symptomsBefore = data.symptoms.filter(s => {
+          const sTime = new Date(s.timestamp);
+          return sTime >= sixHoursBefore && sTime <= logTime;
+        });
+        
+        const symptomsAfter = data.symptoms.filter(s => {
+          const sTime = new Date(s.timestamp);
+          return sTime > logTime && sTime <= twentyFourHoursAfter;
+        });
+
+        const avgSeverityBefore = symptomsBefore.length > 0 
+          ? symptomsBefore.reduce((sum, s) => sum + s.severity, 0) / symptomsBefore.length 
+          : 0;
+        
+        const avgSeverityAfter = symptomsAfter.length > 0
+          ? symptomsAfter.reduce((sum, s) => sum + s.severity, 0) / symptomsAfter.length
+          : 0;
+
+        return {
+          beforeSeverity: avgSeverityBefore,
+          afterSeverity: avgSeverityAfter,
+          severityDifference: avgSeverityBefore - avgSeverityAfter,
+          hasData: symptomsBefore.length > 0 && symptomsAfter.length > 0
+        };
+      }).filter(data => data.hasData);
+
+      if (timingData.length >= 3) {
+        const avgDifference = timingData.reduce((sum, d) => sum + d.severityDifference, 0) / timingData.length;
+        const improvementInstances = timingData.filter(d => d.severityDifference > 0).length;
+        const improvementRate = (improvementInstances / timingData.length) * 100;
+
+        timingPatterns.push({
+          medicationName: medication.name,
+          avgSeverityChange: parseFloat(avgDifference.toFixed(1)),
+          improvementRate: Math.round(improvementRate),
+          dataPoints: timingData.length,
+          pattern: avgDifference > 0.5 ? 'symptoms-often-lower' : avgDifference < -0.5 ? 'symptoms-often-higher' : 'no-clear-pattern',
+          confidence: timingData.length >= 7 ? 'moderate' : 'low'
+        });
+      }
+    });
+
+    return timingPatterns.sort((a, b) => b.avgSeverityChange - a.avgSeverityChange);
+  };
+
+  const analyzeAdvancedSymptomClusters = async (data) => {
+    const clusters = [];
+    const symptomsByDay = {};
+
+    // Group symptoms by day
+    data.symptoms.forEach(symptom => {
+      const dayKey = new Date(symptom.timestamp).toDateString();
+      if (!symptomsByDay[dayKey]) {
+        symptomsByDay[dayKey] = [];
+      }
+      symptomsByDay[dayKey].push(symptom);
+    });
+
+    // Find days with multiple symptoms
+    const clusterDays = Object.entries(symptomsByDay)
+      .filter(([day, symptoms]) => symptoms.length > 1)
+      .map(([day, symptoms]) => ({
+        date: day,
+        symptoms: symptoms,
+        count: symptoms.length,
+        avgSeverity: symptoms.reduce((sum, s) => sum + s.severity, 0) / symptoms.length,
+        symptomTypes: [...new Set(symptoms.map(s => s.name))]
+      }));
+
+    if (clusterDays.length > 0) {
+      // Find most common symptom combinations
+      const combinations = {};
+      clusterDays.forEach(cluster => {
+        const sorted = cluster.symptomTypes.sort().join(' + ');
+        if (!combinations[sorted]) {
+          combinations[sorted] = {
+            combination: sorted,
+            count: 0,
+            avgSeverity: 0,
+            dates: []
+          };
+        }
+        combinations[sorted].count++;
+        combinations[sorted].avgSeverity += cluster.avgSeverity;
+        combinations[sorted].dates.push(cluster.date);
+      });
+
+      // Process combinations
+      Object.values(combinations).forEach(combo => {
+        combo.avgSeverity = combo.avgSeverity / combo.count;
+        if (combo.count >= 2) {
+          clusters.push({
+            symptoms: combo.combination,
+            frequency: combo.count,
+            avgSeverity: parseFloat(combo.avgSeverity.toFixed(1)),
+            recentDate: combo.dates[combo.dates.length - 1],
+            confidence: combo.count >= 4 ? 'moderate' : 'low'
+          });
+        }
+      });
+    }
+
+    return clusters.sort((a, b) => b.frequency - a.frequency).slice(0, 5);
+  };
+
+  const analyzeAdvancedTemporalPatterns = async (data) => {
+    const patterns = [];
+
+    if (data.symptoms.length < 5) return patterns;
+
+    // Time of day patterns
+    const hourlySymptoms = {};
+    for (let i = 0; i < 24; i++) {
+      hourlySymptoms[i] = { count: 0, totalSeverity: 0 };
+    }
+
+    data.symptoms.forEach(symptom => {
+      const hour = new Date(symptom.timestamp).getHours();
+      hourlySymptoms[hour].count++;
+      hourlySymptoms[hour].totalSeverity += symptom.severity;
+    });
+
+    // Find peak hours
+    const totalSymptoms = data.symptoms.length;
+    const avgHourlyCount = totalSymptoms / 24;
+    const peakHour = Object.entries(hourlySymptoms)
+      .filter(([hour, data]) => data.count >= 3 && data.count > avgHourlyCount * 1.5)
+      .sort(([,a], [,b]) => b.count - a.count)[0];
+
+    if (peakHour) {
+      const hour = parseInt(peakHour[0]);
+      const timeOfDay = hour < 6 ? 'Early Morning' : 
+                      hour < 12 ? 'Morning' :
+                      hour < 17 ? 'Afternoon' :
+                      hour < 21 ? 'Evening' : 'Night';
+      
+      patterns.push({
+        type: 'time_of_day',
+        pattern: `${timeOfDay} Pattern`,
+        description: `${Math.round((peakHour[1].count / avgHourlyCount - 1) * 100)}% more symptoms around ${hour}:00`,
+        frequency: peakHour[1].count,
+        avgSeverity: parseFloat((peakHour[1].totalSeverity / peakHour[1].count).toFixed(1)),
+        confidence: peakHour[1].count >= 5 ? 'moderate' : 'low'
+      });
+    }
+
+    return patterns;
+  };
+
+  const analyzeDataCorrelations = async (data) => {
+    const correlations = [];
+    
+    if (data.symptoms.length < 10) return correlations;
+
+    // Group symptoms by type
+    const symptomGroups = {};
+    data.symptoms.forEach(symptom => {
+      if (!symptomGroups[symptom.name]) {
+        symptomGroups[symptom.name] = [];
+      }
+      symptomGroups[symptom.name].push(symptom);
+    });
+
+    // Find symptoms that may occur on the same day
+    const symptomTypes = Object.keys(symptomGroups).filter(type => symptomGroups[type].length >= 3);
+    
+    for (let i = 0; i < symptomTypes.length; i++) {
+      for (let j = i + 1; j < symptomTypes.length; j++) {
+        const symptomA = symptomTypes[i];
+        const symptomB = symptomTypes[j];
+        
+        const datesA = new Set(symptomGroups[symptomA].map(s => new Date(s.timestamp).toDateString()));
+        const datesB = new Set(symptomGroups[symptomB].map(s => new Date(s.timestamp).toDateString()));
+        
+        // Find intersection (days when both symptoms were logged)
+        const intersection = [...datesA].filter(date => datesB.has(date));
+        
+        if (intersection.length >= 2) {
+          const correlationStrength = intersection.length / Math.min(datesA.size, datesB.size);
+          
+          if (correlationStrength >= 0.3) {
+            correlations.push({
+              symptomA,
+              symptomB,
+              coOccurrences: intersection.length,
+              strength: Math.round(correlationStrength * 100),
+              pattern: `${symptomA} & ${symptomB}`,
+              description: `Logged together on ${intersection.length} days`,
+              confidence: intersection.length >= 4 ? 'moderate' : 'low'
+            });
+          }
+        }
+      }
+    }
+
+    return correlations.sort((a, b) => b.strength - a.strength).slice(0, 5);
+  };
+
+  const analyzeTrackingTrends = async (data) => {
+    const trends = [];
+    
+    if (data.symptoms.length < 7) return trends;
+
+    // Split data into two halves to compare trends
+    const sortedSymptoms = data.symptoms.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+    const midPoint = Math.floor(sortedSymptoms.length / 2);
+    const firstHalf = sortedSymptoms.slice(0, midPoint);
+    const secondHalf = sortedSymptoms.slice(midPoint);
+
+    // Overall severity trend in tracking data
+    const firstHalfAvg = firstHalf.reduce((sum, s) => sum + s.severity, 0) / firstHalf.length;
+    const secondHalfAvg = secondHalf.reduce((sum, s) => sum + s.severity, 0) / secondHalf.length;
+    const severityChange = secondHalfAvg - firstHalfAvg;
+    const severityChangePercent = Math.round((severityChange / firstHalfAvg) * 100);
+
+    if (Math.abs(severityChangePercent) >= 15) {
+      trends.push({
+        type: 'severity_tracking',
+        trend: severityChange > 0 ? 'increasing' : 'decreasing',
+        change: Math.abs(severityChangePercent),
+        description: `Tracked severity levels have ${severityChange > 0 ? 'increased' : 'decreased'} by ${Math.abs(severityChangePercent)}%`,
+        current: parseFloat(secondHalfAvg.toFixed(1)),
+        previous: parseFloat(firstHalfAvg.toFixed(1)),
+        confidence: sortedSymptoms.length >= 14 ? 'moderate' : 'low'
+      });
+    }
+
+    // Frequency trend in tracking data
+    const firstHalfDays = (new Date(firstHalf[firstHalf.length - 1].timestamp) - new Date(firstHalf[0].timestamp)) / (1000 * 60 * 60 * 24) + 1;
+    const secondHalfDays = (new Date(secondHalf[secondHalf.length - 1].timestamp) - new Date(secondHalf[0].timestamp)) / (1000 * 60 * 60 * 24) + 1;
+    
+    const firstHalfFreq = firstHalf.length / firstHalfDays;
+    const secondHalfFreq = secondHalf.length / secondHalfDays;
+    const freqChange = ((secondHalfFreq - firstHalfFreq) / firstHalfFreq) * 100;
+
+    if (Math.abs(freqChange) >= 25) {
+      trends.push({
+        type: 'tracking_frequency',
+        trend: freqChange > 0 ? 'increasing' : 'decreasing',
+        change: Math.abs(Math.round(freqChange)),
+        description: `Symptom tracking frequency has ${freqChange > 0 ? 'increased' : 'decreased'} by ${Math.abs(Math.round(freqChange))}%`,
+        current: parseFloat(secondHalfFreq.toFixed(1)),
+        previous: parseFloat(firstHalfFreq.toFixed(1)),
+        confidence: sortedSymptoms.length >= 14 ? 'moderate' : 'low'
+      });
+    }
+
+    return trends;
+  };
   // Mobile sharing functions
   const generateReportText = () => {
     const filtered = getFilteredData();
@@ -386,6 +766,14 @@ const Reports = () => {
       reportText += `KEY INSIGHTS:\n`;
       insights.keyFindings.forEach((finding, index) => {
         reportText += `${index + 1}. ${finding}\n`;
+      });
+      reportText += `\n`;
+    }
+
+    if (activeTab === 'analytics' && analyticsInsights.medicationTimingPatterns.length > 0) {
+      reportText += `DATA PATTERNS:\n`;
+      analyticsInsights.medicationTimingPatterns.forEach((pattern, index) => {
+        reportText += `${index + 1}. ${pattern.medicationName}: ${pattern.improvementRate}% improvement rate\n`;
       });
       reportText += `\n`;
     }
@@ -446,9 +834,50 @@ const Reports = () => {
       case 'week': return 'Past Week';
       case 'month': return 'Past Month';
       case 'quarter': return 'Past 3 Months';
+      case 'year': return 'Past Year';
       default: return 'Past Month';
     }
   };
+
+  const getActiveTabName = () => {
+    switch (activeTab) {
+      case 'summary': return 'Summary Report';
+      case 'insights': return 'Pattern Insights';
+      case 'analytics': return 'Data Patterns';
+      default: return 'Summary Report';
+    }
+  };
+
+  const getActiveTabData = () => {
+    switch (activeTab) {
+      case 'summary':
+        return {
+          mainMetric: `${statistics.actualDaysTracked} days`,
+          symptoms: statistics.totalSymptoms,
+          medications: statistics.totalMedicationDoses
+        };
+      case 'insights':
+        return {
+          mainMetric: getTimeframeName(),
+          symptoms: insights.dataQuality.symptoms,
+          medications: insights.dataQuality.medications
+        };
+      case 'analytics':
+        return {
+          mainMetric: getTimeframeName(),
+          symptoms: reportData.symptoms.length,
+          medications: analyticsInsights.medicationTimingPatterns.length + analyticsInsights.symptomClusters.length + analyticsInsights.temporalPatterns.length
+        };
+      default:
+        return {
+          mainMetric: `${statistics.actualDaysTracked} days`,
+          symptoms: statistics.totalSymptoms,
+          medications: statistics.totalMedicationDoses
+        };
+    }
+  };
+
+  const hasInsufficientAnalyticsData = reportData.symptoms.length < 5;
   return (
     <div className="flex flex-col gap-6">
       {/* Streamlined Header */}
@@ -473,24 +902,30 @@ const Reports = () => {
           <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-secondary-100 rounded-lg flex items-center justify-center">
-                {activeTab === 'summary' ? <ReportsIcon color="var(--secondary-600)" size={20} /> : <TrendsIcon color="var(--secondary-600)" size={20} />}
+                {activeTab === 'summary' ? <ReportsIcon color="var(--secondary-600)" size={20} /> : 
+                 activeTab === 'insights' ? <TrendsIcon color="var(--secondary-600)" size={20} /> :
+                 <AnalyticsIcon color="var(--secondary-600)" size={20} />}
               </div>
               <div>
                 <div className="text-body-small">{activeTab === 'summary' ? 'Report Period' : 'Analysis Period'}</div>
                 <div className="text-lg font-bold text-metric">
-                  {activeTab === 'summary' ? `${statistics.actualDaysTracked} days` : getTimeframeName()}
+                  {getActiveTabData().mainMetric}
                 </div>
               </div>
             </div>
             <div className="h-8 w-px bg-slate-300"></div>
             <div className="flex items-center gap-4">
               <div className="text-center">
-                <div className="text-sm font-bold text-error-600">{activeTab === 'summary' ? statistics.totalSymptoms : insights.dataQuality.symptoms}</div>
-                <div className="text-xs text-slate-600">Symptoms</div>
+                <div className="text-sm font-bold text-error-600">{getActiveTabData().symptoms}</div>
+                <div className="text-xs text-slate-600">
+                  {activeTab === 'analytics' ? 'Entries' : 'Symptoms'}
+                </div>
               </div>
               <div className="text-center">
-                <div className="text-sm font-bold text-success-600">{activeTab === 'summary' ? statistics.totalMedicationDoses : insights.dataQuality.medications}</div>
-                <div className="text-xs text-slate-600">Medications</div>
+                <div className="text-sm font-bold text-success-600">{getActiveTabData().medications}</div>
+                <div className="text-xs text-slate-600">
+                  {activeTab === 'analytics' ? 'Patterns' : 'Medications'}
+                </div>
               </div>
             </div>
           </div>
@@ -500,7 +935,7 @@ const Reports = () => {
       {/* Tab Navigation */}
       <div className="health-card">
         <div className="health-card-body">
-          <div className="grid grid-cols-2 gap-2 bg-slate-50 p-1 rounded-lg">
+          <div className="grid grid-cols-3 gap-2 bg-slate-50 p-1 rounded-lg">
             <button
               onClick={() => setActiveTab('summary')}
               className={`flex items-center justify-center gap-2 px-4 py-3 rounded-md font-medium text-sm transition-all ${
@@ -508,7 +943,7 @@ const Reports = () => {
               }`}
             >
               <ReportsIcon color={activeTab === 'summary' ? 'white' : '#64748B'} size={16} />
-              Summary Report
+              Summary
             </button>
             <button
               onClick={() => setActiveTab('insights')}
@@ -517,12 +952,22 @@ const Reports = () => {
               }`}
             >
               <TrendsIcon color={activeTab === 'insights' ? 'white' : '#64748B'} size={16} />
-              Pattern Insights
+              Insights
+            </button>
+            <button
+              onClick={() => setActiveTab('analytics')}
+              className={`flex items-center justify-center gap-2 px-4 py-3 rounded-md font-medium text-sm transition-all ${
+                activeTab === 'analytics' ? 'bg-secondary-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <AnalyticsIcon color={activeTab === 'analytics' ? 'white' : '#64748B'} size={16} />
+              Patterns
             </button>
           </div>
         </div>
       </div>
-{/* Content based on active tab */}
+
+      {/* Content based on active tab */}
       {activeTab === 'summary' ? (
         <>
           {/* Report Settings */}
@@ -585,7 +1030,8 @@ const Reports = () => {
               </div>
             </div>
           </div>
-{/* Statistics Preview */}
+
+          {/* Statistics Preview */}
           {reportSettings.includeStatistics && (filtered.symptoms.length > 0 || filtered.medicationLogs.length > 0) && (
             <div className="health-card">
               <div className="health-card-body">
@@ -641,7 +1087,7 @@ const Reports = () => {
             </div>
           )}
         </>
-      ) : (
+      ) : activeTab === 'insights' ? (
         <>
           {/* Insights Content */}
           <div className="health-card">
@@ -699,7 +1145,8 @@ const Reports = () => {
               </div>
             </div>
           </div>
-{/* Day Patterns */}
+
+          {/* Day Patterns */}
           {insights.dayPatterns.length > 0 && (
             <div className="health-card">
               <div className="health-card-body">
@@ -753,6 +1200,153 @@ const Reports = () => {
             </div>
           )}
         </>
+      ) : (
+        <>
+          {/* Advanced Analytics Content */}
+          {/* Medical Disclaimer */}
+          <div className="bg-warning-50 border border-warning-200 rounded-lg p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <WarningIcon />
+              <h4 className="font-semibold text-warning-800">Important Notice</h4>
+            </div>
+            <p className="text-warning-700 text-sm leading-relaxed">
+              These are data patterns from your tracking logs, not medical analysis. 
+              All insights should be discussed with your healthcare provider. 
+              This information does not constitute medical advice, diagnosis, or treatment recommendations.
+            </p>
+          </div>
+
+          {/* Timeframe Selector */}
+          <div className="health-card">
+            <div className="health-card-body">
+              <div className="flex gap-2 bg-slate-50 p-1 rounded-lg">
+                {['week', 'month', 'quarter', 'year'].map(timeframe => (
+                  <button
+                    key={timeframe}
+                    onClick={() => setSelectedTimeframe(timeframe)}
+                    className={`flex-1 px-3 py-2 rounded-md text-sm font-medium transition-all ${
+                      selectedTimeframe === timeframe 
+                        ? 'bg-primary-600 text-white shadow-sm' 
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-white'
+                    }`}
+                  >
+                    {timeframe === 'week' ? '7 Days' : 
+                     timeframe === 'month' ? '30 Days' : 
+                     timeframe === 'quarter' ? '90 Days' : '1 Year'}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Advanced Analytics Results */}
+          {hasInsufficientAnalyticsData ? (
+            <div className="health-card text-center py-12">
+              <div className="health-card-body">
+                <div className="w-16 h-16 bg-slate-100 rounded-full mx-auto mb-4 flex items-center justify-center">
+                  <AnalyticsIcon size={32} color="#64748B" />
+                </div>
+                <h3 className="text-heading-3 mb-2">Need More Tracking Data</h3>
+                <p className="text-body text-slate-600 mb-4">
+                  Pattern analysis requires at least 5 symptom entries to generate meaningful insights.
+                </p>
+                <p className="text-body-small text-slate-500">
+                  Continue tracking symptoms and medications to unlock personalized data patterns.
+                </p>
+              </div>
+            </div>
+          ) : loadingAnalytics ? (
+            <div className="health-card text-center py-12">
+              <div className="health-card-body">
+                <div className="w-16 h-16 bg-primary-100 rounded-full mx-auto mb-4 flex items-center justify-center animate-pulse">
+                  <AnalyticsIcon size={32} />
+                </div>
+                <h3 className="text-heading-3 mb-2">Analyzing Patterns</h3>
+                <p className="text-body text-slate-600">
+                  Processing your tracking data for patterns...
+                </p>
+              </div>
+            </div>
+          ) : (
+            <>
+              {/* Medication Timing Patterns */}
+              {analyticsInsights.medicationTimingPatterns.length > 0 && (
+                <div className="health-card">
+                  <div className="health-card-body">
+                    <div className="flex items-center gap-2 mb-4">
+                      <PillIcon />
+                      <h3 className="text-heading-3">Medication Timing Patterns</h3>
+                    </div>
+                    
+                    <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 mb-4">
+                      <p className="text-slate-700 text-xs leading-relaxed">
+                        <strong>Note:</strong> These patterns compare symptom severity before vs. after medication logging times. 
+                        This is tracking data analysis, not medical effectiveness evaluation.
+                      </p>
+                    </div>
+                    
+                    <div className="space-y-3">
+                      {analyticsInsights.medicationTimingPatterns.map((med, index) => (
+                        <div key={index} className="flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-200">
+                          <div className="flex-1">
+                            <div className="font-semibold text-slate-900 mb-1">{med.medicationName}</div>
+                            <div className="text-body-small text-slate-600">
+                              {med.improvementRate}% of instances showed lower symptoms after • {med.dataPoints} log comparisons
+                            </div>
+                            <div className="text-xs text-slate-500 mt-1">
+                              Data confidence: {med.confidence}
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <div className="text-right">
+                              <div className={`text-lg font-bold ${
+                                med.avgSeverityChange > 0 ? 'text-success-600' : 
+                                med.avgSeverityChange < 0 ? 'text-error-600' : 'text-slate-600'
+                              }`}>
+                                {med.avgSeverityChange > 0 ? '+' : ''}{med.avgSeverityChange}
+                              </div>
+                              <div className="text-xs text-slate-600">avg change</div>
+                            </div>
+                            {med.pattern === 'symptoms-often-lower' ? (
+                              <TrendUpIcon />
+                            ) : med.pattern === 'symptoms-often-higher' ? (
+                              <TrendDownIcon />
+                            ) : (
+                              <div className="w-4 h-4 bg-slate-400 rounded-full"></div>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Other analytics results would continue here... */}
+              {/* No Patterns Found */}
+              {analyticsInsights.medicationTimingPatterns.length === 0 && 
+               analyticsInsights.symptomClusters.length === 0 && 
+               analyticsInsights.temporalPatterns.length === 0 && 
+               analyticsInsights.dataCorrelations.length === 0 && 
+               analyticsInsights.trackingTrends.length === 0 && (
+                <div className="health-card text-center py-12">
+                  <div className="health-card-body">
+                    <div className="w-16 h-16 bg-slate-100 rounded-full mx-auto mb-4 flex items-center justify-center">
+                      <AnalyticsIcon size={32} color="#64748B" />
+                    </div>
+                    <h3 className="text-heading-3 mb-2">No Clear Patterns Detected</h3>
+                    <p className="text-body text-slate-600 mb-4">
+                      Your tracking data doesn't show strong patterns in the selected timeframe.
+                    </p>
+                    <p className="text-body-small text-slate-500">
+                      Try selecting a longer timeframe or continue tracking to build more comprehensive data patterns.
+                    </p>
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+        </>
       )}
 
       {/* Mobile-First Sharing Actions */}
@@ -792,8 +1386,9 @@ const Reports = () => {
           </p>
         </div>
       </div>
-{/* Empty State */}
-      {filtered.symptoms.length === 0 && filtered.medicationLogs.length === 0 && (
+
+      {/* Empty State */}
+      {filtered.symptoms.length === 0 && filtered.medicationLogs.length === 0 && activeTab === 'summary' && (
         <div className="health-card text-center py-12">
           <div className="health-card-body">
             <div className="w-16 h-16 bg-slate-100 rounded-full mx-auto mb-4 flex items-center justify-center">
@@ -819,7 +1414,7 @@ const Reports = () => {
             Sharing with Healthcare Providers
           </h4>
           <p className="text-primary-800 text-sm leading-relaxed">
-            Use the share button to send your {activeTab === 'insights' ? 'insights and patterns' : 'health summary'} via 
+            Use the share button to send your {getActiveTabName().toLowerCase()} via 
             text, email, or any messaging app. These data-driven insights help your healthcare provider 
             understand your health patterns and make more informed decisions.
           </p>
