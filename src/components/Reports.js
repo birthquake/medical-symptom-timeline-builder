@@ -1019,7 +1019,8 @@ const Reports = () => {
               </div>
             </div>
           </div>
-{/* Advanced Analytics Results */}
+
+          {/* Advanced Analytics Results */}
           {hasInsufficientAnalyticsData ? (
             <div className="health-card text-center py-12">
               <div className="health-card-body">
