@@ -935,8 +935,8 @@ const Reports = () => {
       {/* Tab Navigation */}
       <div className="health-card">
         <div className="health-card-body">
-          <div className="grid grid-cols-3 gap-2 bg-slate-50 p-1 rounded-lg">
-            <button
+<div className="grid grid-cols-1 sm:grid-cols-3 gap-2 bg-slate-50 p-1 rounded-lg">
+        <button
               onClick={() => setActiveTab('summary')}
               className={`flex items-center justify-center gap-2 px-4 py-3 rounded-md font-medium text-sm transition-all ${
                 activeTab === 'summary' ? 'bg-secondary-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
