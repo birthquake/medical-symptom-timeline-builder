@@ -158,8 +158,168 @@ const Reports = () => {
     dataCorrelations: [],
     trackingTrends: []
   });
+  const [loadingAnalytics, setLoadingAnalytics] = useState(false);import React, { useState, useEffect } from 'react';
+
+// Inline SVG Icons
+const ReportsIcon = ({ color = "#8B5CF6", size = 24 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <path 
+      d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" 
+      stroke={color} 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+      fill="none"
+    />
+    <polyline 
+      points="14,2 14,8 20,8" 
+      stroke={color} 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+    />
+    <line 
+      x1="16" y1="13" x2="8" y2="13" 
+      stroke={color} 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+    />
+    <line 
+      x1="16" y1="17" x2="8" y2="17" 
+      stroke={color} 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+const TrendsIcon = ({ color = "#8B5CF6", size = 24 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <polyline 
+      points="22,12 18,12 15,21 9,3 6,12 2,12" 
+      stroke={color} 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+const AnalyticsIcon = ({ color = "#3B82F6", size = 24 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <polyline points="22,12 18,12 15,21 9,3 6,12 2,12" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const ShareIcon = ({ color = "white", size = 20 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const CopyIcon = ({ size = 20 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" stroke="currentColor" strokeWidth="2"/>
+    <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" stroke="currentColor" strokeWidth="2"/>
+  </svg>
+);
+
+const EmailIcon = ({ size = 20 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" strokeWidth="2"/>
+    <polyline points="22,6 12,13 2,6" stroke="currentColor" strokeWidth="2"/>
+  </svg>
+);
+
+const CalendarIcon = ({ size = 16, color = "#64748B" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke={color} strokeWidth="2"/>
+    <line x1="16" y1="2" x2="16" y2="6" stroke={color} strokeWidth="2" strokeLinecap="round"/>
+    <line x1="8" y1="2" x2="8" y2="6" stroke={color} strokeWidth="2" strokeLinecap="round"/>
+    <line x1="3" y1="10" x2="21" y2="10" stroke={color} strokeWidth="2" strokeLinecap="round"/>
+  </svg>
+);
+
+const ChartIcon = ({ size = 16, color = "#3B82F6" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <polyline points="22,12 18,12 15,21 9,3 6,12 2,12" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const ClockIcon = ({ size = 16, color = "#3B82F6" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <circle cx="12" cy="12" r="10" stroke={color} strokeWidth="2"/>
+    <polyline points="12,6 12,12 16,14" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const PillIcon = ({ size = 16, color = "#059669" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <path d="M10.5 20.5a6.5 6.5 0 1 0-7-7l7 7z" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M13.5 10.5a6.5 6.5 0 1 0 7 7l-7-7z" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <line x1="12" y1="12" x2="12" y2="12" stroke={color} strokeWidth="2" strokeLinecap="round"/>
+  </svg>
+);
+
+const WarningIcon = ({ size = 16, color = "#F59E0B" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <line x1="12" y1="9" x2="12" y2="13" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <line x1="12" y1="17" x2="12.01" y2="17" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const TrendUpIcon = ({ size = 16, color = "#059669" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <polyline points="23,6 13.5,15.5 8.5,10.5 1,18" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <polyline points="17,6 23,6 23,12" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const TrendDownIcon = ({ size = 16, color = "#DC2626" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <polyline points="23,18 13.5,8.5 8.5,13.5 1,6" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <polyline points="17,18 23,18 23,12" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const Reports = () => {
+  const [activeTab, setActiveTab] = useState('summary'); // 'summary', 'insights', or 'analytics'
+  const [reportData, setReportData] = useState({
+    symptoms: [],
+    medications: [],
+    medicationLogs: []
+  });
+  const [reportSettings, setReportSettings] = useState({
+    startDate: '',
+    endDate: '',
+    includeSymptoms: true,
+    includeMedications: true,
+    includeStatistics: true
+  });
+  const [insights, setInsights] = useState({
+    dayPatterns: [],
+    timePatterns: [],
+    severityTrends: [],
+    symptomClusters: [],
+    keyFindings: [],
+    dataQuality: { symptoms: 0, days: 0, medications: 0 }
+  });
+  const [selectedTimeframe, setSelectedTimeframe] = useState('month');
+  const [isSharing, setIsSharing] = useState(false);
+
+  // Advanced Analytics State
+  const [analyticsInsights, setAnalyticsInsights] = useState({
+    medicationTimingPatterns: [],
+    symptomClusters: [],
+    temporalPatterns: [],
+    dataCorrelations: [],
+    trackingTrends: []
+  });
   const [loadingAnalytics, setLoadingAnalytics] = useState(false);
-  // Load data on component mount
+        // Load data on component mount
   useEffect(() => {
     const symptoms = JSON.parse(localStorage.getItem('symptoms') || '[]');
     const medications = JSON.parse(localStorage.getItem('medications') || '[]');
@@ -442,7 +602,7 @@ const Reports = () => {
 
     return findings.slice(0, 5);
   };
-  // Advanced Analytics Functions
+        // Advanced Analytics Functions
   const processAdvancedAnalytics = async () => {
     if (reportData.symptoms.length < 5) {
       setAnalyticsInsights({
@@ -898,9 +1058,9 @@ const Reports = () => {
             </button>
           </div>
           
-          {/* Compact Summary */}
-          <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg">
-            <div className="flex items-center gap-3">
+          {/* Compact Summary - RESPONSIVE */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 bg-slate-50 rounded-lg">
+            <div className="flex items-center gap-3 flex-shrink-0">
               <div className="w-10 h-10 bg-secondary-100 rounded-lg flex items-center justify-center">
                 {activeTab === 'summary' ? <ReportsIcon color="var(--secondary-600)" size={20} /> : 
                  activeTab === 'insights' ? <TrendsIcon color="var(--secondary-600)" size={20} /> :
@@ -913,15 +1073,15 @@ const Reports = () => {
                 </div>
               </div>
             </div>
-            <div className="h-8 w-px bg-slate-300"></div>
-            <div className="flex items-center gap-4">
-              <div className="text-center">
+            <div className="hidden sm:block h-8 w-px bg-slate-300"></div>
+            <div className="flex items-center gap-3 sm:gap-4 w-full sm:w-auto">
+              <div className="text-center flex-1 sm:flex-none">
                 <div className="text-sm font-bold text-error-600">{getActiveTabData().symptoms}</div>
                 <div className="text-xs text-slate-600">
                   {activeTab === 'analytics' ? 'Entries' : 'Symptoms'}
                 </div>
               </div>
-              <div className="text-center">
+              <div className="text-center flex-1 sm:flex-none">
                 <div className="text-sm font-bold text-success-600">{getActiveTabData().medications}</div>
                 <div className="text-xs text-slate-600">
                   {activeTab === 'analytics' ? 'Patterns' : 'Medications'}
@@ -960,6 +1120,7 @@ const Reports = () => {
           </div>
         </div>
       </div>
+
       {/* Content based on active tab */}
       {activeTab === 'summary' ? (
         <>
@@ -968,8 +1129,8 @@ const Reports = () => {
             <div className="health-card-body">
               <h3 className="text-heading-3 mb-4">Report Settings</h3>
               
-              {/* Date Range */}
-              <div className="grid grid-cols-2 gap-4 mb-6">
+              {/* Date Range - RESPONSIVE */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">Start Date:</label>
                   <div className="relative">
@@ -977,7 +1138,7 @@ const Reports = () => {
                       type="date"
                       value={reportSettings.startDate}
                       onChange={(e) => setReportSettings(prev => ({ ...prev, startDate: e.target.value }))}
-                      className="form-input pl-10"
+                      className="form-input pl-10 w-full"
                     />
                     <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
                       <CalendarIcon />
@@ -991,7 +1152,7 @@ const Reports = () => {
                       type="date"
                       value={reportSettings.endDate}
                       onChange={(e) => setReportSettings(prev => ({ ...prev, endDate: e.target.value }))}
-                      className="form-input pl-10"
+                      className="form-input pl-10 w-full"
                     />
                     <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
                       <CalendarIcon />
@@ -1033,8 +1194,8 @@ const Reports = () => {
                   <h3 className="text-heading-3">Report Preview</h3>
                 </div>
 
-                {/* Stats Grid */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                {/* Stats Grid - RESPONSIVE */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                   <div className="text-center p-4 bg-gradient-to-br from-error-50 to-error-100 rounded-lg border border-error-200 transform transition-transform hover:-translate-y-0.5">
                     <div className="text-2xl font-bold text-error-600 mb-1">{statistics.totalSymptoms}</div>
                     <div className="text-xs text-error-700 font-medium">Symptoms</div>
@@ -1104,8 +1265,8 @@ const Reports = () => {
                 ))}
               </div>
 
-              {/* Data Quality Overview */}
-              <div className="grid grid-cols-3 gap-4 mb-6">
+              {/* Data Quality Overview - RESPONSIVE */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
                 <div className="text-center p-4 bg-error-50 border border-error-200 rounded-lg">
                   <div className="text-2xl font-bold text-error-600 mb-1">{insights.dataQuality.symptoms}</div>
                   <div className="text-xs text-error-700 font-medium">Symptoms Tracked</div>
@@ -1150,12 +1311,12 @@ const Reports = () => {
 
                 <div className="space-y-3">
                   {insights.dayPatterns.map((pattern, index) => (
-                    <div key={index} className="flex items-center justify-between p-4 bg-success-50 border border-success-200 rounded-lg">
-                      <div>
+                    <div key={index} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-success-50 border border-success-200 rounded-lg gap-3">
+                      <div className="flex-1">
                         <div className="font-semibold text-success-900 mb-1">{pattern.day}s</div>
                         <div className="text-sm text-success-700">{pattern.insight}</div>
                       </div>
-                      <div className="text-right">
+                      <div className="text-right sm:flex-shrink-0">
                         <div className="text-2xl font-bold text-success-600">{pattern.count}</div>
                         <div className="text-xs text-success-600">avg {pattern.avgSeverity}</div>
                       </div>
@@ -1177,12 +1338,12 @@ const Reports = () => {
 
                 <div className="space-y-3">
                   {insights.timePatterns.map((pattern, index) => (
-                    <div key={index} className="flex items-center justify-between p-4 bg-primary-50 border border-primary-200 rounded-lg">
-                      <div>
+                    <div key={index} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-primary-50 border border-primary-200 rounded-lg gap-3">
+                      <div className="flex-1">
                         <div className="font-semibold text-primary-900 mb-1">{pattern.period}</div>
                         <div className="text-sm text-primary-700">Average severity: {pattern.avgSeverity}</div>
                       </div>
-                      <div className="text-right">
+                      <div className="text-right sm:flex-shrink-0">
                         <div className="text-2xl font-bold text-primary-600">{pattern.percentage}%</div>
                         <div className="text-xs text-primary-600">of symptoms</div>
                       </div>
@@ -1280,17 +1441,17 @@ const Reports = () => {
                     
                     <div className="space-y-3">
                       {analyticsInsights.medicationTimingPatterns.map((med, index) => (
-                        <div key={index} className="flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-200">
+                        <div key={index} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-200 gap-3">
                           <div className="flex-1">
                             <div className="font-semibold text-slate-900 mb-1">{med.medicationName}</div>
-                            <div className="text-body-small text-slate-600">
+                            <div className="text-body-small text-slate-600 mb-2">
                               {med.improvementRate}% of instances showed lower symptoms after • {med.dataPoints} log comparisons
                             </div>
-                            <div className="text-xs text-slate-500 mt-1">
+                            <div className="text-xs text-slate-500">
                               Data confidence: {med.confidence}
                             </div>
                           </div>
-                          <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-3 sm:flex-shrink-0">
                             <div className="text-right">
                               <div className={`text-lg font-bold ${
                                 med.avgSeverityChange > 0 ? 'text-success-600' : 
@@ -1315,7 +1476,6 @@ const Reports = () => {
                 </div>
               )}
 
-              {/* Other analytics results would continue here... */}
               {/* No Patterns Found */}
               {analyticsInsights.medicationTimingPatterns.length === 0 && 
                analyticsInsights.symptomClusters.length === 0 && 
@@ -1362,8 +1522,8 @@ const Reports = () => {
             {isSharing ? 'Preparing...' : 'Share Report'}
           </button>
 
-          {/* Alternative Actions */}
-          <div className="grid grid-cols-2 gap-3">
+          {/* Alternative Actions - RESPONSIVE */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <button onClick={handleCopy} className="btn btn-secondary">
               <CopyIcon />
               Copy Text
