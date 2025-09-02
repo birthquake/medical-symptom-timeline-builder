@@ -557,3 +557,95 @@ body {
   white-space: nowrap;
   border: 0;
 }
+/* Add these responsive utilities to the end of your index.css file */
+
+/* Responsive Breakpoints */
+@media (min-width: 640px) {
+  /* sm: breakpoint utilities */
+  .sm\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sm\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .sm\:flex-row { flex-direction: row; }
+  .sm\:flex-none { flex: none; }
+  .sm\:w-auto { width: auto; }
+  .sm\:items-center { align-items: center; }
+  .sm\:flex-shrink-0 { flex-shrink: 0; }
+  .sm\:gap-4 { gap: var(--space-4); }
+}
+
+@media (min-width: 1024px) {
+  /* lg: breakpoint utilities */
+  .lg\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+/* Add viewport width constraints to prevent overflow */
+html {
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+/* Ensure main app container never exceeds viewport */
+#root {
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Make all direct children respect container bounds */
+.container, 
+.health-card,
+.health-card-body,
+.flex,
+.grid {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Ensure form inputs never force width expansion */
+.form-input {
+  max-width: 100%;
+  min-width: 0; /* Allow inputs to shrink below intrinsic width */
+}
+
+/* Ensure buttons in flex containers can shrink */
+.btn {
+  min-width: 0; /* Allow buttons to shrink */
+  white-space: nowrap;
+}
+
+/* Fix flex containers to prevent overflow */
+.flex {
+  max-width: 100%;
+  min-width: 0;
+}
+
+.flex-1 {
+  flex: 1 1 0%;
+  min-width: 0; /* Critical: allows flex items to shrink below content width */
+}
+
+/* Ensure grid containers respect viewport bounds */
+.grid {
+  max-width: 100%;
+  min-width: 0;
+}
+
+/* Make gap utilities more conservative on mobile */
+@media (max-width: 639px) {
+  .gap-6 { gap: var(--space-4); }
+  .gap-4 { gap: var(--space-3); }
+  .gap-3 { gap: var(--space-2); }
+  
+  /* Reduce padding on mobile to give more room */
+  .health-card-body {
+    padding: var(--space-4);
+  }
+  
+  /* Ensure mobile navigation doesn't cause overflow */
+  .flex {
+    flex-wrap: wrap;
+  }
+}
