@@ -36,6 +36,14 @@ const PillIcon = ({ size = 16, color = "#059669" }) => (
   </svg>
 );
 
+const WarningIcon = ({ size = 16, color = "#F59E0B" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <line x1="12" y1="9" x2="12" y2="13" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <line x1="12" y1="17" x2="12.01" y2="17" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
 const HealthAnalytics = () => {
   const [analyticsData, setAnalyticsData] = useState({
     symptoms: [],
@@ -45,11 +53,11 @@ const HealthAnalytics = () => {
   });
 
   const [insights, setInsights] = useState({
-    medicationEffectiveness: [],
+    medicationTimingPatterns: [],
     symptomClusters: [],
     temporalPatterns: [],
-    correlations: [],
-    trends: []
+    dataCorrelations: [],
+    trackingTrends: []
   });
 
   const [selectedTimeframe, setSelectedTimeframe] = useState('month');
@@ -110,11 +118,11 @@ const HealthAnalytics = () => {
   const processAdvancedAnalytics = async () => {
     if (analyticsData.symptoms.length < 5) {
       setInsights({
-        medicationEffectiveness: [],
+        medicationTimingPatterns: [],
         symptomClusters: [],
         temporalPatterns: [],
-        correlations: [],
-        trends: []
+        dataCorrelations: [],
+        trackingTrends: []
       });
       return;
     }
@@ -124,36 +132,36 @@ const HealthAnalytics = () => {
     // Filter data by selected timeframe
     const filteredData = filterDataByTimeframe(analyticsData, selectedTimeframe);
     
-    // Process different types of analysis
-    const medicationEffectiveness = await analyzeMedicationEffectiveness(filteredData);
+    // Process different types of pattern analysis
+    const medicationTimingPatterns = await analyzeMedicationTimingPatterns(filteredData);
     const symptomClusters = await analyzeSymptomClusters(filteredData);
     const temporalPatterns = await analyzeTemporalPatterns(filteredData);
-    const correlations = await analyzeCorrelations(filteredData);
-    const trends = await analyzeTrends(filteredData);
+    const dataCorrelations = await analyzeDataCorrelations(filteredData);
+    const trackingTrends = await analyzeTrackingTrends(filteredData);
 
     setInsights({
-      medicationEffectiveness,
+      medicationTimingPatterns,
       symptomClusters,
       temporalPatterns,
-      correlations,
-      trends
+      dataCorrelations,
+      trackingTrends
     });
 
     setLoadingAnalysis(false);
   };
 
-  const analyzeMedicationEffectiveness = async (data) => {
-    const effectiveness = [];
+  const analyzeMedicationTimingPatterns = async (data) => {
+    const timingPatterns = [];
 
     data.medications.forEach(medication => {
       const medLogs = data.medicationLogs.filter(log => log.medicationName === medication.name);
       if (medLogs.length < 3) return;
 
-      // Analyze symptoms before and after medication doses
-      const effectivenessData = medLogs.map(log => {
+      // Analyze symptom timing patterns around medication logs
+      const timingData = medLogs.map(log => {
         const logTime = new Date(log.timestamp);
         
-        // Look for symptoms 6 hours before and 24 hours after medication
+        // Look for symptoms 6 hours before and 24 hours after medication log
         const sixHoursBefore = new Date(logTime.getTime() - 6 * 60 * 60 * 1000);
         const twentyFourHoursAfter = new Date(logTime.getTime() + 24 * 60 * 60 * 1000);
         
@@ -178,27 +186,28 @@ const HealthAnalytics = () => {
         return {
           beforeSeverity: avgSeverityBefore,
           afterSeverity: avgSeverityAfter,
-          improvement: avgSeverityBefore - avgSeverityAfter,
+          severityDifference: avgSeverityBefore - avgSeverityAfter,
           hasData: symptomsBefore.length > 0 && symptomsAfter.length > 0
         };
       }).filter(data => data.hasData);
 
-      if (effectivenessData.length > 0) {
-        const avgImprovement = effectivenessData.reduce((sum, d) => sum + d.improvement, 0) / effectivenessData.length;
-        const effectiveCount = effectivenessData.filter(d => d.improvement > 0).length;
-        const effectivenessRate = (effectiveCount / effectivenessData.length) * 100;
+      if (timingData.length >= 3) { // Require at least 3 data points
+        const avgDifference = timingData.reduce((sum, d) => sum + d.severityDifference, 0) / timingData.length;
+        const improvementInstances = timingData.filter(d => d.severityDifference > 0).length;
+        const improvementRate = (improvementInstances / timingData.length) * 100;
 
-        effectiveness.push({
+        timingPatterns.push({
           medicationName: medication.name,
-          avgImprovement: parseFloat(avgImprovement.toFixed(1)),
-          effectivenessRate: Math.round(effectivenessRate),
-          dataPoints: effectivenessData.length,
-          trend: avgImprovement > 0 ? 'improving' : avgImprovement < 0 ? 'worsening' : 'stable'
+          avgSeverityChange: parseFloat(avgDifference.toFixed(1)),
+          improvementRate: Math.round(improvementRate),
+          dataPoints: timingData.length,
+          pattern: avgDifference > 0.5 ? 'symptoms-often-lower' : avgDifference < -0.5 ? 'symptoms-often-higher' : 'no-clear-pattern',
+          confidence: timingData.length >= 7 ? 'moderate' : 'low'
         });
       }
     });
 
-    return effectiveness.sort((a, b) => b.avgImprovement - a.avgImprovement);
+    return timingPatterns.sort((a, b) => b.avgSeverityChange - a.avgSeverityChange);
   };
 
   const analyzeSymptomClusters = async (data) => {
@@ -214,7 +223,7 @@ const HealthAnalytics = () => {
       symptomsByDay[dayKey].push(symptom);
     });
 
-    // Find days with multiple symptoms (clusters)
+    // Find days with multiple symptoms (potential clusters)
     const clusterDays = Object.entries(symptomsByDay)
       .filter(([day, symptoms]) => symptoms.length > 1)
       .map(([day, symptoms]) => ({
@@ -251,7 +260,8 @@ const HealthAnalytics = () => {
             symptoms: combo.combination,
             frequency: combo.count,
             avgSeverity: parseFloat(combo.avgSeverity.toFixed(1)),
-            recentDate: combo.dates[combo.dates.length - 1]
+            recentDate: combo.dates[combo.dates.length - 1],
+            confidence: combo.count >= 4 ? 'moderate' : 'low'
           });
         }
       });
@@ -262,6 +272,8 @@ const HealthAnalytics = () => {
 
   const analyzeTemporalPatterns = async (data) => {
     const patterns = [];
+
+    if (data.symptoms.length < 5) return patterns;
 
     // Time of day patterns
     const hourlySymptoms = {};
@@ -275,12 +287,14 @@ const HealthAnalytics = () => {
       hourlySymptoms[hour].totalSeverity += symptom.severity;
     });
 
-    // Find peak hours
+    // Find peak hours (only if significant)
+    const totalSymptoms = data.symptoms.length;
+    const avgHourlyCount = totalSymptoms / 24;
     const peakHour = Object.entries(hourlySymptoms)
-      .filter(([hour, data]) => data.count > 0)
+      .filter(([hour, data]) => data.count >= 3 && data.count > avgHourlyCount * 1.5)
       .sort(([,a], [,b]) => b.count - a.count)[0];
 
-    if (peakHour && peakHour[1].count >= 3) {
+    if (peakHour) {
       const hour = parseInt(peakHour[0]);
       const timeOfDay = hour < 6 ? 'Early Morning' : 
                       hour < 12 ? 'Morning' :
@@ -289,10 +303,11 @@ const HealthAnalytics = () => {
       
       patterns.push({
         type: 'time_of_day',
-        pattern: `${timeOfDay} Peak`,
-        description: `Most symptoms occur around ${hour}:00`,
+        pattern: `${timeOfDay} Pattern`,
+        description: `${Math.round((peakHour[1].count / avgHourlyCount - 1) * 100)}% more symptoms around ${hour}:00`,
         frequency: peakHour[1].count,
-        avgSeverity: parseFloat((peakHour[1].totalSeverity / peakHour[1].count).toFixed(1))
+        avgSeverity: parseFloat((peakHour[1].totalSeverity / peakHour[1].count).toFixed(1)),
+        confidence: peakHour[1].count >= 5 ? 'moderate' : 'low'
       });
     }
 
@@ -310,9 +325,9 @@ const HealthAnalytics = () => {
       dailySymptoms[day].totalSeverity += symptom.severity;
     });
 
-    const avgDailyCount = data.symptoms.length / 7;
+    const avgDailyCount = totalSymptoms / 7;
     const significantDays = Object.entries(dailySymptoms)
-      .filter(([day, data]) => data.count > avgDailyCount * 1.5 && data.count >= 3)
+      .filter(([day, data]) => data.count >= 3 && data.count > avgDailyCount * 1.5)
       .sort(([,a], [,b]) => b.count - a.count);
 
     if (significantDays.length > 0) {
@@ -322,14 +337,15 @@ const HealthAnalytics = () => {
         pattern: `${dayName} Pattern`,
         description: `${Math.round(((dayData.count / avgDailyCount) - 1) * 100)}% more symptoms on ${dayName}s`,
         frequency: dayData.count,
-        avgSeverity: parseFloat((dayData.totalSeverity / dayData.count).toFixed(1))
+        avgSeverity: parseFloat((dayData.totalSeverity / dayData.count).toFixed(1)),
+        confidence: dayData.count >= 5 ? 'moderate' : 'low'
       });
     }
 
     return patterns;
   };
 
-  const analyzeCorrelations = async (data) => {
+  const analyzeDataCorrelations = async (data) => {
     const correlations = [];
     
     if (data.symptoms.length < 10) return correlations;
@@ -343,7 +359,7 @@ const HealthAnalytics = () => {
       symptomGroups[symptom.name].push(symptom);
     });
 
-    // Find symptoms that often occur on the same day
+    // Find symptoms that may occur on the same day
     const symptomTypes = Object.keys(symptomGroups).filter(type => symptomGroups[type].length >= 3);
     
     for (let i = 0; i < symptomTypes.length; i++) {
@@ -354,31 +370,33 @@ const HealthAnalytics = () => {
         const datesA = new Set(symptomGroups[symptomA].map(s => new Date(s.timestamp).toDateString()));
         const datesB = new Set(symptomGroups[symptomB].map(s => new Date(s.timestamp).toDateString()));
         
-        // Find intersection (days when both symptoms occurred)
+        // Find intersection (days when both symptoms were logged)
         const intersection = [...datesA].filter(date => datesB.has(date));
         
         if (intersection.length >= 2) {
           const correlationStrength = intersection.length / Math.min(datesA.size, datesB.size);
           
-          correlations.push({
-            symptomA,
-            symptomB,
-            coOccurrences: intersection.length,
-            strength: Math.round(correlationStrength * 100),
-            pattern: `${symptomA} & ${symptomB}`,
-            description: `Occur together ${Math.round(correlationStrength * 100)}% of the time`
-          });
+          if (correlationStrength >= 0.3) { // Only show correlations above 30%
+            correlations.push({
+              symptomA,
+              symptomB,
+              coOccurrences: intersection.length,
+              strength: Math.round(correlationStrength * 100),
+              pattern: `${symptomA} & ${symptomB}`,
+              description: `Logged together on ${intersection.length} days`,
+              confidence: intersection.length >= 4 ? 'moderate' : 'low'
+            });
+          }
         }
       }
     }
 
     return correlations
-      .filter(c => c.strength >= 30) // Only show correlations above 30%
       .sort((a, b) => b.strength - a.strength)
       .slice(0, 5);
   };
 
-  const analyzeTrends = async (data) => {
+  const analyzeTrackingTrends = async (data) => {
     const trends = [];
     
     if (data.symptoms.length < 7) return trends;
@@ -389,24 +407,25 @@ const HealthAnalytics = () => {
     const firstHalf = sortedSymptoms.slice(0, midPoint);
     const secondHalf = sortedSymptoms.slice(midPoint);
 
-    // Overall severity trend
+    // Overall severity trend in tracking data
     const firstHalfAvg = firstHalf.reduce((sum, s) => sum + s.severity, 0) / firstHalf.length;
     const secondHalfAvg = secondHalf.reduce((sum, s) => sum + s.severity, 0) / secondHalf.length;
     const severityChange = secondHalfAvg - firstHalfAvg;
     const severityChangePercent = Math.round((severityChange / firstHalfAvg) * 100);
 
-    if (Math.abs(severityChangePercent) >= 10) {
+    if (Math.abs(severityChangePercent) >= 15) { // Only show significant changes
       trends.push({
-        type: 'overall_severity',
+        type: 'severity_tracking',
         trend: severityChange > 0 ? 'increasing' : 'decreasing',
         change: Math.abs(severityChangePercent),
-        description: `Average severity ${severityChange > 0 ? 'increased' : 'decreased'} by ${Math.abs(severityChangePercent)}%`,
+        description: `Tracked severity levels have ${severityChange > 0 ? 'increased' : 'decreased'} by ${Math.abs(severityChangePercent)}%`,
         current: parseFloat(secondHalfAvg.toFixed(1)),
-        previous: parseFloat(firstHalfAvg.toFixed(1))
+        previous: parseFloat(firstHalfAvg.toFixed(1)),
+        confidence: sortedSymptoms.length >= 14 ? 'moderate' : 'low'
       });
     }
 
-    // Frequency trend
+    // Frequency trend in tracking data
     const firstHalfDays = (new Date(firstHalf[firstHalf.length - 1].timestamp) - new Date(firstHalf[0].timestamp)) / (1000 * 60 * 60 * 24) + 1;
     const secondHalfDays = (new Date(secondHalf[secondHalf.length - 1].timestamp) - new Date(secondHalf[0].timestamp)) / (1000 * 60 * 60 * 24) + 1;
     
@@ -414,14 +433,15 @@ const HealthAnalytics = () => {
     const secondHalfFreq = secondHalf.length / secondHalfDays;
     const freqChange = ((secondHalfFreq - firstHalfFreq) / firstHalfFreq) * 100;
 
-    if (Math.abs(freqChange) >= 20) {
+    if (Math.abs(freqChange) >= 25) { // Only show significant changes
       trends.push({
-        type: 'frequency',
+        type: 'tracking_frequency',
         trend: freqChange > 0 ? 'increasing' : 'decreasing',
         change: Math.abs(Math.round(freqChange)),
-        description: `Symptom frequency ${freqChange > 0 ? 'increased' : 'decreased'} by ${Math.abs(Math.round(freqChange))}%`,
+        description: `Symptom tracking frequency has ${freqChange > 0 ? 'increased' : 'decreased'} by ${Math.abs(Math.round(freqChange))}%`,
         current: parseFloat(secondHalfFreq.toFixed(1)),
-        previous: parseFloat(firstHalfFreq.toFixed(1))
+        previous: parseFloat(firstHalfFreq.toFixed(1)),
+        confidence: sortedSymptoms.length >= 14 ? 'moderate' : 'low'
       });
     }
 
@@ -441,13 +461,26 @@ const HealthAnalytics = () => {
 
   return (
     <div className="flex flex-col gap-6">
+      {/* Medical Disclaimer */}
+      <div className="bg-warning-50 border border-warning-200 rounded-lg p-4">
+        <div className="flex items-center gap-2 mb-2">
+          <WarningIcon />
+          <h4 className="font-semibold text-warning-800">Important Notice</h4>
+        </div>
+        <p className="text-warning-700 text-sm leading-relaxed">
+          These are data patterns from your tracking logs, not medical analysis. 
+          All insights should be discussed with your healthcare provider. 
+          This information does not constitute medical advice, diagnosis, or treatment recommendations.
+        </p>
+      </div>
+
       {/* Streamlined Header */}
       <div className="health-card">
         <div className="health-card-body">
           <div className="flex justify-between items-start mb-4">
             <div>
-              <h2 className="text-heading-1">Health Analytics</h2>
-              <p className="text-body">Advanced insights and pattern recognition</p>
+              <h2 className="text-heading-1">Data Patterns</h2>
+              <p className="text-body">Pattern recognition from your tracking data</p>
             </div>
             <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
               <AnalyticsIcon size={20} />
@@ -469,13 +502,13 @@ const HealthAnalytics = () => {
             <div className="flex items-center gap-4">
               <div className="text-center">
                 <div className="text-sm font-bold text-primary-600">{analyticsData.symptoms.length}</div>
-                <div className="text-xs text-slate-600">Data Points</div>
+                <div className="text-xs text-slate-600">Entries</div>
               </div>
               <div className="text-center">
                 <div className="text-sm font-bold text-success-600">
-                  {insights.medicationEffectiveness.length + insights.symptomClusters.length + insights.temporalPatterns.length}
+                  {insights.medicationTimingPatterns.length + insights.symptomClusters.length + insights.temporalPatterns.length}
                 </div>
-                <div className="text-xs text-slate-600">Insights</div>
+                <div className="text-xs text-slate-600">Patterns</div>
               </div>
             </div>
           </div>
@@ -512,12 +545,12 @@ const HealthAnalytics = () => {
             <div className="w-16 h-16 bg-slate-100 rounded-full mx-auto mb-4 flex items-center justify-center">
               <AnalyticsIcon size={32} color="#64748B" />
             </div>
-            <h3 className="text-heading-3 mb-2">Need More Data</h3>
+            <h3 className="text-heading-3 mb-2">Need More Tracking Data</h3>
             <p className="text-body text-slate-600 mb-4">
-              Advanced analytics require at least 5 symptom entries to generate meaningful insights.
+              Pattern analysis requires at least 5 symptom entries to generate meaningful insights.
             </p>
             <p className="text-body-small text-slate-500">
-              Continue tracking symptoms and medications to unlock personalized health insights.
+              Continue tracking symptoms and medications to unlock personalized data patterns.
             </p>
           </div>
         </div>
@@ -527,45 +560,56 @@ const HealthAnalytics = () => {
             <div className="w-16 h-16 bg-primary-100 rounded-full mx-auto mb-4 flex items-center justify-center animate-pulse">
               <AnalyticsIcon size={32} />
             </div>
-            <h3 className="text-heading-3 mb-2">Processing Analytics</h3>
+            <h3 className="text-heading-3 mb-2">Analyzing Patterns</h3>
             <p className="text-body text-slate-600">
-              Analyzing your health data for patterns and insights...
+              Processing your tracking data for patterns...
             </p>
           </div>
         </div>
       ) : (
         <>
-          {/* Medication Effectiveness */}
-          {insights.medicationEffectiveness.length > 0 && (
+          {/* Analytics results go here - continue with Section 3B */}
+        {/* Medication Timing Patterns */}
+          {insights.medicationTimingPatterns.length > 0 && (
             <div className="health-card">
               <div className="health-card-body">
                 <div className="flex items-center gap-2 mb-4">
                   <PillIcon />
-                  <h3 className="text-heading-3">Medication Effectiveness</h3>
+                  <h3 className="text-heading-3">Medication Timing Patterns</h3>
+                </div>
+                
+                <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 mb-4">
+                  <p className="text-slate-700 text-xs leading-relaxed">
+                    <strong>Note:</strong> These patterns compare symptom severity before vs. after medication logging times. 
+                    This is tracking data analysis, not medical effectiveness evaluation.
+                  </p>
                 </div>
                 
                 <div className="space-y-3">
-                  {insights.medicationEffectiveness.map((med, index) => (
+                  {insights.medicationTimingPatterns.map((med, index) => (
                     <div key={index} className="flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-200">
                       <div className="flex-1">
                         <div className="font-semibold text-slate-900 mb-1">{med.medicationName}</div>
                         <div className="text-body-small text-slate-600">
-                          {med.effectivenessRate}% effective • {med.dataPoints} doses analyzed
+                          {med.improvementRate}% of instances showed lower symptoms after • {med.dataPoints} log comparisons
+                        </div>
+                        <div className="text-xs text-slate-500 mt-1">
+                          Data confidence: {med.confidence}
                         </div>
                       </div>
                       <div className="flex items-center gap-3">
                         <div className="text-right">
                           <div className={`text-lg font-bold ${
-                            med.avgImprovement > 0 ? 'text-success-600' : 
-                            med.avgImprovement < 0 ? 'text-error-600' : 'text-slate-600'
+                            med.avgSeverityChange > 0 ? 'text-success-600' : 
+                            med.avgSeverityChange < 0 ? 'text-error-600' : 'text-slate-600'
                           }`}>
-                            {med.avgImprovement > 0 ? '+' : ''}{med.avgImprovement}
+                            {med.avgSeverityChange > 0 ? '+' : ''}{med.avgSeverityChange}
                           </div>
-                          <div className="text-xs text-slate-600">avg improvement</div>
+                          <div className="text-xs text-slate-600">avg change</div>
                         </div>
-                        {med.trend === 'improving' ? (
+                        {med.pattern === 'symptoms-often-lower' ? (
                           <TrendUpIcon />
-                        ) : med.trend === 'worsening' ? (
+                        ) : med.pattern === 'symptoms-often-higher' ? (
                           <TrendDownIcon />
                         ) : (
                           <div className="w-4 h-4 bg-slate-400 rounded-full"></div>
@@ -590,7 +634,7 @@ const HealthAnalytics = () => {
                     <circle cx="5" cy="12" r="2" stroke="#F59E0B" strokeWidth="2"/>
                     <circle cx="19" cy="12" r="2" stroke="#F59E0B" strokeWidth="2"/>
                   </svg>
-                  <h3 className="text-heading-3">Symptom Clusters</h3>
+                  <h3 className="text-heading-3">Symptom Co-occurrences</h3>
                 </div>
                 
                 <div className="space-y-3">
@@ -601,7 +645,7 @@ const HealthAnalytics = () => {
                         <div className="text-sm font-bold text-warning-700">{cluster.frequency}x</div>
                       </div>
                       <div className="text-body-small text-warning-700">
-                        Average severity: {cluster.avgSeverity} • Most recent: {new Date(cluster.recentDate).toLocaleDateString()}
+                        Avg severity: {cluster.avgSeverity} • Data confidence: {cluster.confidence}
                       </div>
                     </div>
                   ))}
@@ -624,13 +668,13 @@ const HealthAnalytics = () => {
                     <div key={index} className="p-4 bg-primary-50 rounded-lg border border-primary-200">
                       <div className="flex items-center justify-between mb-2">
                         <div className="font-semibold text-primary-900">{pattern.pattern}</div>
-                        <div className="text-sm font-bold text-primary-700">{pattern.frequency} events</div>
+                        <div className="text-sm font-bold text-primary-700">{pattern.frequency} logs</div>
                       </div>
                       <div className="text-body-small text-primary-700 mb-2">
                         {pattern.description}
                       </div>
                       <div className="text-xs text-primary-600">
-                        Average severity: {pattern.avgSeverity}
+                        Avg severity: {pattern.avgSeverity} • Confidence: {pattern.confidence}
                       </div>
                     </div>
                   ))}
@@ -639,26 +683,32 @@ const HealthAnalytics = () => {
             </div>
           )}
 
-          {/* Correlations */}
-          {insights.correlations.length > 0 && (
+          {/* Data Correlations */}
+          {insights.dataCorrelations.length > 0 && (
             <div className="health-card">
               <div className="health-card-body">
                 <div className="flex items-center gap-2 mb-4">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                     <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="#7C3AED" strokeWidth="2" fill="none"/>
                   </svg>
-                  <h3 className="text-heading-3">Symptom Correlations</h3>
+                  <h3 className="text-heading-3">Data Co-occurrences</h3>
+                </div>
+                
+                <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 mb-4">
+                  <p className="text-slate-700 text-xs leading-relaxed">
+                    <strong>Note:</strong> These show symptoms that were logged on the same days, not causal relationships.
+                  </p>
                 </div>
                 
                 <div className="space-y-3">
-                  {insights.correlations.map((correlation, index) => (
+                  {insights.dataCorrelations.map((correlation, index) => (
                     <div key={index} className="p-4 bg-secondary-50 rounded-lg border border-secondary-200">
                       <div className="flex items-center justify-between mb-2">
                         <div className="font-semibold text-secondary-900">{correlation.pattern}</div>
                         <div className="text-sm font-bold text-secondary-700">{correlation.strength}%</div>
                       </div>
                       <div className="text-body-small text-secondary-700">
-                        {correlation.description} • {correlation.coOccurrences} co-occurrences
+                        {correlation.description} • Confidence: {correlation.confidence}
                       </div>
                     </div>
                   ))}
@@ -667,17 +717,17 @@ const HealthAnalytics = () => {
             </div>
           )}
 
-          {/* Trends */}
-          {insights.trends.length > 0 && (
+          {/* Tracking Trends */}
+          {insights.trackingTrends.length > 0 && (
             <div className="health-card">
               <div className="health-card-body">
                 <div className="flex items-center gap-2 mb-4">
                   <AnalyticsIcon size={16} />
-                  <h3 className="text-heading-3">Health Trends</h3>
+                  <h3 className="text-heading-3">Tracking Data Trends</h3>
                 </div>
                 
                 <div className="space-y-3">
-                  {insights.trends.map((trend, index) => (
+                  {insights.trackingTrends.map((trend, index) => (
                     <div key={index} className={`p-4 rounded-lg border ${
                       trend.trend === 'increasing' ? 'bg-error-50 border-error-200' : 'bg-success-50 border-success-200'
                     }`}>
@@ -685,7 +735,7 @@ const HealthAnalytics = () => {
                         <div className={`font-semibold ${
                           trend.trend === 'increasing' ? 'text-error-900' : 'text-success-900'
                         }`}>
-                          {trend.type === 'overall_severity' ? 'Severity Trend' : 'Frequency Trend'}
+                          {trend.type === 'severity_tracking' ? 'Severity Data Trend' : 'Tracking Frequency Trend'}
                         </div>
                         <div className="flex items-center gap-2">
                           <div className={`text-sm font-bold ${
@@ -701,6 +751,9 @@ const HealthAnalytics = () => {
                       }`}>
                         {trend.description}
                       </div>
+                      <div className="text-xs text-slate-500 mt-1">
+                        Confidence: {trend.confidence}
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -708,23 +761,23 @@ const HealthAnalytics = () => {
             </div>
           )}
 
-          {/* No Insights Found */}
-          {insights.medicationEffectiveness.length === 0 && 
+          {/* No Patterns Found */}
+          {insights.medicationTimingPatterns.length === 0 && 
            insights.symptomClusters.length === 0 && 
            insights.temporalPatterns.length === 0 && 
-           insights.correlations.length === 0 && 
-           insights.trends.length === 0 && (
+           insights.dataCorrelations.length === 0 && 
+           insights.trackingTrends.length === 0 && (
             <div className="health-card text-center py-12">
               <div className="health-card-body">
                 <div className="w-16 h-16 bg-slate-100 rounded-full mx-auto mb-4 flex items-center justify-center">
                   <AnalyticsIcon size={32} color="#64748B" />
                 </div>
-                <h3 className="text-heading-3 mb-2">No Clear Patterns Yet</h3>
+                <h3 className="text-heading-3 mb-2">No Strong Patterns Detected</h3>
                 <p className="text-body text-slate-600 mb-4">
-                  Your data doesn't show strong patterns in the selected timeframe.
+                  Your tracking data doesn't show clear patterns in the selected timeframe.
                 </p>
                 <p className="text-body-small text-slate-500">
-                  Try selecting a longer timeframe or continue tracking to build more comprehensive insights.
+                  Try selecting a longer timeframe or continue tracking to build more comprehensive data patterns.
                 </p>
               </div>
             </div>
@@ -740,17 +793,16 @@ const HealthAnalytics = () => {
               <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="white"/>
             </svg>
           </div>
-          Understanding Your Analytics
+          Understanding Your Data Patterns
         </h4>
         <div className="text-primary-800 text-sm leading-relaxed space-y-2">
-          <div>• <strong>Medication Effectiveness:</strong> Compares symptoms 6 hours before vs 24 hours after doses</div>
-          <div>• <strong>Symptom Clusters:</strong> Identifies symptoms that frequently occur together</div>
-          <div>• <strong>Timing Patterns:</strong> Reveals when symptoms are most likely to occur</div>
-          <div>• <strong>Correlations:</strong> Shows relationships between different symptoms</div>
-          <div>• <strong>Trends:</strong> Tracks changes in symptom severity and frequency over time</div>
+          <div>• <strong>Timing Patterns:</strong> Compare logged symptom levels before vs after medication times</div>
+          <div>• <strong>Co-occurrences:</strong> Identify symptoms that were logged together on the same days</div>
+          <div>• <strong>Time Patterns:</strong> Show when symptoms are most frequently logged</div>
+          <div>• <strong>Data Trends:</strong> Track changes in your logging patterns over time</div>
         </div>
         <p className="text-primary-700 text-xs mt-4 italic">
-          These insights are based on your personal tracking data and should be discussed with your healthcare provider.
+          These patterns are derived from your personal tracking data and should be shared with your healthcare provider for proper medical interpretation.
         </p>
       </div>
     </div>
