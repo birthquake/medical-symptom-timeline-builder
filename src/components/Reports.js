@@ -597,7 +597,6 @@ const Reports = () => {
 
     return clusters.sort((a, b) => b.frequency - a.frequency).slice(0, 5);
   };
-
   const analyzeAdvancedTemporalPatterns = async (data) => {
     const patterns = [];
 
@@ -878,227 +877,19 @@ const Reports = () => {
   };
 
   const hasInsufficientAnalyticsData = reportData.symptoms.length < 5;
-  return (
-    <div className="flex flex-col gap-6">
-      {/* Streamlined Header */}
-      <div className="health-card">
-        <div className="health-card-body">
-          <div className="flex justify-between items-start mb-4">
-            <div>
-              <h2 className="text-heading-1">Health Reports</h2>
-              <p className="text-body">Generate summaries and discover patterns</p>
-            </div>
-            <button 
-              className="btn btn-primary"
-              onClick={handleShare}
-              disabled={isSharing}
-            >
-              <ShareIcon />
-              {isSharing ? 'Sharing...' : 'Share'}
-            </button>
-          </div>
-          
-          {/* Compact Summary - RESPONSIVE */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 bg-slate-50 rounded-lg">
-            <div className="flex items-center gap-3 flex-shrink-0">
-              <div className="w-10 h-10 bg-secondary-100 rounded-lg flex items-center justify-center">
-                {activeTab === 'summary' ? <ReportsIcon color="var(--secondary-600)" size={20} /> : 
-                 activeTab === 'insights' ? <TrendsIcon color="var(--secondary-600)" size={20} /> :
-                 <AnalyticsIcon color="var(--secondary-600)" size={20} />}
-              </div>
-              <div>
-                <div className="text-body-small">{activeTab === 'summary' ? 'Report Period' : 'Analysis Period'}</div>
-                <div className="text-lg font-bold text-metric">
-                  {getActiveTabData().mainMetric}
-                </div>
-              </div>
-            </div>
-            <div className="hidden sm:block h-8 w-px bg-slate-300"></div>
-            <div className="flex items-center gap-3 sm:gap-4 w-full sm:w-auto">
-              <div className="text-center flex-1 sm:flex-none">
-                <div className="text-sm font-bold text-error-600">{getActiveTabData().symptoms}</div>
-                <div className="text-xs text-slate-600">
-                  {activeTab === 'analytics' ? 'Entries' : 'Symptoms'}
-                </div>
-              </div>
-              <div className="text-center flex-1 sm:flex-none">
-                <div className="text-sm font-bold text-success-600">{getActiveTabData().medications}</div>
-                <div className="text-xs text-slate-600">
-                  {activeTab === 'analytics' ? 'Patterns' : 'Medications'}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Tab Navigation */}
-      <div className="health-card">
-        <div className="health-card-body">
-          <div className="flex gap-3">
-            <button
-              onClick={() => setActiveTab('summary')}
-              className={`btn ${activeTab === 'summary' ? 'btn-primary' : 'btn-secondary'} flex-1 flex items-center justify-center gap-2`}
-            >
-              <ReportsIcon color={activeTab === 'summary' ? 'white' : '#64748B'} size={16} />
-              Summary
-            </button>
-            <button
-              onClick={() => setActiveTab('insights')}
-              className={`btn ${activeTab === 'insights' ? 'btn-primary' : 'btn-secondary'} flex-1 flex items-center justify-center gap-2`}
-            >
-              <TrendsIcon color={activeTab === 'insights' ? 'white' : '#64748B'} size={16} />
-              Insights
-            </button>
-            <button
-              onClick={() => setActiveTab('analytics')}
-              className={`btn ${activeTab === 'analytics' ? 'btn-primary' : 'btn-secondary'} flex-1 flex items-center justify-center gap-2`}
-            >
-              <AnalyticsIcon color={activeTab === 'analytics' ? 'white' : '#64748B'} size={16} />
-              Patterns
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Content based on active tab */}
-      {activeTab === 'summary' ? (
-        <>
-          {/* Report Settings */}
-          <div className="health-card">
-            <div className="health-card-body">
-              <h3 className="text-heading-3 mb-4">Report Settings</h3>
-              
-              {/* Date Range - RESPONSIVE */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Start Date:</label>
-                  <div className="relative">
-                    <input
-                      type="date"
-                      value={reportSettings.startDate}
-                      onChange={(e) => setReportSettings(prev => ({ ...prev, startDate: e.target.value }))}
-                      className="form-input pl-10 w-full"
-                    />
-                    <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                      <CalendarIcon />
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">End Date:</label>
-                  <div className="relative">
-                    <input
-                      type="date"
-                      value={reportSettings.endDate}
-                      onChange={(e) => setReportSettings(prev => ({ ...prev, endDate: e.target.value }))}
-                      className="form-input pl-10 w-full"
-                    />
-                    <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                      <CalendarIcon />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Include Options */}
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-3">Include in Report:</label>
-                <div className="space-y-2">
-                  {[
-                    { key: 'includeSymptoms', label: 'Symptoms & Severity Levels' },
-                    { key: 'includeMedications', label: 'Current Medications' },
-                    { key: 'includeStatistics', label: 'Summary Statistics' }
-                  ].map(option => (
-                    <label key={option.key} className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-100 transition-colors">
-                      <input
-                        type="checkbox"
-                        checked={reportSettings[option.key]}
-                        onChange={(e) => setReportSettings(prev => ({ ...prev, [option.key]: e.target.checked }))}
-                        className="w-4 h-4 text-primary-600 bg-white border-slate-300 rounded focus:ring-primary-500 focus:ring-2"
-                      />
-                      <span className="text-sm font-medium text-slate-700 flex-1">{option.label}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Statistics Preview */}
-          {reportSettings.includeStatistics && (filtered.symptoms.length > 0 || filtered.medicationLogs.length > 0) && (
-            <div className="health-card">
-              <div className="health-card-body">
-                <div className="flex items-center gap-2 mb-4">
-                  <ChartIcon />
-                  <h3 className="text-heading-3">Report Preview</h3>
-                </div>
-
-                {/* Stats Grid - RESPONSIVE */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                  <div className="text-center p-4 bg-gradient-to-br from-error-50 to-error-100 rounded-lg border border-error-200 transform transition-transform hover:-translate-y-0.5">
-                    <div className="text-2xl font-bold text-error-600 mb-1">{statistics.totalSymptoms}</div>
-                    <div className="text-xs text-error-700 font-medium">Symptoms</div>
-                  </div>
-
-                  <div className="text-center p-4 bg-gradient-to-br from-success-50 to-success-100 rounded-lg border border-success-200 transform transition-transform hover:-translate-y-0.5">
-                    <div className="text-2xl font-bold text-success-600 mb-1">{statistics.totalMedicationDoses}</div>
-                    <div className="text-xs text-success-700 font-medium">Medications</div>
-                  </div>
-
-                  <div className="text-center p-4 bg-gradient-to-br from-warning-50 to-warning-100 rounded-lg border border-warning-200 transform transition-transform hover:-translate-y-0.5">
-                    <div className="text-2xl font-bold" style={{ color: getSeverityColor(parseFloat(statistics.avgSeverity)) }}>
-                      {statistics.avgSeverity}
-                    </div>
-                    <div className="text-xs text-warning-700 font-medium">Avg Severity</div>
-                  </div>
-
-                  <div className="text-center p-4 bg-gradient-to-br from-primary-50 to-primary-100 rounded-lg border border-primary-200 transform transition-transform hover:-translate-y-0.5">
-                    <div className="text-2xl font-bold text-primary-600 mb-1">{statistics.actualDaysTracked}</div>
-                    <div className="text-xs text-primary-700 font-medium">Days Tracked</div>
-                  </div>
-                </div>
-
-                {/* Key Insights */}
-                <div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
-                  <h4 className="text-heading-4 mb-3">Key Insights:</h4>
-                  <div className="space-y-2 text-sm text-slate-700">
-                    <div className="flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 bg-error-500 rounded-full"></div>
-                      Most common symptom: <strong className="text-error-600">{statistics.mostCommonSymptom}</strong>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 bg-success-500 rounded-full"></div>
-                      Most taken medication: <strong className="text-success-600">{statistics.mostTakenMedication}</strong>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 bg-primary-500 rounded-full"></div>
-                      Daily averages: <strong>{statistics.dailyAverages.symptomsPerDay}</strong> symptoms, <strong>{statistics.dailyAverages.medicationsPerDay}</strong> medications
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-        </>
-      ) : activeTab === 'insights' ? (
-        <>
+  <>
           {/* Insights Content */}
           <div className="health-card">
             <div className="health-card-body">
               <h3 className="text-heading-3 mb-4">Analysis Period - {getTimeframeName()}</h3>
 
-              {/* Timeframe Selector */}
-              <div className="flex gap-2 bg-slate-50 p-1 rounded-lg mb-6">
+              {/* Timeframe Selector - UPDATED TO MATCH MAIN TAB STYLING */}
+              <div className="flex gap-3 mb-6">
                 {['week', 'month', 'quarter'].map(timeframe => (
                   <button
                     key={timeframe}
                     onClick={() => setSelectedTimeframe(timeframe)}
-                    className={`flex-1 px-3 py-2 rounded-md text-sm font-medium transition-all ${
-                      selectedTimeframe === timeframe 
-                        ? 'bg-secondary-600 text-white shadow-sm' 
-                        : 'text-slate-600 hover:text-slate-900 hover:bg-white'
-                    }`}
+                    className={`btn ${selectedTimeframe === timeframe ? 'btn-primary' : 'btn-secondary'} flex-1 flex items-center justify-center`}
                   >
                     {timeframe === 'week' ? '7 Days' : timeframe === 'month' ? '30 Days' : '90 Days'}
                   </button>
@@ -1210,19 +1001,15 @@ const Reports = () => {
             </p>
           </div>
 
-          {/* Timeframe Selector */}
+          {/* Timeframe Selector - UPDATED TO MATCH MAIN TAB STYLING */}
           <div className="health-card">
             <div className="health-card-body">
-              <div className="flex gap-2 bg-slate-50 p-1 rounded-lg">
+              <div className="flex gap-2">
                 {['week', 'month', 'quarter', 'year'].map(timeframe => (
                   <button
                     key={timeframe}
                     onClick={() => setSelectedTimeframe(timeframe)}
-                    className={`flex-1 px-3 py-2 rounded-md text-sm font-medium transition-all ${
-                      selectedTimeframe === timeframe 
-                        ? 'bg-primary-600 text-white shadow-sm' 
-                        : 'text-slate-600 hover:text-slate-900 hover:bg-white'
-                    }`}
+                    className={`btn ${selectedTimeframe === timeframe ? 'btn-primary' : 'btn-secondary'} flex-1 flex items-center justify-center`}
                   >
                     {timeframe === 'week' ? '7 Days' : 
                      timeframe === 'month' ? '30 Days' : 
@@ -1232,8 +1019,7 @@ const Reports = () => {
               </div>
             </div>
           </div>
-
-          {/* Advanced Analytics Results */}
+{/* Advanced Analytics Results */}
           {hasInsufficientAnalyticsData ? (
             <div className="health-card text-center py-12">
               <div className="health-card-body">
