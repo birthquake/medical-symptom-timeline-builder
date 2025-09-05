@@ -599,13 +599,15 @@ const processSeverityDistribution = (symptoms) => {
   ].filter(item => item.value > 0);
 };
 // Main Reports Component with Enhanced Chart Data Processing
-const Reports = ({ symptoms, medicationLogs, onExport }) => {
+const Reports = ({ onExport }) => {
   const [activeTab, setActiveTab] = useState('summary');
   const [timeframe, setTimeframe] = useState('month');
   const [isLoading, setIsLoading] = useState(true);
   const [statistics, setStatistics] = useState({});
   const [patterns, setPatterns] = useState({});
   const [analytics, setAnalytics] = useState({});
+  const [symptoms, setSymptoms] = useState([]);
+  const [medicationLogs, setMedicationLogs] = useState([]);
   
   // New chart data state
   const [chartData, setChartData] = useState({
@@ -618,6 +620,16 @@ const Reports = ({ symptoms, medicationLogs, onExport }) => {
     medicationTiming: []
   });
 
+    // Add the data loading useEffect here (BEFORE the existing useEffect):
+  useEffect(() => {
+    // Load data from localStorage
+    const savedSymptoms = JSON.parse(localStorage.getItem('symptoms') || '[]');
+    const savedMedicationLogs = JSON.parse(localStorage.getItem('medicationLogs') || '[]');
+    
+    setSymptoms(savedSymptoms);
+    setMedicationLogs(savedMedicationLogs);
+  }, []); // Run once when component mounts
+  
   useEffect(() => {
     generateReports();
   }, [symptoms, medicationLogs, timeframe]);
