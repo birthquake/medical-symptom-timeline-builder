@@ -672,9 +672,10 @@ const Reports = ({ onExport }) => {
     <div className="space-y-6">
       {/* Timeframe Selection */}
       <div className="flex justify-center mb-6">
-        <div className="bg-slate-100 rounded-lg p-1 flex">
-          {['week', 'month', 'quarter', 'year'].map((period) => (
-  <button
+<div className="bg-slate-100 rounded-lg p-1 flex gap-1">
+    {['week', 'month', 'quarter', 'year'].map((period) => (
+  
+      <button
     key={period}
     onClick={() => setTimeframe(period)}
     className={timeframe === period ? 'btn-primary' : 'btn-secondary'}
@@ -1293,14 +1294,11 @@ This report is for personal use only and should not replace professional medical
               { id: 'analytics', label: 'Analytics', icon: AnalyticsIcon }
             ].map((tab) => (
               <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center px-6 py-4 text-sm font-medium border-b-2 transition-colors ${
-                  activeTab === tab.id
-                    ? 'border-primary-500 text-primary-600 bg-primary-50'
-                    : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'
-                }`}
-              >
+  key={tab.id}
+  onClick={() => setActiveTab(tab.id)}
+  className={activeTab === tab.id ? 'btn-primary' : 'btn-secondary'}
+  style={{ padding: 'var(--space-2) var(--space-4)', fontSize: 'var(--text-sm)', flex: 1 }}
+>
                 <tab.icon 
                   size={16} 
                   color={activeTab === tab.id ? 'var(--primary-600)' : 'var(--slate-500)'} 
