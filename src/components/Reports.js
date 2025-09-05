@@ -674,15 +674,12 @@ const Reports = ({ onExport }) => {
       <div className="flex justify-center mb-6">
         <div className="bg-slate-100 rounded-lg p-1 flex">
           {['week', 'month', 'quarter', 'year'].map((period) => (
-            <button
-              key={period}
-              onClick={() => setTimeframe(period)}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
-                timeframe === period
-                  ? 'bg-white text-primary-600 shadow-sm'
-                  : 'text-slate-600 hover:text-slate-800'
-              }`}
-            >
+  <button
+    key={period}
+    onClick={() => setTimeframe(period)}
+    className={timeframe === period ? 'btn-primary' : 'btn-secondary'}
+    style={{ padding: 'var(--space-2) var(--space-4)', fontSize: 'var(--text-sm)' }}
+  >
               {period.charAt(0).toUpperCase() + period.slice(1)}
             </button>
           ))}
@@ -941,26 +938,29 @@ const Reports = ({ onExport }) => {
 
         <div className="flex flex-col sm:flex-row gap-3">
           <button
-            onClick={() => handleShare('copy')}
-            className="flex-1 bg-white text-slate-700 px-4 py-2 rounded-lg border border-slate-300 hover:bg-slate-50 transition-colors flex items-center justify-center"
-          >
+  onClick={() => handleShare('copy')}
+  className="btn-secondary flex items-center justify-center"
+  style={{ flex: 1 }}
+>
             <CopyIcon size={16} />
             <span className="ml-2">Copy Report</span>
           </button>
           
           <button
-            onClick={() => handleShare('email')}
-            className="flex-1 bg-white text-slate-700 px-4 py-2 rounded-lg border border-slate-300 hover:bg-slate-50 transition-colors flex items-center justify-center"
-          >
+  onClick={() => handleShare('email')}
+  className="btn-secondary flex items-center justify-center"
+  style={{ flex: 1 }}
+>
             <EmailIcon size={16} />
             <span className="ml-2">Email Report</span>
           </button>
           
           {onExport && (
             <button
-              onClick={onExport}
-              className="flex-1 bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors flex items-center justify-center"
-            >
+  onClick={onExport}
+  className="btn-primary flex items-center justify-center"
+  style={{ flex: 1 }}
+>
               <ShareIcon size={16} />
               <span className="ml-2">Export Data</span>
             </button>
