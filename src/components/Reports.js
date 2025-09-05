@@ -1276,7 +1276,7 @@ This report is for personal use only and should not replace professional medical
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-slate-900 mb-2">
-  Health Reports & Analytics
+  Health Reports/Analytics
 </h1>
         <p className="text-slate-600">
           Comprehensive insights from your health tracking data over the past {timeframe}
