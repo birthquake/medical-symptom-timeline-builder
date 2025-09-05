@@ -1275,10 +1275,9 @@ This report is for personal use only and should not replace professional medical
     <div className="max-w-6xl mx-auto p-4">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-slate-900 flex items-center mb-2">
-          <ReportsIcon size={28} color="var(--primary-600)" />
-          <span className="ml-3">Health Reports & Analytics</span>
-        </h1>
+        <h1 className="text-2xl font-bold text-slate-900 mb-2">
+  Health Reports & Analytics
+</h1>
         <p className="text-slate-600">
           Comprehensive insights from your health tracking data over the past {timeframe}
         </p>
