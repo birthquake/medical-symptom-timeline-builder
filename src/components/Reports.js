@@ -679,7 +679,7 @@ const Reports = ({ onExport }) => {
     key={period}
     onClick={() => setTimeframe(period)}
     className={timeframe === period ? 'btn-primary' : 'btn-secondary'}
-    style={{ padding: 'var(--space-2) var(--space-4)', fontSize: 'var(--text-sm)' }}
+    style={{ padding: 'var(--space-2) var(--space-4)', fontSize: 'var(--text-sm)', flex: 1 }}
   >
               {period.charAt(0).toUpperCase() + period.slice(1)}
             </button>
