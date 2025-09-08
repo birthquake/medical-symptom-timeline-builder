@@ -62,7 +62,6 @@ const BulbIcon = () => (
   </svg>
 );
 
-// NEW: Smart suggestions icon
 const StarIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
@@ -182,7 +181,28 @@ const getSmartSuggestion = (smartDefaults, timeSuggestion) => {
 };
 
 // END OF SECTION 2
-// SECTION 3: Component Declaration and State (Lines 181-280)
+// SECTION 3: Success Message Component and Component State (Lines 181-280)
+
+// Success Message Component - NEW
+const SuccessMessage = ({ symptom, onClose }) => (
+  <div className="fixed top-4 right-4 bg-success-600 text-white px-6 py-4 rounded-lg shadow-lg z-50 animate-slide-in-right">
+    <div className="flex items-center gap-3">
+      <div className="w-8 h-8 bg-success-500 rounded-full flex items-center justify-center">
+        <CheckIcon />
+      </div>
+      <div>
+        <div className="font-semibold text-sm">Symptom Logged Successfully</div>
+        <div className="text-success-100 text-xs">{symptom.name} • Severity {symptom.severity}/10</div>
+      </div>
+      <button 
+        onClick={onClose}
+        className="ml-4 text-success-200 hover:text-white transition-colors"
+      >
+        <CloseIcon />
+      </button>
+    </div>
+  </div>
+);
 
 const SymptomTracker = () => {
   // Form state
@@ -193,10 +213,15 @@ const SymptomTracker = () => {
   const [showForm, setShowForm] = useState(false);
   const [todayCount, setTodayCount] = useState(0);
   
-  // NEW: Smart defaults state
+  // Smart defaults state
   const [smartDefaults, setSmartDefaults] = useState(null);
   const [timeSuggestion, setTimeSuggestion] = useState(null);
   const [showSmartSuggestions, setShowSmartSuggestions] = useState(true);
+  
+  // NEW: Visual feedback state
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [lastSubmittedSymptom, setLastSubmittedSymptom] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Base common symptoms (fallback when no user data)
   const commonSymptoms = [
@@ -243,6 +268,9 @@ const SymptomTracker = () => {
     }
   }, [symptoms]);
 
+// END OF SECTION 3
+  // SECTION 4: Enhanced Event Handlers (Lines 281-380)
+
   // Handle smart symptom selection
   const handleSmartSelect = (symptomName, suggestedSeverity = null) => {
     setSymptomName(symptomName);
@@ -260,14 +288,17 @@ const SymptomTracker = () => {
     }
   };
 
-  // Enhanced form submission with success feedback
-  const handleSubmit = (e) => {
+  // ENHANCED form submission with visual feedback
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (!symptomName.trim()) {
       alert('Please enter a symptom name');
       return;
     }
+
+    // Show loading state
+    setIsSubmitting(true);
 
     const newSymptom = {
       id: Date.now(),
@@ -282,7 +313,11 @@ const SymptomTracker = () => {
       timestamp: new Date().toISOString()
     };
 
+    // Simulate slight delay for better UX feedback
+    await new Promise(resolve => setTimeout(resolve, 300));
+
     setSymptoms(prev => [newSymptom, ...prev]);
+    setLastSubmittedSymptom(newSymptom);
     
     // Reset form with smart defaults for next entry
     setSymptomName('');
@@ -292,13 +327,12 @@ const SymptomTracker = () => {
       setSeverity(5);
     }
     setShowForm(false);
+    setIsSubmitting(false);
 
-    // Show brief success feedback
-    // You could add a toast notification here later
+    // Show success message
+    setShowSuccessMessage(true);
+    setTimeout(() => setShowSuccessMessage(false), 4000);
   };
-
-  // END OF SECTION 3
-  // SECTION 4: Utility Functions (Lines 281-380)
 
   // Delete symptom with confirmation
   const deleteSymptom = (id) => {
@@ -331,6 +365,9 @@ const SymptomTracker = () => {
     if (severity <= 6) return 'Moderate';
     return 'Severe';
   };
+
+// END OF SECTION 4
+  // SECTION 5: Utility Functions (Lines 381-480)
 
   // Enhanced time formatting
   const formatTime = (dateStr, timeStr) => {
@@ -387,8 +424,8 @@ const SymptomTracker = () => {
     return match?.avgSeverity || null;
   };
 
-// END OF SECTION 4
-  // SECTION 5: Component Render - Header and Smart Suggestions (Lines 381-480)
+// END OF SECTION 5
+  // SECTION 6: Component Render - Header and Smart Suggestions (Lines 481-580)
 
   return (
     <div className="flex flex-col gap-6">
@@ -497,8 +534,8 @@ const SymptomTracker = () => {
         </div>
       </div>
 
-// END OF SECTION 5
-// SECTION 6A: Form Header and Quick Select (Lines 481-530)
+// END OF SECTION 6
+// SECTION 7A: Form Header (Lines 581-610)
 
       {/* Enhanced Professional Symptom Entry Form */}
       {showForm && (
@@ -515,6 +552,10 @@ const SymptomTracker = () => {
           
           <div className="health-card-body">
             <form onSubmit={handleSubmit} className="space-y-6">
+
+// END OF SECTION 7A
+                // SECTION 7B: Quick Select Buttons (Lines 611-660)
+
               {/* Enhanced Quick Select with Smart Defaults */}
               <div>
                 <div className="flex items-center gap-2 mb-3">
@@ -563,8 +604,8 @@ const SymptomTracker = () => {
                 )}
               </div>
 
-// END OF SECTION 6A
-// SECTION 6B: Form Input Fields (Lines 531-580)
+// END OF SECTION 7B
+// SECTION 7C: Form Input Fields (Lines 661-730)
 
               {/* Enhanced Custom Symptom Name */}
               <div data-section="symptom-name">
@@ -640,8 +681,8 @@ const SymptomTracker = () => {
                 </div>
               </div>
 
-// END OF SECTION 6B
-// SECTION 6C: Notes Field and Form Actions (Lines 581-630)
+// END OF SECTION 7C
+// SECTION 7D: Notes Field and Enhanced Form Actions (Lines 731-780)
 
               {/* Professional Notes Field */}
               <div>
@@ -657,19 +698,34 @@ const SymptomTracker = () => {
                 />
               </div>
 
-              {/* Form Actions */}
+              {/* Enhanced Form Actions with Loading States */}
               <div className="flex gap-3 pt-2">
                 <button
                   type="submit"
-                  className="btn btn-success flex-1 flex items-center justify-center gap-2"
+                  disabled={isSubmitting}
+                  className={`btn flex-1 flex items-center justify-center gap-2 transition-all duration-200 ${
+                    isSubmitting 
+                      ? 'btn-secondary cursor-not-allowed opacity-75' 
+                      : 'btn-success hover:shadow-md'
+                  }`}
                 >
-                  <CheckIcon />
-                  Save Symptom
+                  {isSubmitting ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      Saving...
+                    </>
+                  ) : (
+                    <>
+                      <CheckIcon />
+                      Save Symptom
+                    </>
+                  )}
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowForm(false)}
-                  className="btn btn-secondary px-6"
+                  disabled={isSubmitting}
+                  className="btn btn-secondary px-6 disabled:opacity-50"
                 >
                   Cancel
                 </button>
@@ -679,8 +735,8 @@ const SymptomTracker = () => {
         </div>
       )}
 
-// END OF SECTION 6C
-// SECTION 7: Symptoms List and Component Closing (Lines 631-730)
+// END OF SECTION 7D
+// SECTION 8: Symptoms List (Lines 781-850)
 
       {/* Professional Symptoms List */}
       <div className="health-card">
@@ -728,6 +784,9 @@ const SymptomTracker = () => {
         </div>
       </div>
 
+// END OF SECTION 8
+// SECTION 9: Enhanced Tip Card, Success Message, and Components (Lines 851-920)
+
       {/* Enhanced Professional Tip Card */}
       {symptoms.length > 0 && (
         <div className="health-card bg-primary-50 border-primary-200">
@@ -744,7 +803,7 @@ const SymptomTracker = () => {
                   {smartDefaults?.hasData ? (
                     <>Great job tracking consistently! Your most common symptom is "{smartDefaults.mostCommon?.name}" with an average severity of {smartDefaults.mostCommon?.avgSeverity}/10. Share these patterns with your healthcare provider.</>
                   ) : (
-                    <>Great job tracking your symptoms! Keep logging regularly to identify patterns and share these logs with your healthcare provider during your next visit.</>
+                    <>Keep logging regularly to identify patterns and share these logs with your healthcare provider during your next visit.</>
                   )}
                 </p>
               </div>
@@ -752,12 +811,17 @@ const SymptomTracker = () => {
           </div>
         </div>
       )}
+
+      {/* Success Message Toast */}
+      {showSuccessMessage && lastSubmittedSymptom && (
+        <SuccessMessage 
+          symptom={lastSubmittedSymptom}
+          onClose={() => setShowSuccessMessage(false)}
+        />
+      )}
     </div>
   );
 };
-
-// END OF SECTION 7
-// SECTION 8: Professional Symptom Card Component (Lines 731-800)
 
 // Professional Symptom Card Component - Enhanced with better spacing and interactions
 const SymptomCard = ({ symptom, onDelete, getSeverityColor, getSeverityLabel, formatTime }) => (
@@ -802,4 +866,4 @@ const SymptomCard = ({ symptom, onDelete, getSeverityColor, getSeverityLabel, fo
 
 export default SymptomTracker;
 
-// END OF SECTION 8 - Complete File
+// END OF SECTION 9 - Complete Enhanced File
