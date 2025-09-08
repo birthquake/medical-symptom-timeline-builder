@@ -132,16 +132,19 @@ const getTimeBasedSuggestions = (symptoms) => {
   const currentHour = now.getHours();
   const currentDay = now.getDay();
   
-  // Get symptoms from same time periods
   const timeMatches = symptoms.filter(symptom => {
-    const symptomDate = new Date(symptom.date);
-    const symptomHour = parseInt(symptom.time.split(':')[0]);
-    const symptomDay = symptomDate.getDay();
-    
-    // Same day of week OR similar time of day (±2 hours)
-    return symptomDay === currentDay || 
-           Math.abs(symptomHour - currentHour) <= 2;
-  });
+  const symptomDate = new Date(symptom.date);
+  const symptomDay = symptomDate.getDay();
+  
+  // Skip symptoms without time data
+  if (!symptom.time) return symptomDay === currentDay;
+  
+  const symptomHour = parseInt(symptom.time.split(':')[0]);
+  
+  // Same day of week OR similar time of day (±2 hours)
+  return symptomDay === currentDay || 
+         Math.abs(symptomHour - currentHour) <= 2;
+});
 
   if (timeMatches.length === 0) return null;
 
