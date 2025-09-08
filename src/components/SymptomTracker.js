@@ -1,4 +1,3 @@
-// SECTION 1: Imports and SVG Icons (Lines 1-80)
 import React, { useState, useEffect } from 'react';
 
 // Professional SVG Icons
@@ -68,8 +67,6 @@ const StarIcon = () => (
   </svg>
 );
 
-// END OF SECTION 1
-// SECTION 2: Smart Defaults Helper Functions (Lines 81-180)
 
 // Smart defaults logic - analyzes user patterns
 const getSmartDefaults = (symptoms) => {
@@ -180,8 +177,6 @@ const getSmartSuggestion = (smartDefaults, timeSuggestion) => {
   return null;
 };
 
-// END OF SECTION 2
-// SECTION 3: Success Message Component and Component State (Lines 181-280)
 
 // Success Message Component - NEW
 const SuccessMessage = ({ symptom, onClose }) => (
@@ -268,8 +263,6 @@ const SymptomTracker = () => {
     }
   }, [symptoms]);
 
-// END OF SECTION 3
-  // SECTION 4: Enhanced Event Handlers (Lines 281-380)
 
   // Handle smart symptom selection
   const handleSmartSelect = (symptomName, suggestedSeverity = null) => {
@@ -366,8 +359,6 @@ const SymptomTracker = () => {
     return 'Severe';
   };
 
-// END OF SECTION 4
-  // SECTION 5: Utility Functions (Lines 381-480)
 
   // Enhanced time formatting
   const formatTime = (dateStr, timeStr) => {
@@ -424,8 +415,6 @@ const SymptomTracker = () => {
     return match?.avgSeverity || null;
   };
 
-// END OF SECTION 5
-  // SECTION 6: Component Render - Header and Smart Suggestions (Lines 481-580)
 
   return (
     <div className="flex flex-col gap-6">
@@ -534,9 +523,6 @@ const SymptomTracker = () => {
         </div>
       </div>
 
-// END OF SECTION 6
-
-// SECTION 7A: Form Header (Lines 581-610)
 
       {/* Enhanced Professional Symptom Entry Form */}
       {showForm && (
@@ -554,9 +540,6 @@ const SymptomTracker = () => {
           <div className="health-card-body">
             <form onSubmit={handleSubmit} className="space-y-6">
 
-// END OF SECTION 7A
-                
-                // SECTION 7B: Quick Select Buttons (Lines 611-660)
 
               {/* Enhanced Quick Select with Smart Defaults */}
               <div>
@@ -591,9 +574,9 @@ const SymptomTracker = () => {
                       >
                         {symptom}
                         {isFrequent && (
-                          <div className="absolute -top-1 -right-1 w-3 h-3 bg-primary-500 rounded-full flex items-center justify-center">
-                            <StarIcon />
-                          </div>
+                          <div className="absolute -top-1 -right-1 w-4 h-4 bg-primary-500 rounded-full flex items-center justify-center">
+  <StarIcon />
+</div>
                         )}
                       </button>
                     );
@@ -606,8 +589,6 @@ const SymptomTracker = () => {
                 )}
               </div>
 
-// END OF SECTION 7B
-// SECTION 7C: Form Input Fields (Lines 661-730)
 
               {/* Enhanced Custom Symptom Name */}
               <div data-section="symptom-name">
@@ -683,8 +664,6 @@ const SymptomTracker = () => {
                 </div>
               </div>
 
-// END OF SECTION 7C
-// SECTION 7D: Notes Field and Enhanced Form Actions (Lines 731-780)
 
               {/* Professional Notes Field */}
               <div>
@@ -737,9 +716,6 @@ const SymptomTracker = () => {
         </div>
       )}
 
-// END OF SECTION 7D
-
-// SECTION 8: Symptoms List (Lines 781-850)
 
       {/* Professional Symptoms List */}
       <div className="health-card">
@@ -787,8 +763,6 @@ const SymptomTracker = () => {
         </div>
       </div>
 
-// END OF SECTION 8
-// SECTION 9: Enhanced Tip Card, Success Message, and Components (Lines 851-920)
 
       {/* Enhanced Professional Tip Card */}
       {symptoms.length > 0 && (
@@ -869,4 +843,3 @@ const SymptomCard = ({ symptom, onDelete, getSeverityColor, getSeverityLabel, fo
 
 export default SymptomTracker;
 
-// END OF SECTION 9 - Complete Enhanced File
