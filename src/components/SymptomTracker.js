@@ -195,14 +195,13 @@ const SuccessMessage = ({ symptom, onClose }) => (
       <div>
         <div className="font-semibold text-sm">Symptom Logged Successfully</div>
         <div className="text-xs" style={{ color: '#dcfce7' }}>{symptom.name} • Severity {symptom.severity}/10</div>
-      </div>
-      <button 
-        onClick={onClose}
-        className="ml-4 hover:text-white transition-colors"
-        style={{ color: '#bbf7d0' }}
-      >
-        <CloseIcon />
-      </button>
+      </div><button 
+  onClick={onClose}
+  className="ml-4 hover:text-white transition-colors"
+  style={{ color: '#22c55e' }}
+>
+  ×
+</button>
     </div>
   </div>
 );
