@@ -198,7 +198,7 @@
   --glass-backdrop: blur(8px);
 }
 
-// END OF SECTION 1
+/* END OF SECTION 1 */
 
 /* SECTION 2: Enhanced Keyframes and Base Typography (Lines 201-400) */
 
@@ -424,7 +424,7 @@ body {
   line-height: var(--leading-normal);
 }
 
-// END OF SECTION 2
+/* END OF SECTION 2 */
 
 /* SECTION 3: Text Colors and Link Styling (Lines 401-500) */
 
@@ -462,7 +462,7 @@ body {
   outline-offset: 2px;
 }
 
-// END OF SECTION 3
+/* END OF SECTION 3 */
 /* SECTION 4: Enhanced Professional Component Patterns - Health Cards (Lines 501-700) */
 
 /* Sophisticated Card System */
@@ -548,7 +548,7 @@ body {
   border-top: 1px solid var(--slate-100);
 }
 
-// END OF SECTION 4
+/* END OF SECTION 4 */
 /* SECTION 5A: Button Base Styles (Lines 701-750) */
 
 .btn {
@@ -606,7 +606,7 @@ body {
   box-shadow: var(--button-shadow) !important;
 }
 
-// END OF SECTION 5A
+/* END OF SECTION 5A */
 /* SECTION 5B: Button Variants (Lines 751-820) */
 
 .btn-primary {
@@ -667,7 +667,7 @@ body {
   border-color: var(--error-600);
 }
 
-// END OF SECTION 5B
+/* END OF SECTION 5B */
 /* SECTION 5C: Button Styles and Sizes (Lines 821-880) */
 
 .btn-ghost {
@@ -720,7 +720,7 @@ body {
   border-radius: var(--radius-sm);
 }
 
-// END OF SECTION 5C
+/* END OF SECTION 5C */
 /* SECTION 6: Enhanced Form Controls with Medical-Grade Precision (Lines 881-1100) */
 
 .form-group {
@@ -977,7 +977,7 @@ body {
   border-left: none;
 }
 
-// END OF SECTION 6
+/* END OF SECTION 6 */
 /* SECTION 7: Enhanced Status Indicators and Micro-Components (Lines 1101-1350) */
 
 /* Sophisticated Status Dots */
@@ -1325,7 +1325,7 @@ body {
   border-radius: var(--radius-full);
 }
 
-// END OF SECTION 7
+/* END OF SECTION 7 */
 /* SECTION 8: Enhanced Layout Utilities - Containers & Flexbox (Lines 1351-1550) */
 
 /* Container System */
@@ -1453,7 +1453,7 @@ body {
 .gap-y-6 { row-gap: var(--space-6); }
 .gap-y-8 { row-gap: var(--space-8); }
 
-// END OF SECTION 8
+/* END OF SECTION 8 */
 /* SECTION 9A: Margin Utilities (Lines 1551-1620) */
 
 /* Enhanced Margin Utilities */
@@ -1510,7 +1510,7 @@ body {
 .ml-6 { margin-left: var(--space-6); }
 .ml-8 { margin-left: var(--space-8); }
 
-// END OF SECTION 9A
+/* END OF SECTION 9A */
 /* SECTION 9B: Padding Utilities (Lines 1621-1690) */
 
 /* Enhanced Padding Utilities */
@@ -1573,7 +1573,7 @@ body {
 .pl-4 { padding-left: var(--space-4); }
 .pl-6 { padding-left: var(--space-6); }
 
-// END OF SECTION 9B
+/* END OF SECTION 9B */
 /* SECTION 9C: Color and Background Utilities (Lines 1691-1780) */
 
 /* Enhanced Color Utilities */
@@ -1637,7 +1637,7 @@ body {
   background: linear-gradient(135deg, var(--slate-50) 0%, white 100%);
 }
 
-// END OF SECTION 9C
+/* END OF SECTION 9C */
 /* SECTION 10: Animation, Border, Shadow, and Final Utilities (Lines 1781-2000) */
 
 /* Border Utilities */
@@ -1754,7 +1754,7 @@ body {
 .z-40 { z-index: 40; }
 .z-50 { z-index: 50; }
 
-// END OF SECTION 10
+/* END OF SECTION 10 */
 /* SECTION 11: Display, Responsive Design & Final Utilities (Lines 2001-2200) */
 
 /* Width & Height Utilities */
@@ -1945,4 +1945,4 @@ html {
   /* Dark mode variables would go here when needed */
 }
 
-// END OF SECTION 11 - Complete CSS File
+/* END OF SECTION 11 - Complete CSS File */
