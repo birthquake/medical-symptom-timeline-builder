@@ -441,29 +441,32 @@ const SymptomTracker = () => {
               Log Symptom
             </button>
           </div>
-
-          {/* Smart Suggestion Banner */}
+{/* Smart Suggestion Banner */}
           {showSmartSuggestions && (smartDefaults?.hasData || timeSuggestion) && (
-<div className="mb-4 p-4 rounded-lg" style={{
-  backgroundColor: '#f0fdfa',
-  border: '1px solid #99f6e4'
-}}>              <div className="flex items-start gap-3">
-                <div className="w-8 h-8 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+            <div className="mb-4 p-4 rounded-lg" style={{
+              backgroundColor: '#f0fdfa',
+              border: '1px solid #99f6e4'
+            }}>
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{
+                  backgroundColor: '#ccfbf1'
+                }}>
                   <StarIcon />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-2">
-                    <h4 className="text-body-small font-semibold text-primary-800">
+                    <h4 className="text-body-small font-semibold" style={{ color: '#115e59' }}>
                       Smart Suggestion
                     </h4>
                     <button
                       onClick={() => setShowSmartSuggestions(false)}
-                      className="text-primary-600 hover:text-primary-800 text-xs"
+                      className="text-xs hover:opacity-80"
+                      style={{ color: '#0d9488' }}
                     >
                       ×
                     </button>
                   </div>
-                  <p className="text-body-small text-primary-700 mb-3">
+                  <p className="text-body-small mb-3" style={{ color: '#0f766e' }}>
                     {getSmartSuggestion(smartDefaults, timeSuggestion)}
                   </p>
                   
@@ -480,7 +483,8 @@ const SymptomTracker = () => {
                             );
                           }, 100);
                         }}
-                        className="inline-flex items-center gap-1 px-3 py-1 bg-primary-600 text-white text-xs font-medium rounded-full hover:bg-primary-700 transition-colors"
+                        className="inline-flex items-center gap-1 px-3 py-1 text-white text-xs font-medium rounded-full hover:opacity-90 transition-opacity"
+                        style={{ backgroundColor: '#0d9488' }}
                       >
                         <PlusIcon />
                         Log {smartDefaults.mostCommon.name}
@@ -495,7 +499,11 @@ const SymptomTracker = () => {
                             handleSmartSelect(timeSuggestion.symptom);
                           }, 100);
                         }}
-                        className="inline-flex items-center gap-1 px-3 py-1 bg-primary-100 text-primary-700 text-xs font-medium rounded-full hover:bg-primary-200 transition-colors"
+                        className="inline-flex items-center gap-1 px-3 py-1 text-xs font-medium rounded-full hover:opacity-90 transition-opacity"
+                        style={{ 
+                          backgroundColor: '#ccfbf1',
+                          color: '#0f766e'
+                        }}
                       >
                         <PlusIcon />
                         Log {timeSuggestion.symptom}
