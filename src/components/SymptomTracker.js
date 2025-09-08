@@ -441,8 +441,10 @@ const SymptomTracker = () => {
 
           {/* Smart Suggestion Banner */}
           {showSmartSuggestions && (smartDefaults?.hasData || timeSuggestion) && (
-            <div className="mb-4 p-4 bg-primary-50 border border-primary-200 rounded-lg">
-              <div className="flex items-start gap-3">
+<div className="mb-4 p-4 rounded-lg" style={{
+  backgroundColor: '#f0fdfa',
+  border: '1px solid #99f6e4'
+}}>              <div className="flex items-start gap-3">
                 <div className="w-8 h-8 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
                   <StarIcon />
                 </div>
