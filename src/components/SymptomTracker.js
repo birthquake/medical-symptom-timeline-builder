@@ -183,18 +183,23 @@ const getSmartSuggestion = (smartDefaults, timeSuggestion) => {
 
 // Success Message Component - NEW
 const SuccessMessage = ({ symptom, onClose }) => (
-  <div className="fixed top-4 right-4 bg-success-600 text-white px-6 py-4 rounded-lg shadow-lg z-50 animate-slide-in-right">
+  <div className="fixed top-4 right-4 text-white px-6 py-4 rounded-lg shadow-lg z-50 animate-slide-in-right" style={{
+    backgroundColor: '#16a34a'
+  }}>
     <div className="flex items-center gap-3">
-      <div className="w-8 h-8 bg-success-500 rounded-full flex items-center justify-center">
+      <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{
+        backgroundColor: '#22c55e'
+      }}>
         <CheckIcon />
       </div>
       <div>
         <div className="font-semibold text-sm">Symptom Logged Successfully</div>
-        <div className="text-success-100 text-xs">{symptom.name} • Severity {symptom.severity}/10</div>
+        <div className="text-xs" style={{ color: '#dcfce7' }}>{symptom.name} • Severity {symptom.severity}/10</div>
       </div>
       <button 
         onClick={onClose}
-        className="ml-4 text-success-200 hover:text-white transition-colors"
+        className="ml-4 hover:text-white transition-colors"
+        style={{ color: '#bbf7d0' }}
       >
         <CloseIcon />
       </button>
